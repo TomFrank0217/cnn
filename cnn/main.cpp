@@ -1,6 +1,8 @@
 /******************************************
 Author:Hanzhi Fan
 Date: 5th, Oct, 2019
+
+This a project to test my math(algorithm) and code
 *******************************************/
 #include <iostream>
 #include <string>
