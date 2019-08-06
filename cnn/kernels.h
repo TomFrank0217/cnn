@@ -19,14 +19,19 @@ public:
     bool kernels::features_2_matrix(int kernels_width = KERNEL_ROW, int kernels_height = KERNEL_COL,\
 					int stride = 1, int padding_mode = VALID_PADDING);
     bool show(int image_show_mode = SHOW_IMAGE_VALUE);
-
+    bool features_2_matrix();
 private:
     matrix *m_p_kernels_features;
     matrix *features_matrix;
+
     int m_kernels_features_count;
     int m_kernels_features_row;
     int m_kernels_features_col;
 
+    int m_feature_matrix_row;
+    int m_feature_matrix_col;
+
+    int m_padding;
 };
 
 typedef kernels features;

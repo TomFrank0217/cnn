@@ -13,6 +13,7 @@
 #define VALID_PADDING  0
 #define SAME_PADDING   1
 
+
 #define  AVE_VALUE  127.5
 
 #define KERNEL_ROW     3

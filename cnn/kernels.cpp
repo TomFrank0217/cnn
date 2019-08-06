@@ -182,7 +182,8 @@ kernels::kernels(const cv::Mat &image,DATA_TYPE translation, DATA_TYPE scale){
     }
 
     for (int i = 0; i < m_kernels_features_count; ++i){
-        m_p_kernels_features[i] = matrix(m_kernels_features_row, m_kernels_features_col, DATA_TYPE(0.0));
+        m_p_kernels_features[i] = \
+            matrix(m_kernels_features_row, m_kernels_features_col, DATA_TYPE(0.0));
     }
     
     int k = 0;
@@ -192,7 +193,8 @@ kernels::kernels(const cv::Mat &image,DATA_TYPE translation, DATA_TYPE scale){
         //int k = -1;
         for (int i = 0; i < m_kernels_features_row; ++i){
             for (int j = 0; j < m_kernels_features_col; ++j){
-                m_p_kernels_features[0].m_p_data[k] = DATA_TYPE((int)image.at<uchar>(i, j)) - translation;
+                m_p_kernels_features[0].m_p_data[k] = \
+                    DATA_TYPE((int)image.at<uchar>(i, j)) - translation;
                 m_p_kernels_features[0].m_p_data[k] *= scale;
                 ++k;
                 //
@@ -212,5 +214,16 @@ kernels::kernels(const cv::Mat &image,DATA_TYPE translation, DATA_TYPE scale){
 }
 
 bool kernels::features_2_matrix(){
-    ;
+    m_padding = VALID_PADDING;/* todo 初始化m_padding */
+    switch (m_padding){
+    case VALID_PADDING:
+        int row = (m_kernels_features_row - m_ker)/* kernels_row features_row 分开定义 */
+        m_feature_matrix_row = 0;
+        break;
+    case SAME_PADDING:/* todo */
+        break;
+    default:
+        break;/*  todo */
+    }
+
 }
