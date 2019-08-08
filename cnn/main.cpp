@@ -29,11 +29,13 @@ struct num_path{
 bool get_files(string file_name, vector<string> &files);
 bool show(Mat &image, int show_image_mode = SHOW_IMAGE_VALUE);
 bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name);
+
 int main(int argc, char* argv[]){
     //matrix A(3, 3, -2, 3);
     //matrix C = A*B;
     //A.show();
     //B.show();
+
     string file_name = "F:\\chormeDownload\\trainimage\\pic2\\0\\*.bmp";
     vector<num_path> vec_path_label;
     get_image_path_and_label(vec_path_label, file_name);
