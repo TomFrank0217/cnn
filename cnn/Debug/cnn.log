@@ -1,17 +1,29 @@
-﻿生成启动时间为 2019/7/22 22:46:58。
-     1>项目“D:\c_code\cnn\cnn\cnn.vcxproj”在节点 2 上(Build 个目标)。
+﻿生成启动时间为 2019/8/8 16:20:17。
+     1>项目“E:\code\cnn\cnn\cnn.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         C:\Program Files (x86)\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt matrix.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt kernels.cpp main.cpp matrix.cpp
          matrix.cpp
-     1>d:\c_code\cnn\cnn\matrix.cpp(44): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
-     1>d:\c_code\cnn\cnn\matrix.cpp(242): warning C4715: “matrix::show”: 不是所有的控件路径都返回值
-       Link:
-         C:\Program Files (x86)\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\c_code\cnn\Debug\cnn.exe" /INCREMENTAL /NOLOGO opencv_ts300d.lib opencv_world300d.lib opencv_ts300.lib opencv_world300.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\c_code\cnn\Debug\cnn.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\c_code\cnn\Debug\cnn.lib" /MACHINE:X86 Debug\kernels.obj
-         Debug\main.obj
-         Debug\matrix.obj
-         cnn.vcxproj -> D:\c_code\cnn\Debug\cnn.exe
-     1>已完成生成项目“D:\c_code\cnn\cnn\cnn.vcxproj”(Build 个目标)的操作。
+     1>e:\code\cnn\cnn\matrix.cpp(44): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+         main.cpp
+     1>d:\software\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>d:\software\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>d:\software\opencv\build\include\opencv2\core\utility.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>e:\code\cnn\cnn\main.cpp(44): warning C4018: “<”: 有符号/无符号不匹配
+     1>e:\code\cnn\cnn\main.cpp(138): warning C4018: “<”: 有符号/无符号不匹配
+         kernels.cpp
+     1>d:\software\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>d:\software\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>d:\software\opencv\build\include\opencv2\core\utility.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>e:\code\cnn\cnn\kernels.cpp(220): error C2065: “m_ker”: 未声明的标识符
+     1>e:\code\cnn\cnn\kernels.cpp(221): error C2146: 语法错误: 缺少“;”(在标识符“m_feature_matrix_row”的前面)
+     1>e:\code\cnn\cnn\kernels.cpp(223): error C2360: “row”的初始化操作由“case”标签跳过
+                 e:\code\cnn\cnn\kernels.cpp(220) : 参见“row”的声明
+     1>e:\code\cnn\cnn\kernels.cpp(225): error C2361: “default”标签跳过“row”的初始化操作
+                 e:\code\cnn\cnn\kernels.cpp(220) : 参见“row”的声明
+         正在生成代码...
+     1>e:\code\cnn\cnn\matrix.cpp(242): warning C4715: “matrix::show”: 不是所有的控件路径都返回值
+     1>已完成生成项目“E:\code\cnn\cnn\cnn.vcxproj”(Build 个目标)的操作 - 失败。
 
-生成成功。
+生成失败。
 
-已用时间 00:00:01.08
+已用时间 00:00:01.68
