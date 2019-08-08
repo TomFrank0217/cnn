@@ -1,8 +1,12 @@
 cnn.sdf
 cnn.opensdf
 /cnn/Debug/
+*suo
 *.pdb
 *.idb
 *.obj
 *.log
 *.sdf
+*.vcxproj
+*.filters
+*.user
