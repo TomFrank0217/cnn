@@ -1,6 +1,6 @@
 cnn.sdf
 cnn.opensdf
-cnn/Debug/
+/cnn/Debug/
 *.pdb
 *.idb
 *.obj
