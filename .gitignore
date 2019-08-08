@@ -2,3 +2,8 @@ cnn.sdf
 cnn.opensdf
 Debug/
 cnn/Debug
+*.pdb
+*.idb
+*.obj
+*.log
+*.sdf
