@@ -34,7 +34,6 @@ int main(int argc, char* argv[]){
     //matrix C = A*B;
     //A.show();
     //B.show();
-    //C.show();
     string file_name = "F:\\chormeDownload\\trainimage\\pic2\\0\\*.bmp";
     vector<num_path> vec_path_label;
     get_image_path_and_label(vec_path_label, file_name);
