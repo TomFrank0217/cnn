@@ -1,4 +1,4 @@
-﻿生成启动时间为 2019/8/8 16:33:54。
+﻿生成启动时间为 2019/8/8 16:36:55。
      1>项目“E:\code\cnn\cnn\cnn.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt kernels.cpp main.cpp
@@ -6,8 +6,8 @@
      1>d:\software\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
      1>d:\software\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
      1>d:\software\opencv\build\include\opencv2\core\utility.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-     1>e:\code\cnn\cnn\main.cpp(44): warning C4018: “<”: 有符号/无符号不匹配
-     1>e:\code\cnn\cnn\main.cpp(138): warning C4018: “<”: 有符号/无符号不匹配
+     1>e:\code\cnn\cnn\main.cpp(43): warning C4018: “<”: 有符号/无符号不匹配
+     1>e:\code\cnn\cnn\main.cpp(137): warning C4018: “<”: 有符号/无符号不匹配
          kernels.cpp
      1>d:\software\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
      1>d:\software\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
@@ -23,4 +23,4 @@
 
 生成失败。
 
-已用时间 00:00:01.09
+已用时间 00:00:01.10
