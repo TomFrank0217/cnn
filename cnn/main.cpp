@@ -26,7 +26,6 @@ struct num_path{
     string path;
 };
 
-
 bool get_files(string file_name, vector<string> &files);
 bool show(Mat &image, int show_image_mode = SHOW_IMAGE_VALUE);
 bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name);
