@@ -213,17 +213,3 @@ kernels::kernels(const cv::Mat &image,DATA_TYPE translation, DATA_TYPE scale){
     return;
 }
 
-bool kernels::features_2_matrix(){
-    m_padding = VALID_PADDING;/* todo 初始化m_padding */
-    switch (m_padding){
-    case VALID_PADDING:
-        int row = (m_kernels_features_row - m_ker)/* kernels_row features_row 分开定义 */
-        m_feature_matrix_row = 0;
-        break;
-    case SAME_PADDING:/* todo */
-        break;
-    default:
-        break;/*  todo */
-    }
-
-}

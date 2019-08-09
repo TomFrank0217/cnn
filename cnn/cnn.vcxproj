@@ -81,12 +81,14 @@
     <ClCompile Include="kernels.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="matrix.cpp" />
+    <ClCompile Include="tensor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="const_values.h" />
     <ClInclude Include="debug_print.h" />
     <ClInclude Include="kernels.h" />
     <ClInclude Include="matrix.h" />
+    <ClInclude Include="tensor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
