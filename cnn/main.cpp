@@ -37,7 +37,7 @@ int main(int argc, char* argv[]){
     matrix B(3, 3, -5, 3);
     matrix C = 1 - A;
     A.show(SHOW_IMAGE_INITAIL_VALUE);
-    //B.show(SHOW_IMAGE_INITAIL_VALUE);
+    B.show(SHOW_IMAGE_INITAIL_VALUE);
 	C.show(SHOW_IMAGE_INITAIL_VALUE);
 
  //   string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
