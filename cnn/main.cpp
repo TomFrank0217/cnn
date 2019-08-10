@@ -16,6 +16,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 #include "matrix.h"
+#include "tensor.h"
 #include "kernels.h"
 
 using namespace cv;
@@ -36,17 +37,19 @@ int main(int argc, char* argv[]){
     //A.show();
     //B.show();
 
-
-    string file_name = "F:\\chormeDownload\\trainimage\\pic2\\0\\*.bmp";
+    string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
+	cout << file_name << endl;
     vector<num_path> vec_path_label;
     get_image_path_and_label(vec_path_label, file_name);
-
+	string str = "**************************************************************";
     for (int i = 0; i < vec_path_label.size(); ++i){
         cout << vec_path_label[i].path << endl;
         Mat image = imread(vec_path_label[i].path,0);
-        show(image, SHOW_IMAGE_VALUE);
-        features feature_maps(image);
-        feature_maps.show(SHOW_IMAGE_VALUE);
+		show(image, SHOW_IMAGE_SHAPE);
+		tensor A(image);
+		A.show(SHOW_IMAGE_SHAPE);
+		cout << str << endl << str << endl << str << endl;
+        //feature_maps.show(SHOW_IMAGE_VALUE);
     }
 
     return 0;
@@ -54,7 +57,8 @@ int main(int argc, char* argv[]){
 
 bool get_files(string file_name, vector<string> &files){
     _finddata_t file_info;
-    long handle = _findfirst(file_name.c_str(), &file_info);
+	//intptr_t handle = _findfirst(file_name.c_str(), &file_info);/* win7 */
+	intptr_t handle = _findfirst(file_name.c_str(), &file_info);  /* win10 */
     //cout << file_name << endl;
     string full_name = file_name.substr(0, 36);
     //cout << full_name << endl;
@@ -62,19 +66,25 @@ bool get_files(string file_name, vector<string> &files){
         cerr << "failed to transfer files" << endl;
         return false;
     }
-
+	//int i = -1;
     do{
         //cout << file_info.name << endl;
         files.push_back(full_name + file_info.name);
-    } while (0 == _findnext(handle, &file_info));
+		//cout << files[++i] << endl, Mat image = imread(files[i], 0);
+		
+		//cout << image.rows << "   " << image.cols << endl;
+		//imshow("000000",image);
+		//waitKey(100);
+		int todo = 0;
+	} while (0== _findnext(handle, &file_info));
 
     return true;
 }
 
 bool show(Mat &image, int show_image_mode){
     //namedwindow(window_name,1);
-    //imshow(window_name, image);//ÏÔÊ¾Í¼Æ¬
-    //waitkey(0);
+	//imshow(window_name, image);//ÏÔÊ¾Í¼Æ¬
+    //waitKey(100);
     int num = 0;
     string str;
     switch (show_image_mode)
@@ -124,7 +134,7 @@ bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name
     vector<string> file_names;
     int num_counts = 0;
     //for (int i = 0; i < 10; ++i){    /* todo */
-    for (int i = 0; i < 1; ++i){    /* todo */
+    for (int i = 0; i < 10; ++i){    /* todo */
         file_name[34] = '0' + i;
         file_names.push_back(file_name);
         get_files(file_name, num_file);

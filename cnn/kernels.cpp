@@ -193,9 +193,9 @@ kernels::kernels(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale){
 		//int k = -1;
 		for (int i = 0; i < m_kernels_features_row; ++i){
 			for (int j = 0; j < m_kernels_features_col; ++j){
-				m_p_kernels_features[0].m_p_data[k] = \
+				m_p_kernels_features[0].mp_data[k] = \
 					DATA_TYPE((int)image.at<uchar>(i, j)) - translation;
-				m_p_kernels_features[0].m_p_data[k] *= scale;
+				m_p_kernels_features[0].mp_data[k] *= scale;
 				++k;
 				//
 			}

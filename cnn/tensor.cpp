@@ -192,9 +192,9 @@ tensor::tensor(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale){
 		//int k = -1;
 		for (int i = 0; i < m_tensors_row; ++i){
 			for (int j = 0; j < m_tensors_col; ++j){
-				mp_tensors[0].m_p_data[k] = \
+				mp_tensors[0].mp_data[k] = \
 					DATA_TYPE((int)image.at<uchar>(i, j)) - translation;
-				mp_tensors[0].m_p_data[k] *= scale;
+				mp_tensors[0].mp_data[k] *= scale;
 				++k;
 				//
 			}

@@ -1,0 +1,26 @@
+﻿生成启动时间为 2019/8/10 14:11:54。
+     1>项目“E:\code\cnn\cnn\cnn.vcxproj”在节点 2 上(Build 个目标)。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt main.cpp
+         main.cpp
+     1>D:\software\opencv\build\include\opencv2/core/mat.hpp(1965): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>D:\software\opencv\build\include\opencv2/core/persistence.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>D:\software\opencv\build\include\opencv2/core/utility.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>e:\code\cnn\cnn\tensor.h(22): warning C4010: 单行注释包含行继续符
+     1>main.cpp(142): warning C4267: “+=”: 从“size_t”转换到“int”，可能丢失数据
+     1>main.cpp(149): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"E:\code\cnn\x64\Release\cnn.exe" /INCREMENTAL:NO /NOLOGO opencv_world300d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\code\cnn\x64\Release\cnn.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\code\cnn\x64\Release\cnn.lib" /MACHINE:X64 x64\Release\kernel.obj
+         x64\Release\kernels.obj
+         x64\Release\main.obj
+         x64\Release\matrix.obj
+         x64\Release\tensor.obj
+         正在生成代码
+     1>e:\code\cnn\cnn\matrix.cpp(242): warning C4715: “matrix::show”: 不是所有的控件路径都返回值
+         已完成代码的生成
+         cnn.vcxproj -> E:\code\cnn\x64\Release\cnn.exe
+     1>已完成生成项目“E:\code\cnn\cnn\cnn.vcxproj”(Build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:01.44

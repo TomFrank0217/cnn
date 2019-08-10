@@ -7,7 +7,7 @@
 
 #define SHOW_IMAGE_VALUE 0
 #define SHOW_IMAGE_SHAPE 1
-#define SHOW_IAMGE_CROP_LENGTH 3
+#define SHOW_IAMGE_CROP_LENGTH 2
 #define SHOW_WIDTH 7
 
 #define VALID_PADDING  0
@@ -20,7 +20,7 @@
 #define KERNEL_COL     3
 
 #define ABS(X) ((X)>0.0?(X):-(X))
-
+#define DELTA 0.01
 //#include "kernels.h"
 
 //typedef kernels features;

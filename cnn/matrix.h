@@ -14,6 +14,7 @@ public:
     matrix(int rows, int cols, DATA_TYPE low, DATA_TYPE high);
     matrix(const matrix &A);
     ~matrix();
+	/*  matrix目前只支持 (-1,0,1.0)矩阵的显示  */
     bool show(int show_image_mode = SHOW_IMAGE_VALUE);
     matrix operator+(const matrix &addition_matrix);
     matrix operator-(const matrix &reduction_matrix);
@@ -23,6 +24,6 @@ public:
 public:
     int m_rows;
     int m_cols;
-    DATA_TYPE *m_p_data;
+    DATA_TYPE *mp_data;
 };
 #endif
