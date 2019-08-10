@@ -2,3 +2,5 @@
 /cnn/Debug
 /x64
 /cnn/x64/Debug
+/cnn/x64/Release
+/cnn/x64/Debug/cnn.tlog
