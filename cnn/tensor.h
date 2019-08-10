@@ -10,6 +10,7 @@
 
 class tensor{
 public:
+	tensor();
 	tensor(int tensors_count, int tensors_row, int tensors_col, int val);
 	tensor(int tensors_count, int tensors_row, int tensors_col, DATA_TYPE val);
 	tensor(int tensors_count, int tensors_row, int tensors_col, int min, int max);

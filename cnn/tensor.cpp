@@ -1,5 +1,12 @@
 #include "tensor.h"
 
+tensor::tensor(){
+	this->m_tensors_row = 0;
+	this->m_tensors_col = 0;
+	this->m_tensors_count = 0;
+	this->mp_tensors = NULL;
+}
+
 tensor::tensor(int tensors_count, int tensors_row, int tensors_col, int val) :
 m_tensors_count(tensors_count), m_tensors_row(tensors_row), m_tensors_col(tensors_col)
 {
