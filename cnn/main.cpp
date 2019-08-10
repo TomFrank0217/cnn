@@ -33,11 +33,11 @@ bool show(Mat &image, int show_image_mode = SHOW_IMAGE_SCALE_VALUE);
 bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name);
 
 int main(int argc, char* argv[]){
-	matrix A(2, 3, -1, 3);
-	//A.show();
-    matrix C = A*3;
+	matrix A(3, 3, -3, 3);
+    matrix B(3, 3, -5, 3);
+    matrix C = 1 - A;
     A.show(SHOW_IMAGE_INITAIL_VALUE);
-    //B.show();
+    //B.show(SHOW_IMAGE_INITAIL_VALUE);
 	C.show(SHOW_IMAGE_INITAIL_VALUE);
 
  //   string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";

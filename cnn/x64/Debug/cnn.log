@@ -1,26 +1,18 @@
-﻿生成启动时间为 2019/8/10 16:51:03。
-     1>项目“E:\code\cnn\cnn\cnn.vcxproj”在节点 2 上(Build 个目标)。
+﻿生成启动时间为 2019/8/10 23:15:07。
+     1>项目“D:\c_code\cnn\cnn\cnn.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W0 /WX- /sdl /Od /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt feature.cpp kernel.cpp kernels.cpp main.cpp matrix.cpp tensor.cpp
-         feature.cpp
-         正在生成代码...
-         正在编译...
-         tensor.cpp
+         C:\Program Files (x86)\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W0 /WX- /sdl /Od /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt matrix.cpp
          matrix.cpp
-         main.cpp
-         kernels.cpp
-         kernel.cpp
-         正在生成代码...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"E:\code\cnn\x64\Debug\cnn.exe" /INCREMENTAL /NOLOGO opencv_world300d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\code\cnn\x64\Debug\cnn.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\code\cnn\x64\Debug\cnn.lib" /MACHINE:X64 x64\Debug\feature.obj
+         C:\Program Files (x86)\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\c_code\cnn\x64\Debug\cnn.exe" /INCREMENTAL /NOLOGO opencv_world300d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\c_code\cnn\x64\Debug\cnn.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\c_code\cnn\x64\Debug\cnn.lib" /MACHINE:X64 x64\Debug\feature.obj
          x64\Debug\kernel.obj
          x64\Debug\kernels.obj
          x64\Debug\main.obj
          x64\Debug\matrix.obj
          x64\Debug\tensor.obj
-         cnn.vcxproj -> E:\code\cnn\x64\Debug\cnn.exe
-     1>已完成生成项目“E:\code\cnn\cnn\cnn.vcxproj”(Build 个目标)的操作。
+         cnn.vcxproj -> D:\c_code\cnn\x64\Debug\cnn.exe
+     1>已完成生成项目“D:\c_code\cnn\cnn\cnn.vcxproj”(Build 个目标)的操作。
 
 生成成功。
 
-已用时间 00:00:03.44
+已用时间 00:00:00.83

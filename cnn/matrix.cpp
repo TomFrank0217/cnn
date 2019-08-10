@@ -423,17 +423,19 @@ matrix operator+(const DATA_TYPE val, const matrix &addition_matrix){
 matrix operator-(const DATA_TYPE val, const matrix &reduction_matrix){
 	if (reduction_matrix.m_rows <= 0 || reduction_matrix.m_cols <= 0){
 		DEBUG_PRINT("reduction_matrix.m_rows <= 0 || reduction_matrix.m_cols <= 0\n \
-																				matrix::operator-\n");
+					matrix::operator-\n");
 	}
 
 	if (NULL == reduction_matrix.mp_data){
 		DEBUG_PRINT("NULL == addition_matrix.mp_data  matrix::operator+\n");
 	}
+
 	matrix result_matrix(reduction_matrix.m_rows, reduction_matrix.m_cols, val);
 	int elements_count = reduction_matrix.m_rows*reduction_matrix.m_cols;
 	DATA_TYPE *p_result_data = result_matrix.mp_data;
+    DATA_TYPE *p_reduction_data = reduction_matrix.mp_data;
 	for (int i = 0; i < elements_count; ++i){
-		p_result_data[i] -= val;
+        p_result_data[i] -= p_reduction_data[i];
 	}
 
 	return result_matrix;
