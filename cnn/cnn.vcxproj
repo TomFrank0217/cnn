@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="feature.cpp" />
     <ClCompile Include="kernel.cpp" />
     <ClCompile Include="kernels.cpp" />
     <ClCompile Include="main.cpp" />
@@ -152,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="const_values.h" />
     <ClInclude Include="debug_print.h" />
+    <ClInclude Include="feature.h" />
     <ClInclude Include="kernel.h" />
     <ClInclude Include="kernels.h" />
     <ClInclude Include="matrix.h" />

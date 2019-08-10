@@ -4,7 +4,7 @@
 #include "const_values.h"
 
 matrix::matrix(int rows, int cols, int val):\
-m_rows(rows),m_cols(cols)
+m_rows(rows), m_cols(cols)
 {
     if (0 == rows && 0 == cols){
         mp_data = NULL;
@@ -13,7 +13,8 @@ m_rows(rows),m_cols(cols)
     if (rows <= 0 || cols <= 0){
         DEBUG_PRINT("matrix::matrix(int rows, int cols)\nrows <= 0 || cols <= 0\n");
     }
-
+	m_rows = rows;
+	m_cols = cols;
     mp_data = new DATA_TYPE[m_rows * m_cols];
     //DEBUG_PRINT("m_p_matrix = new DATA_TYPE[rows * cols];\n");/* to delete */
     if (NULL == mp_data){
@@ -236,7 +237,7 @@ matrix matrix::operator-(DATA_TYPE reduction_num){
 	return reduction_matrix;
 }
 
-matrix  matrix::operator*(const DATA_TYPE val){
+matrix matrix::operator*(const DATA_TYPE val){
 	if (m_rows <= 0 || m_cols <= 0){
 		DEBUG_PRINT("m_rows <= 0 || m_cols <= 0  matrix::operator*\n");
 	}
@@ -247,7 +248,7 @@ matrix  matrix::operator*(const DATA_TYPE val){
 
 	matrix multiplier_matrix(*this);
 	int elements_count = this->m_rows*this->m_cols;
-	DATA_TYPE *p_data = this->mp_data;
+	DATA_TYPE *p_data = multiplier_matrix.mp_data;
 	for (int i = 0; i < elements_count; ++i){
 		p_data[i] *= val;
 	}
@@ -358,9 +359,7 @@ bool matrix::show(int show_image_mode){
 		}
 		break;
 
-	case SHOW_IMAGE_VALUE:
-
-
+	case SHOW_IMAGE_SCALE_VALUE:
 		for (int i = SHOW_IAMGE_CROP_LENGTH; i < m_rows - SHOW_IAMGE_CROP_LENGTH; ++i){
 			for (int j = SHOW_IAMGE_CROP_LENGTH; j < m_cols - SHOW_IAMGE_CROP_LENGTH; ++j){
 				if (ABS(AVE_VALUE*(mp_data[i*m_cols + j] + 1.0)) < DELTA){
@@ -376,10 +375,28 @@ bool matrix::show(int show_image_mode){
 		}
 		break;
 
+	case SHOW_IMAGE_INITAIL_VALUE:
+		for (int i = SHOW_IAMGE_CROP_LENGTH; i < m_rows - SHOW_IAMGE_CROP_LENGTH; ++i){
+			for (int j = SHOW_IAMGE_CROP_LENGTH; j < m_cols - SHOW_IAMGE_CROP_LENGTH; ++j){
+				//	if ( ABS(mp_data[i*m_cols + j]) < DELTA){
+				//		for (int k = 0; k < SHOW_WIDTH; ++k){
+				//			std::cout << " ";
+				//		}
+				//	}
+				//	else{
+				//		std::cout << std::setw(SHOW_WIDTH) << std::setprecision(SHOW_WIDTH / 2 - 1) << mp_data[i*m_cols + j];
+				//	}
+				//}
+				std::cout << std::setw(4) << std::setprecision(2) << mp_data[i*m_cols + j];
+			}
+			std::cout << std::endl;
+		}
+		break;
 	default:
 		return false;
 	}
-
+	std::cout << std::endl;
+	return true;
 }
 
 matrix operator+(const DATA_TYPE val, const matrix &addition_matrix){

@@ -18,7 +18,7 @@
 #include "matrix.h"
 #include "tensor.h"
 #include "kernel.h"
-#include "kernels.h"
+#include "feature.h"
 
 using namespace cv;
 using namespace std;
@@ -29,28 +29,32 @@ struct num_path{
 };
 
 bool get_files(string file_name, vector<string> &files);
-bool show(Mat &image, int show_image_mode = SHOW_IMAGE_VALUE);
+bool show(Mat &image, int show_image_mode = SHOW_IMAGE_SCALE_VALUE);
 bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name);
 
 int main(int argc, char* argv[]){
-    //matrix A(3, 3, -2, 3);
-    //matrix C = A*B;
-    //A.show();
+	matrix A(2, 3, -1, 3);
+	//A.show();
+    matrix C = A*3;
+    A.show(SHOW_IMAGE_INITAIL_VALUE);
     //B.show();
+	C.show(SHOW_IMAGE_INITAIL_VALUE);
 
-    string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
-	cout << file_name << endl;
-    vector<num_path> vec_path_label;
-    get_image_path_and_label(vec_path_label, file_name);
-	string str = "**************************************************************";
-    for (int i = 0; i < vec_path_label.size(); ++i){
-        cout << vec_path_label[i].path << endl;
-        Mat image = imread(vec_path_label[i].path,0);
-		show(image, SHOW_IMAGE_SHAPE);
-		kernel ker(image);
-		ker.show(SHOW_IMAGE_SHAPE);
-		cout << str << endl << str << endl << str << endl;
-    }
+ //   string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
+	//cout << file_name << endl;
+ //   vector<num_path> vec_path_label;
+ //   get_image_path_and_label(vec_path_label, file_name);
+	//string str = "**************************************************************";
+ //   for (int i = 0; i < vec_path_label.size(); ++i){
+ //       cout << vec_path_label[i].path << endl;
+ //       Mat image = imread(vec_path_label[i].path,0);
+	//	show(image, SHOW_IMAGE_SHAPE);
+	//	feature fea(image);
+	//	fea.show(SHOW_IMAGE_SHAPE);
+	//	kernel ker(image);
+	//	ker.show(SHOW_IMAGE_SHAPE);
+	//	cout << str << endl << str << endl << str << endl;
+ //   }
 
     return 0;
 }
@@ -102,7 +106,7 @@ bool show(Mat &image, int show_image_mode){
         }
         break;
 
-    case SHOW_IMAGE_VALUE:
+    case SHOW_IMAGE_SCALE_VALUE:
         
         for (int k = 0; k < SHOW_WIDTH; ++k){
             str += " ";

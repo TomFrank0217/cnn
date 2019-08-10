@@ -22,7 +22,7 @@ public:
 	//virtual bool reshape(int kernels_width = KERNEL_ROW, int kernels_height = KERNEL_COL, \
 		int stride = 1, int padding_mode = VALID_PADDING);
 	/*  tensor的数值必须归一化到(-1,1)之间，才能正确显示 其余的数值todo  */
-	bool show(int image_show_mode = SHOW_IMAGE_VALUE);
+	bool show(int image_show_mode = SHOW_IMAGE_SCALE_VALUE);
 	bool reshape();
 public:
 	matrix *mp_tensors;
