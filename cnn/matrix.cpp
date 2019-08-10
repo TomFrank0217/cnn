@@ -154,91 +154,105 @@ matrix matrix::operator+(const matrix & addition_matrix){
     return sum_matrix;
 }
 
-matrix matrix::operator-(const matrix &reduction_matrix){
+matrix matrix::operator+(DATA_TYPE addition_num){
+	if (m_rows <= 0 || m_cols <= 0){
+		DEBUG_PRINT("m_rows <= 0 || m_cols <= 0  matrix::operator+\n");
+	}
 
-    if (m_rows <= 0 || m_cols <= 0){
-        DEBUG_PRINT("m_rows <= 0 || m_cols <= 0  matrix::operator+\n");
-    }
+	if (NULL == mp_data){
+		DEBUG_PRINT("NULL == mp_data  matrix::operator+\n");
+	}
 
-    if (reduction_matrix.m_rows <= 0 || reduction_matrix.m_cols <= 0){
-        DEBUG_PRINT("reduction_matrix.m_rows <= 0 || reduction_matrix.m_cols <= 0  \
-                    matrix::operator+\n");
-    }
+	matrix sum_matrix(*this);
 
-    if (NULL == mp_data){
-        DEBUG_PRINT("NULL == m_p_data  matrix::operator+\n");
-    }
+	int k = 0;
+	for (int i = 0; i < m_rows; ++i){
+		for (int j = 0; j < m_cols; ++j){
+			sum_matrix.mp_data[k] += addition_num;
+			++k;
+		}
+	}
 
-    if (NULL == reduction_matrix.mp_data){
-        DEBUG_PRINT("NULL == reduction_matrix.m_p_data  matrix::operator+\n");
-    }
-
-    if (m_rows != reduction_matrix.m_rows || m_cols != reduction_matrix.m_cols){
-        DEBUG_PRINT("m_rows != reduction_matrix.m_rows || m_cols != reduction_matrix.m_cols \
-                                                            matrix::operator+\n");
-    }
-
-    matrix minuend_matrix(*this);
-
-    int k = 0;
-    for (int i = 0; i < m_rows; ++i){
-        for (int j = 0; j < m_cols; ++j){
-            minuend_matrix.mp_data[k] -= reduction_matrix.mp_data[k];
-            ++k;
-        }
-    }
-
-    return minuend_matrix;
+	return sum_matrix;
 }
 
-bool matrix::show(int show_image_mode){
-    if (m_rows <= 0 || m_cols <= 0 || NULL == mp_data){
-        DEBUG_PRINT("(m_rows <= 0 || m_cols <= 0 || NULL == m_p_data)    \
-                                        matrix::show()");
-        return false;
-    }
 
-    int num = 0;
-    int k = -1;
+matrix matrix::operator-(const matrix &reduction_matrix){
 
-    //std::string  zero_str = "  ", nonzero_str = "**";
-    std::string str;
-    switch (show_image_mode)
-    {
-    case SHOW_IMAGE_SHAPE:
-        for (int i = SHOW_IAMGE_CROP_LENGTH; i < m_rows - SHOW_IAMGE_CROP_LENGTH; ++i){
-            for (int j = SHOW_IAMGE_CROP_LENGTH; j < m_cols - SHOW_IAMGE_CROP_LENGTH; ++j){
-				if (ABS(AVE_VALUE*(mp_data[i*m_cols + j] + 1.0)) < DELTA)
-                    std::cout << "  ";
-                else
-                    std::cout << "**";
-            }
-            std::cout << std::endl;
-        }
-        break;
+	if (m_rows <= 0 || m_cols <= 0){
+		DEBUG_PRINT("m_rows <= 0 || m_cols <= 0  matrix::operator+\n");
+	}
 
-    case SHOW_IMAGE_VALUE:
-        
+	if (reduction_matrix.m_rows <= 0 || reduction_matrix.m_cols <= 0){
+		DEBUG_PRINT("reduction_matrix.m_rows <= 0 || reduction_matrix.m_cols <= 0  \
+																matrix::operator+\n");
+	}
 
-        for (int i = SHOW_IAMGE_CROP_LENGTH; i < m_rows - SHOW_IAMGE_CROP_LENGTH; ++i){
-            for (int j = SHOW_IAMGE_CROP_LENGTH; j < m_cols - SHOW_IAMGE_CROP_LENGTH; ++j){
-				if (ABS(AVE_VALUE*(mp_data[i*m_cols + j] + 1.0)) < DELTA){
-                    for (int k = 0; k < SHOW_WIDTH; ++k){
-                        std::cout << " ";
-                    }
-                }
-                else{
-                    std::cout << std::setw(SHOW_WIDTH) << std::setprecision(SHOW_WIDTH / 2 - 1) << mp_data[i*m_cols + j];
-                }
-            }
-            std::cout << std::endl;
-        }
-        break;
+	if (NULL == mp_data){
+		DEBUG_PRINT("null == m_p_data  matrix::operator+\n");
+	}
 
-    default:
-        return false;
-    }
+	if (NULL == reduction_matrix.mp_data){
+		DEBUG_PRINT("null == reduction_matrix.m_p_data  matrix::operator+\n");
+	}
 
+	if (m_rows != reduction_matrix.m_rows || m_cols != reduction_matrix.m_cols){
+		DEBUG_PRINT("m_rows != reduction_matrix.m_rows || m_cols != reduction_matrix.m_cols \
+									matrix::operator+\n");
+	}
+
+	matrix minuend_matrix(*this);
+
+	int k = 0;
+	for (int i = 0; i < m_rows; ++i){
+		for (int j = 0; j < m_cols; ++j){
+			minuend_matrix.mp_data[k] -= reduction_matrix.mp_data[k];
+			++k;
+		}
+	}
+
+	return minuend_matrix;
+}
+
+matrix matrix::operator-(DATA_TYPE reduction_num){
+	if (m_rows <= 0 || m_cols <= 0){
+		DEBUG_PRINT("m_rows <= 0 || m_cols <= 0  matrix::operator+\n");
+	}
+
+	if (NULL == mp_data){
+		DEBUG_PRINT("NULL == mp_data  matrix::operator+\n");
+	}
+
+	matrix reduction_matrix(*this);
+
+	int k = 0;
+	for (int i = 0; i < m_rows; ++i){
+		for (int j = 0; j < m_cols; ++j){
+			reduction_matrix.mp_data[k] -= reduction_num;
+			++k;
+		}
+	}
+
+	return reduction_matrix;
+}
+
+matrix  matrix::operator*(const DATA_TYPE val){
+	if (m_rows <= 0 || m_cols <= 0){
+		DEBUG_PRINT("m_rows <= 0 || m_cols <= 0  matrix::operator*\n");
+	}
+
+	if (NULL == mp_data){
+		DEBUG_PRINT("NULL == mp_data  matrix::operator*\n");
+	}
+
+	matrix multiplier_matrix(*this);
+	int elements_count = this->m_rows*this->m_cols;
+	DATA_TYPE *p_data = this->mp_data;
+	for (int i = 0; i < elements_count; ++i){
+		p_data[i] *= val;
+	}
+
+	return multiplier_matrix;
 }
 
 matrix matrix::operator*(const matrix &multiplier_matrix){
@@ -260,8 +274,8 @@ matrix matrix::operator*(const matrix &multiplier_matrix){
     }
 
     if (this->m_cols != multiplier_matrix.m_rows){
-        DEBUG_PRINT("this->m_cols != multiplier_matrix.m_rows  \
-                                        matrix::operator*(const matrix &multiplier_matrix)\n");
+        DEBUG_PRINT("this->m_cols != multiplier_matrix.m_rows  \n \
+					matrix::operator*(const matrix &multiplier_matrix)\n");
     }
 
     matrix product_matrix(this->m_rows, multiplier_matrix.m_cols, 0.0);
@@ -293,7 +307,7 @@ matrix::~matrix(){
         DEBUG_PRINT("NULL == m_p_data  matrix::~matrix()\n");
     }
 
-    DEBUG_PRINT("matrix destrcutor called.\n");
+    DEBUG_PRINT("matrix destructor called.\n");
     delete[] mp_data;
 }
 
@@ -316,4 +330,54 @@ matrix& matrix::operator=(const matrix &A){
     }
 
     return *this;
+}
+
+bool matrix::show(int show_image_mode){
+	if (m_rows <= 0 || m_cols <= 0 || NULL == mp_data){
+		DEBUG_PRINT("(m_rows <= 0 || m_cols <= 0 || NULL == m_p_data)    \
+										                                        matrix::show()");
+		return false;
+	}
+
+	int num = 0;
+	int k = -1;
+
+	//std::string  zero_str = "  ", nonzero_str = "**";
+	std::string str;
+	switch (show_image_mode)
+	{
+	case SHOW_IMAGE_SHAPE:
+		for (int i = SHOW_IAMGE_CROP_LENGTH; i < m_rows - SHOW_IAMGE_CROP_LENGTH; ++i){
+			for (int j = SHOW_IAMGE_CROP_LENGTH; j < m_cols - SHOW_IAMGE_CROP_LENGTH; ++j){
+				if (ABS(AVE_VALUE*(mp_data[i*m_cols + j] + 1.0)) < DELTA)
+					std::cout << "  ";
+				else
+					std::cout << "**";
+			}
+			std::cout << std::endl;
+		}
+		break;
+
+	case SHOW_IMAGE_VALUE:
+
+
+		for (int i = SHOW_IAMGE_CROP_LENGTH; i < m_rows - SHOW_IAMGE_CROP_LENGTH; ++i){
+			for (int j = SHOW_IAMGE_CROP_LENGTH; j < m_cols - SHOW_IAMGE_CROP_LENGTH; ++j){
+				if (ABS(AVE_VALUE*(mp_data[i*m_cols + j] + 1.0)) < DELTA){
+					for (int k = 0; k < SHOW_WIDTH; ++k){
+						std::cout << " ";
+					}
+				}
+				else{
+					std::cout << std::setw(SHOW_WIDTH) << std::setprecision(SHOW_WIDTH / 2 - 1) << mp_data[i*m_cols + j];
+				}
+			}
+			std::cout << std::endl;
+		}
+		break;
+
+	default:
+		return false;
+	}
+
 }
