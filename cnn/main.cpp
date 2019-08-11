@@ -44,11 +44,21 @@ int main(int argc, char* argv[]){
 	//fs.show(SHOW_IMAGE_INITAIL_VALUE);
 	//fs.reshape();
 	//fs.m_features_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
-	 
-	tensor ts(5, 3, 3, -2, 2);
-	ts.show(SHOW_IMAGE_INITAIL_VALUE);
+	// 
+	//tensor ts(5, 3, 3, -2, 2);
+	//ts.show(SHOW_IMAGE_INITAIL_VALUE);
 
-	//kernels kers(2, 3, 3, 3, -2, 2);
+	kernels kers(2, 3, 3, 3, -2, 2);
+	cout << endl;
+	cout << kers.m_channels << "  " << kers.m_rows << "  "\
+		<< kers.m_cols << "  " << kers.m_kernels_count << endl;
+	for (int i = 0; i < kers.m_kernels_count; ++i){
+		cout << "kernel " << i << endl;
+		cout << kers.mp_tensors[i].m_channels << "  " \
+			 << kers.mp_tensors[i].m_rows << "  " << kers.mp_tensors[i].m_cols;
+		cout << endl;
+		(kers.mp_tensors[i]).show(SHOW_IMAGE_INITAIL_VALUE);
+	}
 	//kers.show(SHOW_IMAGE_INITAIL_VALUE);
 
  //   string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";

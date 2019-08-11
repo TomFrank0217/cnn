@@ -162,12 +162,13 @@ bool tensor::show(int show_image_mode){
 	}
 
 	if (0 >= m_channels){
-		DEBUG_PRINT("bool tensor::show()\n  \0 >= m_kernels_count");
+		DEBUG_PRINT("bool tensor::show()\n  \0 >= m_channels\n");
 		return false;
 	}
 
+	DEBUG_PRINT("tensor row=%d  col=%d", m_rows, m_cols);
 	for (int i = 0; i < m_channels; ++i){
-		DEBUG_PRINT("tensor %3d\n", i);
+		DEBUG_PRINT("matrix %3d\n", i);
 		mp_matrixes[i].show(show_image_mode);
 	}
 
@@ -222,3 +223,32 @@ tensor::tensor(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale){
 //bool tensor::reshape(int kernels_width, int kernels_height, int stride, int padding_mode){
 //	return true;
 //}
+
+tensor::tensor(const tensor& ts_){
+    m_channels = ts_.m_channels;
+	m_rows = ts_.m_rows;
+	m_cols = ts_.m_cols;
+	mp_matrixes = new matrix[m_channels];
+	for (int i = 0; i < m_channels; ++i){
+		mp_matrixes[i] = ts_.mp_matrixes[i];
+	}
+}
+
+tensor& tensor::operator=(const tensor &ts_){
+	if (this == &ts_){
+		return *this;
+	}
+	
+	delete[] mp_matrixes;
+	mp_matrixes = NULL;
+	m_channels = ts_.m_channels;
+	m_rows = ts_.m_rows;
+	m_cols = ts_.m_cols;
+
+	mp_matrixes = new matrix[m_channels];
+	for (int i = 0; i < m_channels; i++){
+		mp_matrixes[i] = ts_.mp_matrixes[i];
+	}
+
+	return *this;
+}

@@ -21,7 +21,7 @@ m_channels(channels),m_rows(rows),m_cols(cols),m_kernels_count(kernels_count){
 	}
 
 	for (int i = 0; i < kernels_count; ++i){
-		*mp_tensors = tensor(channels, rows, cols, val);
+		mp_tensors[i] = tensor(channels, rows, cols, val);
 	}
 }
 
@@ -38,7 +38,7 @@ m_channels(channels), m_rows(rows), m_cols(cols), m_kernels_count(kernels_count)
 	}
 
 	for (int i = 0; i < kernels_count; ++i){
-		*mp_tensors = tensor(channels, rows, cols, val);
+		mp_tensors[i] = tensor(channels, rows, cols, val);
 	}
 }
 
@@ -55,7 +55,7 @@ m_channels(channels), m_rows(rows), m_cols(cols), m_kernels_count(kernels_count)
 	}
 
 	for (int i = 0; i < kernels_count; ++i){
-		*mp_tensors = tensor(channels, rows, cols, min, max);
+		mp_tensors[i] = tensor(channels, rows, cols, min, max);
 	}
 }
 
@@ -72,7 +72,7 @@ m_channels(channels), m_rows(rows), m_cols(cols), m_kernels_count(kernels_count)
 	}
 
 	for (int i = 0; i < kernels_count; ++i){
-		*mp_tensors = tensor(channels, rows, cols, min, max);
+		mp_tensors[i] = tensor(channels, rows, cols, min, max);
 	}
 }
 
@@ -91,7 +91,7 @@ bool kernels::show(int image_show_mode){
 	for (int i = 0; i < m_kernels_count; ++i){
 		std::cout << "kernels" << i << std::endl;
 		mp_tensors[i].show(image_show_mode);
+		std::cout << std::endl;
 	}
-
 	return true;
 }

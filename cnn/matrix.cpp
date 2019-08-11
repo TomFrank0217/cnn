@@ -337,8 +337,8 @@ matrix& matrix::operator=(const matrix &A){
 
 bool matrix::show(int show_image_mode){
 	if (m_rows <= 0 || m_cols <= 0 || NULL == mp_data){
-		DEBUG_PRINT("(m_rows <= 0 || m_cols <= 0 || NULL == m_p_data)    \
-										                                        matrix::show()");
+		DEBUG_PRINT("(m_rows <= 0 || m_cols <= 0 || NULL == mp_data)    \
+					matrix::show()\n");
 		return false;
 	}
 
