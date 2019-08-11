@@ -6,11 +6,15 @@
 class features :public tensor{
 public:
 	features();
+	/* to understand 为什么特征不需要复制构造函数，因为没有指针变量吗？ */
+	//features(features &fs_);
 	features(int feature_channels, int features_rows, int features_cols, int val);
 	features(const cv::Mat &image, DATA_TYPE translation = AVE_VALUE, DATA_TYPE scale = 1.0 / AVE_VALUE);
 	~features();
 	features(int channels, int rows, int cols, DATA_TYPE min, DATA_TYPE max);
 	features(int channels, int rows, int cols, int min, int max);
+	/* to understand 为什么特征不需要赋值函数，因为没有指针变量吗？ */
+	//features& operator=(const features& fs_);
 	bool reshape(int kernels_rows = KERNEL_ROWS, int kernels_cols = KERNEL_COLS, \
 		int stride = 1, int padding_mode = VALID_PADDING);
 public:

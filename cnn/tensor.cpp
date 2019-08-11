@@ -166,7 +166,7 @@ bool tensor::show(int show_image_mode){
 		return false;
 	}
 
-	DEBUG_PRINT("tensor row=%d  col=%d", m_rows, m_cols);
+	//DEBUG_PRINT("\n\n\ntensor row=%d  col=%d  \n", m_rows, m_cols);
 	for (int i = 0; i < m_channels; ++i){
 		DEBUG_PRINT("matrix %3d\n", i);
 		mp_matrixes[i].show(show_image_mode);

@@ -98,28 +98,7 @@ m_rows(rows),m_cols(cols)
     }
 }
 
-matrix::matrix(const matrix &A):\
-m_rows(A.m_rows),m_cols(A.m_cols)
-{
-    DEBUG_PRINT("matrix::matrix(const matrix &A) called\n");
-    if (A.m_rows <= 0 || A.m_cols <= 0){
-        DEBUG_PRINT("matrix::matrix(const matrix &A)\n A.m_rows <= 0 || A.m_cols <= 0\n");
-    }
 
-    if (NULL == A.mp_data){
-        DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == m_p_data\n");
-    }
-    
-    mp_data = new DATA_TYPE[m_rows*m_cols];
-    if (NULL == mp_data){
-        DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == m_p_data\n");
-    }
-
-    int element_counts = m_rows*m_cols;
-    for (int i = 0; i < element_counts; ++i){
-        mp_data[i] = A.mp_data[i];
-    }
-}
 
 matrix matrix::operator+(const matrix & addition_matrix){
     if (m_rows <= 0 || m_cols <= 0){
@@ -333,6 +312,28 @@ matrix& matrix::operator=(const matrix &A){
     }
 
     return *this;
+}
+matrix::matrix(const matrix &A) :\
+m_rows(A.m_rows), m_cols(A.m_cols)
+{
+	DEBUG_PRINT("matrix::matrix(const matrix &A) called\n");
+	if (A.m_rows <= 0 || A.m_cols <= 0){
+		DEBUG_PRINT("matrix::matrix(const matrix &A)\n A.m_rows <= 0 || A.m_cols <= 0\n");
+	}
+
+	if (NULL == A.mp_data){
+		DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == m_p_data\n");
+	}
+
+	mp_data = new DATA_TYPE[m_rows*m_cols];
+	if (NULL == mp_data){
+		DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == m_p_data\n");
+	}
+
+	int element_counts = m_rows*m_cols;
+	for (int i = 0; i < element_counts; ++i){
+		mp_data[i] = A.mp_data[i];
+	}
 }
 
 bool matrix::show(int show_image_mode){

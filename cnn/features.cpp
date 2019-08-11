@@ -91,3 +91,43 @@ bool features::reshape(int kernels_rows, int kernels_cols, int stride, int paddi
 	return true;
 }
 
+//features::features(features &fs_){
+//	m_channels = fs_.m_channels;
+//	m_rows = fs_.m_rows;
+//	m_cols = fs_.m_cols;
+//	delete[] mp_matrixes;
+//	mp_matrixes = NULL;
+//	mp_matrixes = new matrix[m_channels];
+//	for (int i = 0; i < m_channels; ++i){
+//		mp_matrixes[i] = fs_.mp_matrixes[i];
+//	}
+//	m_features_matrix = fs_.m_features_matrix;
+//	m_kernel_rows = fs_.m_kernel_rows;
+//	m_kernel_cols = fs_.m_kernel_cols;
+//	m_stride = fs_.m_stride;
+//	m_padding_mode = fs_.m_padding_mode;
+//}
+
+//features& features::operator=(const features& fs_){
+//	if (&fs_ == this){
+//		return *this;
+//	}
+//	m_channels = fs_.m_channels;
+//	m_rows = fs_.m_rows;
+//	m_cols = fs_.m_cols;
+//	if (NULL != mp_matrixes){
+//		delete[] mp_matrixes;
+//	}
+//	mp_matrixes = NULL;
+//	mp_matrixes = new matrix[m_channels];
+//	for (int i = 0; i < m_channels; ++i){
+//		mp_matrixes[i] = fs_.mp_matrixes[i];
+//	}
+//	m_features_matrix = fs_.m_features_matrix;
+//	m_kernel_rows = fs_.m_kernel_rows;
+//	m_kernel_cols = fs_.m_kernel_cols;
+//	m_stride = fs_.m_stride;
+//	m_padding_mode = fs_.m_padding_mode;
+//	
+//	return *this;
+//}
