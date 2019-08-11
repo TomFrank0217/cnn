@@ -387,7 +387,9 @@ bool matrix::show(int show_image_mode){
 				//		std::cout << std::setw(SHOW_WIDTH) << std::setprecision(SHOW_WIDTH / 2 - 1) << mp_data[i*m_cols + j];
 				//	}
 				//}
+ 
 				std::cout << std::setw(4) << std::setprecision(2) << mp_data[i*m_cols + j];
+				//std::cout << mp_data[i*m_cols + j];
 			}
 			std::cout << std::endl;
 		}

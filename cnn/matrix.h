@@ -14,7 +14,7 @@ public:
     matrix(int rows, int cols, DATA_TYPE low, DATA_TYPE high);
     matrix(const matrix &A);
     ~matrix();
-	/*  matrix目前只支持 (-1,0,1.0)矩阵的显示  */
+	
     bool show(int show_image_mode = SHOW_IMAGE_SCALE_VALUE);
 
 	friend matrix operator+(const DATA_TYPE val, const matrix &addition_matrix);

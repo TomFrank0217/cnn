@@ -17,18 +17,18 @@ m_channels(channels), m_rows(rows), m_cols(cols)
 
 	mp_matrixes = new matrix[m_channels];
 	if (NULL == mp_matrixes){
-		DEBUG_PRINT("NULL == mp_tensors\n");
+		DEBUG_PRINT("NULL == mp_matrixes\n");
 		return;
 	}
 
 	if (0 == m_rows || 0 == m_cols){
-		DEBUG_PRINT("0 == m_tensors_row || 0 == m_tensors_col\n");
+		DEBUG_PRINT("0 == m_tensor_row || 0 == m_tensor_col\n");
 		mp_matrixes = NULL;
 		return;
 	}
 
 	if (0 > m_rows || 0 > m_cols){
-		DEBUG_PRINT("0 > m_tensors_row || 0 > m_tensors_col\n");
+		DEBUG_PRINT("0 > m_tensor_row || 0 > m_tensor_col\n");
 		mp_matrixes = NULL;
 		return;
 	}
@@ -71,8 +71,8 @@ m_channels(tensors_count), m_rows(tensors_row), m_cols(tensors_col)
 	return;
 }
 
-tensor::tensor(int tensors_count, int tensors_row, int tensors_col, int min, int max) :\
-m_channels(tensors_count), m_rows(tensors_row), m_cols(tensors_col)
+tensor::tensor(int channels, int rows, int cols, int min, int max) :\
+m_channels(channels), m_rows(rows), m_cols(cols)
 {
 	if (0 >= m_channels){
 		DEBUG_PRINT("0 >= m_tensors_count\n");

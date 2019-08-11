@@ -14,6 +14,19 @@ features::features(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale)
 	matrix m_features_matrix;
 }
 
+features::features(int feature_channels, int features_rows, int features_cols, DATA_TYPE min, DATA_TYPE max) : \
+tensor(feature_channels, features_rows, features_cols, min,max)
+{
+	return;
+}
+
+features::features(int feature_channels, int features_rows, int features_cols, int min, int max) : \
+tensor(feature_channels, features_rows, features_cols, min, max)
+{
+	return;
+}
+
+
 features::~features(){
 	;
 }
@@ -56,12 +69,12 @@ bool features::reshape(int kernels_rows, int kernels_cols, int stride, int paddi
 		/* todo 此处计算可以优化 */
 		for (int i = 0; i < m_features_matrix.m_rows; ++i){
 			for (int j = 0; j < m_features_matrix.m_cols; ++j){
-				channel_in_kernels = j % (m_kernel_rows*m_kernel_cols);
+				channel_in_kernels = j / (m_kernel_rows*m_kernel_cols);
 				index_in_kernel = j - channel_in_kernels*m_kernel_rows*m_kernel_cols;
-				row_in_kernel = index_in_kernel%m_kernel_cols;
+				row_in_kernel = index_in_kernel / m_kernel_cols;
 				col_in_kernel = index_in_kernel - row_in_kernel*m_kernel_cols;
 				
-				row_in_feature = i % ((m_cols - m_kernel_cols) / stride + 1);
+				row_in_feature = i / ((m_cols - m_kernel_cols) / stride + 1);
 				col_in_feature = i - row_in_feature*((m_cols - m_kernel_cols) / stride + 1);
 				m_features_matrix.mp_data[i*m_features_matrix.m_cols + j] = \
 					mp_matrixes[channel_in_kernels].mp_data\
