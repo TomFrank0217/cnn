@@ -40,21 +40,21 @@ int main(int argc, char* argv[]){
     B.show(SHOW_IMAGE_INITAIL_VALUE);
 	C.show(SHOW_IMAGE_INITAIL_VALUE);
 
- //   string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
-	//cout << file_name << endl;
- //   vector<num_path> vec_path_label;
- //   get_image_path_and_label(vec_path_label, file_name);
-	//string str = "**************************************************************";
- //   for (int i = 0; i < vec_path_label.size(); ++i){
- //       cout << vec_path_label[i].path << endl;
- //       Mat image = imread(vec_path_label[i].path,0);
-	//	show(image, SHOW_IMAGE_SHAPE);
-	//	feature fea(image);
-	//	fea.show(SHOW_IMAGE_SHAPE);
-	//	kernel ker(image);
-	//	ker.show(SHOW_IMAGE_SHAPE);
-	//	cout << str << endl << str << endl << str << endl;
- //   }
+    string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
+	cout << file_name << endl;
+    vector<num_path> vec_path_label;
+    get_image_path_and_label(vec_path_label, file_name);
+	string str = "**************************************************************";
+    for (int i = 0; i < vec_path_label.size(); ++i){
+        cout << vec_path_label[i].path << endl;
+        Mat image = imread(vec_path_label[i].path,0);
+		show(image, SHOW_IMAGE_SHAPE);
+		feature fea(image);
+		fea.show(SHOW_IMAGE_SHAPE);
+		kernel ker(image);
+		ker.show(SHOW_IMAGE_SHAPE);
+		cout << str << endl << str << endl << str << endl;
+    }
 
     return 0;
 }

@@ -1,150 +1,150 @@
 #include "tensor.h"
 
 tensor::tensor(){
-	this->m_tensors_row = 0;
-	this->m_tensors_col = 0;
-	this->m_tensors_count = 0;
-	this->mp_tensors = NULL;
+	this->m_rows = 0;
+	this->m_cols = 0;
+	this->m_channels = 0;
+	this->mp_matrixes = NULL;
 }
 
-tensor::tensor(int tensors_count, int tensors_row, int tensors_col, int val) :
-m_tensors_count(tensors_count), m_tensors_row(tensors_row), m_tensors_col(tensors_col)
+tensor::tensor(int channels, int rows, int cols, int val) :
+m_channels(channels), m_rows(rows), m_cols(cols)
 {
-	if (0 >= m_tensors_count){
+	if (0 >= m_channels){
 		DEBUG_PRINT("0 >= m_tensors_count\n");
 		return;
 	}
 
-	mp_tensors = new matrix[m_tensors_count];
-	if (NULL == mp_tensors){
+	mp_matrixes = new matrix[m_channels];
+	if (NULL == mp_matrixes){
 		DEBUG_PRINT("NULL == mp_tensors\n");
 		return;
 	}
 
-	if (0 == m_tensors_row || 0 == m_tensors_col){
+	if (0 == m_rows || 0 == m_cols){
 		DEBUG_PRINT("0 == m_tensors_row || 0 == m_tensors_col\n");
-		mp_tensors = NULL;
+		mp_matrixes = NULL;
 		return;
 	}
 
-	if (0 > m_tensors_row || 0 > m_tensors_col){
+	if (0 > m_rows || 0 > m_cols){
 		DEBUG_PRINT("0 > m_tensors_row || 0 > m_tensors_col\n");
-		mp_tensors = NULL;
+		mp_matrixes = NULL;
 		return;
 	}
 
-	for (int i = 0; i < m_tensors_count; ++i){
-		mp_tensors[i] = matrix(m_tensors_row, m_tensors_col, val);
+	for (int i = 0; i < m_channels; ++i){
+		mp_matrixes[i] = matrix(m_rows, m_cols, val);
 	}
 	return;
 }
 
 tensor::tensor(int tensors_count, int tensors_row, int tensors_col, DATA_TYPE val) :
-m_tensors_count(tensors_count), m_tensors_row(tensors_row), m_tensors_col(tensors_col)
+m_channels(tensors_count), m_rows(tensors_row), m_cols(tensors_col)
 {
-	if (0 >= m_tensors_count){
+	if (0 >= m_channels){
 		DEBUG_PRINT("0 >= m_tensors_count\n");
 		return;
 	}
 
-	mp_tensors = new matrix[m_tensors_count];
-	if (NULL == mp_tensors){
+	mp_matrixes = new matrix[m_channels];
+	if (NULL == mp_matrixes){
 		DEBUG_PRINT("NULL == mp_tensors\n");
 		return;
 	}
 
-	if (0 == m_tensors_row || 0 == m_tensors_col){
+	if (0 == m_rows || 0 == m_cols){
 		DEBUG_PRINT("0 == m_tensors_row || 0 == m_tensors_col\n");
-		mp_tensors = NULL;
+		mp_matrixes = NULL;
 		return;
 	}
 
-	if (0 > m_tensors_row || 0 > m_tensors_col){
+	if (0 > m_rows || 0 > m_cols){
 		DEBUG_PRINT("0 > m_tensors_row || 0 > m_tensors_col\n");
-		mp_tensors = NULL;
+		mp_matrixes = NULL;
 		return;
 	}
 
-	for (int i = 0; i < m_tensors_count; ++i){
-		mp_tensors[i] = matrix(m_tensors_row, m_tensors_col, val);
+	for (int i = 0; i < m_channels; ++i){
+		mp_matrixes[i] = matrix(m_rows, m_cols, val);
 	}
 	return;
 }
 
 tensor::tensor(int tensors_count, int tensors_row, int tensors_col, int min, int max) :\
-m_tensors_count(tensors_count), m_tensors_row(tensors_row), m_tensors_col(tensors_col)
+m_channels(tensors_count), m_rows(tensors_row), m_cols(tensors_col)
 {
-	if (0 >= m_tensors_count){
+	if (0 >= m_channels){
 		DEBUG_PRINT("0 >= m_tensors_count\n");
 		return;
 	}
 
-	mp_tensors = new matrix[m_tensors_count];
-	if (NULL == mp_tensors){
+	mp_matrixes = new matrix[m_channels];
+	if (NULL == mp_matrixes){
 		DEBUG_PRINT("NULL == mp_tensors\n");
 		return;
 	}
 
-	if (0 == m_tensors_row || 0 == m_tensors_col){
+	if (0 == m_rows || 0 == m_cols){
 		DEBUG_PRINT("0 == m_tensors_row || 0 == m_tensors_col\n");
-		mp_tensors = NULL;
+		mp_matrixes = NULL;
 		return;
 	}
 
-	if (0 > m_tensors_row || 0 > m_tensors_col){
+	if (0 > m_rows || 0 > m_cols){
 		DEBUG_PRINT("0 > m_tensors_row || 0 > m_tensors_col\n");
-		mp_tensors = NULL;
+		mp_matrixes = NULL;
 		return;
 	}
 
-	for (int i = 0; i < m_tensors_count; ++i){
-		mp_tensors[i] = matrix(m_tensors_row, m_tensors_col, min, max);
+	for (int i = 0; i < m_channels; ++i){
+		mp_matrixes[i] = matrix(m_rows, m_cols, min, max);
 	}
 	return;
 }
 
 tensor::tensor(int tensors_count, int tensors_row, int tensors_col, DATA_TYPE min, DATA_TYPE max) :\
-m_tensors_count(tensors_count), m_tensors_row(tensors_row), m_tensors_col(tensors_col)
+m_channels(tensors_count), m_rows(tensors_row), m_cols(tensors_col)
 {
-	if (0 >= m_tensors_count){
+	if (0 >= m_channels){
 		DEBUG_PRINT("0 >= m_tensors_count\n");
 		return;
 	}
 
-	mp_tensors = new matrix[m_tensors_count];
-	if (NULL == mp_tensors){
+	mp_matrixes = new matrix[m_channels];
+	if (NULL == mp_matrixes){
 		DEBUG_PRINT("NULL == mp_tensors\n");
 		return;
 	}
 
-	if (0 == m_tensors_row || 0 == m_tensors_col){
+	if (0 == m_rows || 0 == m_cols){
 		DEBUG_PRINT("0 == m_tensors_row || 0 == m_tensors_col\n");
-		mp_tensors = NULL;
+		mp_matrixes = NULL;
 		return;
 	}
 
-	if (0 > m_tensors_row || 0 > m_tensors_col){
+	if (0 > m_rows || 0 > m_cols){
 		DEBUG_PRINT("0 > m_tensors_row || 0 > m_tensors_col\n");
-		mp_tensors = NULL;
+		mp_matrixes = NULL;
 		return;
 	}
 
-	for (int i = 0; i < m_tensors_count; ++i){
-		mp_tensors[i] = matrix(m_tensors_row, m_tensors_col, min, max);
+	for (int i = 0; i < m_channels; ++i){
+		mp_matrixes[i] = matrix(m_rows, m_cols, min, max);
 	}
 	return;
 }
 
 tensor::~tensor(){
-	if (NULL == mp_tensors){
+	if (NULL == mp_matrixes){
 		return;
 	}
 
-	if (m_tensors_count <= 0 || m_tensors_row <= 0 || m_tensors_col <= 0){
+	if (m_channels <= 0 || m_rows <= 0 || m_cols <= 0){
 		return;
 	}
 
-	delete[] mp_tensors;
+	delete[] mp_matrixes;
 	//for (int i = 0; i < m_kernels_count; ++i){
 	//    DEBUG_PRINT("i=%d\n", i);
 	//    delete (m_p_kernels + i);/* todo */
@@ -155,20 +155,20 @@ tensor::~tensor(){
 }
 
 bool tensor::show(int show_image_mode){
-	if (0 >= m_tensors_row || 0 >= m_tensors_col){
+	if (0 >= m_rows || 0 >= m_cols){
 		DEBUG_PRINT("bool tensor::show() \n \
 					0 >= m_tensors_row || 0 >= m_tensors_col\n");
 		return false;
 	}
 
-	if (0 >= m_tensors_count){
+	if (0 >= m_channels){
 		DEBUG_PRINT("bool tensor::show()\n  \0 >= m_kernels_count");
 		return false;
 	}
 
-	for (int i = 0; i < m_tensors_count; ++i){
+	for (int i = 0; i < m_channels; ++i){
 		DEBUG_PRINT("tensor %3d\n", i);
-		mp_tensors[i].show(show_image_mode);
+		mp_matrixes[i].show(show_image_mode);
 	}
 
 	return true;
@@ -176,32 +176,32 @@ bool tensor::show(int show_image_mode){
 
 tensor::tensor(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale){
 	//int img_channels = image.channels();
-	this->m_tensors_count = image.channels();
-	this->m_tensors_row = image.rows;
-	this->m_tensors_col = image.cols;
+	this->m_channels = image.channels();
+	this->m_rows = image.rows;
+	this->m_cols = image.cols;
 
-	this->mp_tensors = new matrix[m_tensors_count];
+	this->mp_matrixes = new matrix[m_channels];
 
-	if (NULL == mp_tensors){
+	if (NULL == mp_matrixes){
 		DEBUG_PRINT("NULL == mp_tensors\n");
 		return;
 	}
 
-	for (int i = 0; i < m_tensors_count; ++i){
-		mp_tensors[i] = \
-			matrix(m_tensors_row, m_tensors_col, DATA_TYPE(0.0));
+	for (int i = 0; i < m_channels; ++i){
+		mp_matrixes[i] = \
+			matrix(m_rows, m_cols, DATA_TYPE(0.0));
 	}
 
 	int k = 0;
-	switch (m_tensors_count)
+	switch (m_channels)
 	{
 	case 1:
 		//int k = -1;
-		for (int i = 0; i < m_tensors_row; ++i){
-			for (int j = 0; j < m_tensors_col; ++j){
-				mp_tensors[0].mp_data[k] = \
+		for (int i = 0; i < m_rows; ++i){
+			for (int j = 0; j < m_cols; ++j){
+				mp_matrixes[0].mp_data[k] = \
 					DATA_TYPE((int)image.at<uchar>(i, j)) - translation;
-				mp_tensors[0].mp_data[k] *= scale;
+				mp_matrixes[0].mp_data[k] *= scale;
 				++k;
 				//
 			}
