@@ -9,9 +9,9 @@
 class matrix{
 public:
     matrix(int rows = 0, int cols = 0, int val = 0);
-    matrix(int rows, int cols, int low, int high);
+    matrix(int rows, int cols, int min, int max);
     matrix(int rows, int cols, DATA_TYPE val);
-    matrix(int rows, int cols, DATA_TYPE low, DATA_TYPE high);
+    matrix(int rows, int cols, DATA_TYPE min, DATA_TYPE max);
     matrix(const matrix &A);
     ~matrix();
 	

@@ -130,3 +130,17 @@ kernels& kernels::operator=(const kernels& ker_){
 		mp_tensors[i] = ker_.mp_tensors[i];
 	}
 }
+
+bool kernels::reshape(){
+    int kernels_matrix_rows = m_rows*m_cols*m_channels;
+    int kernels_matrix_cols = m_kernels_count;
+    m_kernels_matrix = matrix(kernels_matrix_rows, kernels_matrix_cols);
+    /* kernels是个四维张量，要确定m_kernels_matrix（i，j）
+       在kernels种的具体位置需要一个四维向量（ROW,COL,row,col）
+       即确定一个(向量)定位函数loc. st loc(i,j)=（ROW,COL,row,col）*/
+    for (int i = 0; i < kernels_matrix_rows; ++i){
+        for (int j = 0; j < kernels_matrix_cols; ++j){
+            ;/* todo */
+        }
+    }
+}

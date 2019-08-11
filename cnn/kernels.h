@@ -16,12 +16,14 @@ public:
 	bool reshape(int kernel_rows = KERNEL_ROWS, int kernel_cols = KERNEL_COLS, \
 		int stride = 1, int padding_mode = VALID_PADDING);
 	bool show(int image_show_mode = SHOW_IMAGE_INITAIL_VALUE);
+    bool reshape();
 public:
 	tensor* mp_tensors;
 	int m_channels;
 	int m_rows;
 	int m_cols;
 	int m_kernels_count;
+    matrix m_kernels_matrix;
 };
 
 #endif
