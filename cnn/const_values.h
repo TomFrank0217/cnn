@@ -16,8 +16,8 @@
 
 #define  AVE_VALUE  127.5
 
-#define KERNEL_ROW     3
-#define KERNEL_COL     3
+#define KERNEL_ROWS     3
+#define KERNEL_COLS     3
 
 #define ABS(X) ((X)>0.0?(X):-(X))
 #define DELTA 0.001
