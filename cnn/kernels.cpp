@@ -95,3 +95,38 @@ bool kernels::show(int image_show_mode){
 	}
 	return true;
 }
+
+kernels::kernels(const kernels &ker_){
+	m_channels = ker_.m_channels;
+	m_rows = ker_.m_rows;
+	m_cols = ker_.m_cols;
+	m_kernels_count = ker_.m_kernels_count;
+	if (NULL != mp_tensors){
+		delete[] mp_tensors;
+	}
+	mp_tensors = NULL;
+	mp_tensors = new tensor[m_kernels_count];
+
+	for (int i = 0; i < m_kernels_count; ++i){
+		mp_tensors[i] = ker_.mp_tensors[i];
+	}
+}
+kernels& kernels::operator=(const kernels& ker_){
+	if (&ker_ == this){
+		return *this;
+	}
+
+	m_channels = ker_.m_channels;
+	m_rows = ker_.m_rows;
+	m_cols = ker_.m_cols;
+	m_kernels_count = ker_.m_kernels_count;
+	if (NULL != mp_tensors){
+		delete[] mp_tensors;
+	}
+	mp_tensors = NULL;
+	mp_tensors = new tensor[m_kernels_count];
+
+	for (int i = 0; i < m_kernels_count; ++i){
+		mp_tensors[i] = ker_.mp_tensors[i];
+	}
+}

@@ -289,7 +289,7 @@ matrix::~matrix(){
         DEBUG_PRINT("NULL == m_p_data  matrix::~matrix()\n");
     }
 
-    DEBUG_PRINT("matrix destructor called.\n");
+    //DEBUG_PRINT("matrix destructor called.\n");
     delete[] mp_data;
 }
 

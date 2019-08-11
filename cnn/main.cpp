@@ -39,36 +39,42 @@ int main(int argc, char* argv[]){
  //   A.show(SHOW_IMAGE_INITAIL_VALUE);
  //   B.show(SHOW_IMAGE_INITAIL_VALUE);
 	//C.show(SHOW_IMAGE_INITAIL_VALUE);
-	{
-		features fs(2, 4, 4, -2, 2);
-		fs.show(SHOW_IMAGE_INITAIL_VALUE);
-		fs.reshape();
-		fs.m_features_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
-		features fs1;
-		fs1 = fs;
-		fs1.show();
-	}
 
-	{
-		tensor ts(5, 3, 3, -2, 2);
-		ts.show(SHOW_IMAGE_INITAIL_VALUE);
-		tensor ts1;
-		ts1 = ts;
-		ts1.show();
-	}
-	//kernels kers(2, 3, 3, 3, -2, 2);
-	//cout << endl;
-	//cout << kers.m_channels << "  " << kers.m_rows << "  "\
-	//	<< kers.m_cols << "  " << kers.m_kernels_count << endl;
-	//for (int i = 0; i < kers.m_kernels_count; ++i){
-	//	cout << "kernel " << i << endl;
-	//	cout << kers.mp_tensors[i].m_channels << "  " \
-	//		 << kers.mp_tensors[i].m_rows << "  " << kers.mp_tensors[i].m_cols;
-	//	cout << endl;
-	//	(kers.mp_tensors[i]).show(SHOW_IMAGE_INITAIL_VALUE);
+	//{
+	//	tensor ts(5, 3, 3, -2, 2);
+	//	ts.show(SHOW_IMAGE_INITAIL_VALUE);
+	//	tensor ts1;
+	//	ts1 = ts;
+	//	ts1.show();
 	//}
-	//kers.show(SHOW_IMAGE_INITAIL_VALUE);
 
+	//{
+	//	features fs(2, 4, 4, -2, 2);
+	//	fs.show(SHOW_IMAGE_INITAIL_VALUE);
+	//	fs.reshape();
+	//	fs.m_features_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
+	//	features fs1;
+	//	fs1 = fs;
+	//	fs1.show();
+	//}
+	{
+		kernels kers(2, 3, 3, 3, -2, 2);
+		kers.show(SHOW_IMAGE_INITAIL_VALUE);
+		kernels k2 = kers;
+		k2 = kers;
+		k2.show();
+		//cout << endl;
+		//cout << kers.m_channels << "  " << kers.m_rows << "  "\
+		//	<< kers.m_cols << "  " << kers.m_kernels_count << endl;
+		//for (int i = 0; i < kers.m_kernels_count; ++i){
+		//	cout << "kernel " << i << endl;
+		//	cout << kers.mp_tensors[i].m_channels << "  " \
+		//		<< kers.mp_tensors[i].m_rows << "  " << kers.mp_tensors[i].m_cols;
+		//	cout << endl;
+		//	(kers.mp_tensors[i]).show(SHOW_IMAGE_INITAIL_VALUE);
+		//}
+		
+	}
  //   string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
 	//cout << file_name << endl;
  //   vector<num_path> vec_path_label;
