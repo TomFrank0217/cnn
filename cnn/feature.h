@@ -6,7 +6,7 @@
 class feature :public tensor{
 public:
 	feature();
-	feature(int features_count, int features_row, int features_col, int val);
+	feature(int channels, int rows, int cols, int val);
 	feature(const cv::Mat &image, DATA_TYPE translation = AVE_VALUE, DATA_TYPE scale = 1.0 / AVE_VALUE);
 	~feature();
 	//virtual bool reshape(int kernels_width = KERNEL_ROW, int kernels_height = KERNEL_COL, \

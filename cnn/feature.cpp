@@ -4,17 +4,16 @@ feature::feature(){
 	;
 }
 
-feature::feature(int features_count, int features_row, int features_col, int val):\
-tensor(features_count, features_row, features_col, val){
-	;
-}
-
-
-feature::~feature(){
+feature::feature(int channels, int rows, int cols, int val):\
+tensor(channels, rows, cols, val){
 	;
 }
 
 feature::feature(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale)
-	:tensor(image, translation, scale){
+	     :tensor(image, translation, scale){
+	;
+}
+
+feature::~feature(){
 	;
 }
