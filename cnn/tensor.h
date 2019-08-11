@@ -17,12 +17,10 @@ public:
 	tensor(int channels, int rows, int cols, DATA_TYPE min, DATA_TYPE max);
 	/*  tensor的数值必须归一化到(-1,1)之间  */
 	tensor::tensor(const cv::Mat &image, DATA_TYPE translation = AVE_VALUE, DATA_TYPE scale = 1.0 / AVE_VALUE);
-
-	virtual ~tensor();
-	virtual bool reshape(int kernel_rows = KERNEL_ROWS, int kernel_cols = KERNEL_COLS, \
+	 ~tensor();
+	//virtual bool reshape(int kernel_rows = KERNEL_ROWS, int kernel_cols = KERNEL_COLS, \
 		int stride = 1, int padding_mode = VALID_PADDING);
 
-	/*  tensor的数值必须归一化到(-1,1)之间，才能正确显示 其余的数值todo  */
 	bool show(int image_show_mode = SHOW_IMAGE_SCALE_VALUE);
 public:
 	matrix *mp_matrixes;

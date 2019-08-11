@@ -11,7 +11,7 @@ public:
 	~features();
 	features(int channels, int rows, int cols, DATA_TYPE min, DATA_TYPE max);
 	features(int channels, int rows, int cols, int min, int max);
-	virtual bool reshape(int kernels_rows = KERNEL_ROWS, int kernels_cols = KERNEL_COLS, \
+	bool reshape(int kernels_rows = KERNEL_ROWS, int kernels_cols = KERNEL_COLS, \
 		int stride = 1, int padding_mode = VALID_PADDING);
 public:
 	matrix m_features_matrix;
