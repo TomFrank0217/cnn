@@ -17,8 +17,8 @@
 
 #include "matrix.h"
 #include "tensor.h"
-#include "kernel.h"
-#include "feature.h"
+#include "kernels.h"
+#include "features.h"
 
 using namespace cv;
 using namespace std;
@@ -49,9 +49,9 @@ int main(int argc, char* argv[]){
         cout << vec_path_label[i].path << endl;
         Mat image = imread(vec_path_label[i].path,0);
 		show(image, SHOW_IMAGE_SHAPE);
-		feature fea(image);
+		features fea(image);
 		fea.show(SHOW_IMAGE_SHAPE);
-		kernel ker(image);
+		kernels ker(image);
 		ker.show(SHOW_IMAGE_SHAPE);
 		cout << str << endl << str << endl << str << endl;
     }

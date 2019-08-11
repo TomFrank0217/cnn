@@ -218,3 +218,7 @@ tensor::tensor(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale){
 	}
 	return;
 }
+
+bool tensor::reshape(int kernels_width, int kernels_height, int stride, int padding_mode){
+	return true;
+}

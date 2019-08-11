@@ -18,7 +18,7 @@ features::~features(){
 	;
 }
 
-bool features::reshape(int kernels_width = KERNEL_ROW, int kernels_height = KERNEL_COL, \
-	int stride = 1, int padding_mode = VALID_PADDING){
-	;
+bool features::reshape(int kernels_width, int kernels_height, \
+	int stride, int padding_mode){
+	return true;
 }
