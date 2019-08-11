@@ -35,6 +35,7 @@ public:
     int m_rows;
     int m_cols;
     DATA_TYPE *mp_data;
+	static int rand_num;
 };
 
 #endif

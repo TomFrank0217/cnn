@@ -39,11 +39,18 @@ int main(int argc, char* argv[]){
  //   A.show(SHOW_IMAGE_INITAIL_VALUE);
  //   B.show(SHOW_IMAGE_INITAIL_VALUE);
 	//C.show(SHOW_IMAGE_INITAIL_VALUE);
-	features fs(2, 4, 4, -2, 2);
-	fs.show(SHOW_IMAGE_INITAIL_VALUE);
-	fs.reshape();
-	
-	fs.m_features_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
+
+	//features fs(2, 4, 4, -2, 2);
+	//fs.show(SHOW_IMAGE_INITAIL_VALUE);
+	//fs.reshape();
+	//fs.m_features_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
+	 
+	tensor ts(5, 3, 3, -2, 2);
+	ts.show(SHOW_IMAGE_INITAIL_VALUE);
+
+	//kernels kers(2, 3, 3, 3, -2, 2);
+	//kers.show(SHOW_IMAGE_INITAIL_VALUE);
+
  //   string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
 	//cout << file_name << endl;
  //   vector<num_path> vec_path_label;

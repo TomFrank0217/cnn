@@ -3,6 +3,8 @@
 #include <iomanip>
 #include "const_values.h"
 
+int matrix::rand_num = 0;
+
 matrix::matrix(int rows, int cols, int val):\
 m_rows(rows), m_cols(cols)
 {
@@ -42,7 +44,7 @@ matrix::matrix(int rows, int cols, int low, int high){
         DEBUG_PRINT("low > high\nNULL  \
                     matrix(int rows, int cols, int low, int high)\n");
     }
-    srand(time(0));
+    srand(matrix::rand_num++);
     int mod_num = high - low + 1;
     int k = 0;
     for (int i = 0; i < m_rows; ++i){
@@ -84,7 +86,7 @@ m_rows(rows),m_cols(cols)
         DEBUG_PRINT("matrix::matrix(int rows, int cols)\nNULL == m_p_data\n");
     }
     
-    srand( (unsigned int) (time(0)) );
+    srand(matrix::rand_num++);
     int element_counts = rows*cols;
     DATA_TYPE rand_num = DATA_TYPE(0);
     DATA_TYPE scale = DATA_TYPE(0.0);

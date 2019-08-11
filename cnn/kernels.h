@@ -9,11 +9,12 @@ public:
 	kernels(int channels, int rows, int cols, int kernels_count, int val);
 	kernels(int channels, int rows, int cols, int kernels_count, DATA_TYPE val);
 	kernels(int channels, int rows, int cols, int kernels_count, int min, int max);
-	
+	kernels(int channels, int rows, int cols, int kernels_count, DATA_TYPE min, DATA_TYPE max);
 	~kernels();
 	
-	virtual bool reshape(int kernel_rows = KERNEL_ROWS, int kernel_cols = KERNEL_COLS, \
+	bool reshape(int kernel_rows = KERNEL_ROWS, int kernel_cols = KERNEL_COLS, \
 		int stride = 1, int padding_mode = VALID_PADDING);
+	bool show(int image_show_mode = SHOW_IMAGE_INITAIL_VALUE);
 public:
 	tensor* mp_tensors;
 	int m_channels;

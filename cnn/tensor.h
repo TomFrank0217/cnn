@@ -21,7 +21,7 @@ public:
 	//virtual bool reshape(int kernel_rows = KERNEL_ROWS, int kernel_cols = KERNEL_COLS, \
 		int stride = 1, int padding_mode = VALID_PADDING);
 
-	bool show(int image_show_mode = SHOW_IMAGE_SCALE_VALUE);
+	 bool show(int image_show_mode = SHOW_IMAGE_INITAIL_VALUE);
 public:
 	matrix *mp_matrixes;
 	int m_channels;
