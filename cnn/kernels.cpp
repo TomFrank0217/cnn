@@ -132,12 +132,31 @@ kernels::~kernels(){
 	//return true;
 //}
 
-bool kernels::show(int image_show_mode){
-	for (int i = 0; i < m_kernels_count; ++i){
-		std::cout << "kernels" << i << std::endl;
-		mp_tensors0[i].show(image_show_mode);
-		std::cout << std::endl;
+/* bool show(int image_show_mode = SHOW_IMAGE_INITAIL_VALUE, int mode = MATRIEX2KERNELS) */
+bool kernels::show(int image_show_mode, int mode){
+	if (KERNELS2MATRIEX == mode){
+		std::cout << "kernels\n" << std::endl;
+		for (int i = 0; i < m_kernels_count; ++i){
+			std::cout << "kernel " << i << std::endl;
+			mp_tensors0[i].show(image_show_mode);
+			std::cout << std::endl;
+		}
+		m_kernels_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
 	}
+	else if (MATRIEX2KERNELS == mode){
+		std::cout << "matrix \n" << std::endl;
+		m_kernels_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
+		for (int i = 0; i < m_kernels_count; ++i){
+			std::cout << "kernel " << i << std::endl;
+			mp_tensors1[i].show(image_show_mode);
+			std::cout << std::endl;
+		}
+	}
+	else{
+
+	}
+
+
 	return true;
 }
 
@@ -195,6 +214,30 @@ kernels& kernels::operator=(const kernels& ker_){
 bool kernels::reshape(int mode){
 	switch(mode)
 	{
+		/* (R,C,r,c)->(i,j)
+		(ROW,COL,row,col->(kernels_matrix.row, kernels_matrix.col)) */
+	case KERNELS2MATRIEX:
+		int ROWS = m_channels;
+		int COLS = m_kernels_count;
+		int rows = m_rows;
+		int cols = m_cols;
+		int i = 0;
+		int j = 0;
+		/* todo 此处代码可以优化 for example 交换 R C 的循环顺序 */
+		for (int R = 0; R < ROWS; ++R){
+			for (int C = 0; C < COLS; ++C){
+				for (int r = 0; r < rows; ++r){
+					for (int c = 0; c < cols; ++c){
+						i = R*rows*cols + r*cols + c;
+						j = C;
+						m_kernels_matrix.mp_data[i*m_kernels_matrix.m_cols + j] = \
+							mp_tensors0[C].mp_matrixes[R].mp_data[r*cols + c];
+					}
+				}
+			}
+		}
+		/* 此处是核心代码 */
+		break;
 	case MATRIEX2KERNELS:
 		int kernels_matrix_rows = m_rows*m_cols*m_channels;
 		int kernels_matrix_cols = m_kernels_count;
@@ -237,30 +280,7 @@ bool kernels::reshape(int mode){
 		}
 		/* 以上是核心代码 */
 		break;
-		/* (R,C,r,c)->(i,j)
-		(ROW,COL,row,col->(kernels_matrix.row, kernels_matrix.col)) */
-	case KERNELS2MATRIEX:
-		int ROWS = m_channels;
-		int COLS = m_kernels_count;
-		int rows = m_rows;
-		int cols = m_cols;
-		int i = 0;
-		int j = 0;
-		/* todo 此处代码可以优化 for example 交换 R C 的循环顺序 */
-		for (int R = 0; R < ROWS; ++R){
-			for (int C = 0; C < COLS; ++C){
-				for (int r = 0; r < rows; ++r){
-					for (int c = 0; c < cols; ++c){
-						i = R*rows*cols + r*cols + c;
-						j = C;
-						m_kernels_matrix.mp_data[i*m_kernels_matrix.m_cols + j] = \
-							mp_tensors0[C].mp_matrixes[R].mp_data[r*cols + c];
-					}
-				}
-			}
-		}
-		/* 此处是核心代码 */
-		break;
+
 	default:
 		std::cout << "bool kernels::reshape(int mode)\n default\n";
 		break;
