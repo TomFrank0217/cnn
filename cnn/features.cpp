@@ -59,38 +59,39 @@ bool features::reshape(int reshape_mode, int kernels_rows,int kernels_cols, int 
 	if (MATRIX2FEATURES == reshape_mode){
 
 		/* 此处是核心代码 */
-		/* 将feature_matrix回归到原始的的features */
-		/* 就是要学习这样的一个映射关系f, */
-		/*s.t. f: features_matrix(i,j)->features(channel,row,col) */
-		int channel = 0;/* channel 是features_matrix第(i,j)个pixel 在原始特征图中的通道数 */
-		int rpf = 0;/* rpf 是features_matrix第(i,j)个pixel 在原始特征图中的行数 */
-		int cpf = 0;/* cpf 是features_matrix第(i,j)个pixel 在原始特征图中的列数 */
+		/* 将 feature_matrix 回归到原始的的 features */
+		/* 就是要学习这样的一个映射关系f-1, */
+		/*s.t. f-1: (channel,rpf,cpf) -> (i,j) */
+		/* 这是一个后向插值的过程 可以减轻很多计算量 ，相比于下面被注释的前向插值而言 */
+		int channel = 0;/* channel 表示元素所在特征图中的的几个通道 */
+		int rpf = 0;/* rpf 是第channel个feature 元素所在行数 */
+		int cpf = 0;/* rpf 是第channel个feature 元素所在列数 */
+		int rpk = 0;/*rpk 是features中(channel,rpf,cpf)个元素在卷积核(二维)中的行数 */
+		int cpk = 0;/*cpk 是features中(channel,rpf,cpf)个元素在卷积核(二维)中的列数 */
 
-		int rpk = 0;/*rpk 是features_matrix第(i,j)个pixel 在卷积核(二维)中的行数 */
-		int cpk = 0;/*cpk 是features_matrix第(i,j)个pixel 在卷积核(二维)中的列数 */
-
-		/*rkf 是features_matrix第(i,j)个pixel 在二维卷积核(左上方元素)在特征中的行数 */
+		/*rkf 是features第(channel,rpf,cpf)个pixel 在二维卷积核(左上方元素)在特征中的行数 */
 		int rkf = 0;
-		/*ckf 是features_matrix第(i,j)个pixel 在二维卷积核(左上方元素)在特征中的列数 */
+		/*ckf 是features第(channel,rpf,cpf)个pixel 在二维卷积核(左上方元素)在特征中的列数 */
 		int ckf = 0;
-
-		/* 我们学习的并不是 f:(i,j) -> (channel,rpf,cpf)的直接映射关系
-		(channel,rpf,cpf)=(channel_in_features,row_pixel_feature,col_pixel_feature) */
-
-		/* 实际上我们寻找到两个映射关系 g和h  s.t. f=h*g */
-		/* 第一个是 g:(i,j)->(c,rpk,cpk,rkf,ckf)的映射关系,(c,rpk,cpk,rkf,ckf):=
-		(channel,row_pixel_ker,col_pixel_ker,row_ker_feature,col_ker_feature) */
-		/* 第二个是 h:(channel,rpk,cpk,rkf,ckf)-> (channel,rpf,cpf) */
-		/* (channel,rpf,cpf):=(c,row_pixel_feature,col_pixel_feature)*/
-
-		/* f=h*g的一个复合函数关系 */
-
 		/* index_in_kernel辅助变量，描述元素相对于单个(二维)卷积核的相对位置）*/
 		int index_in_kernel = 0;
-
 		switch (padding_mode)
 		{
 		case VALID_PADDING:
+			/* (i,j) (g)-> (channel,rpk,cpk,rkf,ckf) (h)-> (channel,rpf,cpf) */
+			/* (i,j) (f)-> (channel,rpf,cpf)  是一个不可逆过程 */
+			/* 所以  (channel,rpf,cpf) (f-1)-> (i,j)  的f-1实际上是一个多射过程 */
+			/* 具体的怎么把这一段代码写出来还需要思考 */
+			/* todo */
+			//for (channel = 0; channel < m_tensor.m_channels; ++channel){
+			//	for (rpf = 0; rpf < m_tensor.m_rows; ++rpf){
+			//		for (cpf = 0; cpf < m_tensor.m_cols; ++cpf){
+
+			//		}
+			//	}
+			//}
+
+			/* 以下代码虽然正确，但是features中很多元素被重复被计算了K*K次严重浪费计算资源 */
 			for (int i = 0; i < m_features_matrix.m_rows; ++i){
 				for (int j = 0; j < m_features_matrix.m_cols; ++j){
 					/* g: (i,j) -> (channel,rpk,cpk,rkf,ckf) */
@@ -105,11 +106,16 @@ bool features::reshape(int reshape_mode, int kernels_rows,int kernels_cols, int 
 					//channel = channel;
 					rpf = rpk + rkf;
 					cpf = cpk + ckf;
-					int tmp = m_tensor.mp_matrixes[channel].mp_data[rpf*mp_matrixes[0].m_cols + cpf]\
+					m_tensor.mp_matrixes[channel].mp_data[rpf*mp_matrixes[0].m_cols + cpf]\
 						= m_features_matrix.mp_data[i*m_features_matrix.m_cols + j];
-					std::cout << tmp << "  ";
+					
 				}
 			}
+			/* 留这一段代码的原因是以后参考和注意，要注意正向计算和反向计算的区别 */
+			/* 这就好比前向插值和反向插值的区别 */
+			/* 以上代码虽然正确，但是features中很多元素被重复被计算了K*K次严重浪费计算资源 */
+
+
 			break;
 		case SAME_PADDING:
 			/*todo*/
@@ -119,25 +125,37 @@ bool features::reshape(int reshape_mode, int kernels_rows,int kernels_cols, int 
 		}
 	}
 
+
 	if (FEATURES2MATRIX == reshape_mode){
 
+		/* 此处是核心代码 */
+		/* 将G: features -> matrix */
+		/* 我们要学习这样的一个映射关系f  这是一个逆向的过程 */
+		/* s.t. f: matrix中的第(i,j)pixel ->  features中第(channel,row,col)个元素 */
+		/* 简化即是 f: (i,j) -> (channel,rpf,cpf) *******************************
+		******(channel,rpf,cpf) = (channel,row_pixel_feature,col_pixel_feature): */
+		/* 关于 rpf cpf 的定义如下 */
+		int channel = 0;/* channel channel_in_features 是features_matrix第(i,j)个pixel 在原始特征图中的通道数 */
+		int rpf = 0;    /* rpf row_pixel_feature 是features_matrix第(i,j)个pixel 在原始特征图中的行数 */
+		int cpf = 0;    /* cpf col_pixel_feature 是features_matrix第(i,j)个pixel 在原始特征图中的列数 */
 
-		/* 以下三个变量来确定卷积左上方元素的在kernel中的位置 */
-		int channel = 0;/* 即channel_in_features, channel代表第几个卷积核(特征) */
-		int rpk = 0;     /* row代表元素相对于卷积核(二维)左上方元素的行数 和kernels(4 dims)kernel(3 dims)定义的不一致)*/
-		int cpk = 0;    /*  解释同上 col代表元素相对于卷积核左上方元素的列数 */
-		/* 以上三个变量来确定单个卷积核左上方元素的在kernel中的位置 */
-		
+		int rpk = 0;/*rpk 是features_matrix第(i,j)个pixel 在卷积核(二维)中的行数 */
+		int cpk = 0;/*cpk 是features_matrix第(i,j)个pixel 在卷积核(二维)中的列数 */
+		/*rkf 是features_matrix第(i,j)个pixel 在二维卷积核(左上方元素)在特征中的行数 */
+		int rkf = 0;
+		/*ckf 是features_matrix第(i,j)个pixel 在二维卷积核(左上方元素)在特征中的列数 */
+		int ckf = 0;
+		/* 我们学习的并不是直接得到 f: (i,j) -> (channel,rpf,cpf) 的映射关系 */
+		/* 实际上我们寻找到两个映射关系 g和h,  s.t. f=h*g 这样的一个复合函数的关系 */
+		/* 第一个是 g: (i,j)->(c,rpk,cpk,rkf,ckf)的映射关系,
+		/* 第二个是 h:(channel,rpk,cpk,rkf,ckf)-> (channel,rpf,cpf) */
+		/* f=h*g的一个复合函数关系 */
+
 		/* index_in_kernels辅助变量，描述元素相对于单个卷积核的相对位置（一维）*/
 		int index_in_kernel = 0;
-		/* 以下两个变量来确定卷积核左上角元素相对于单个特征的位置 */
-		int rkf = 0;
-		int ckf = 0;
 		/* 仿照牛顿力学中的相对位置，即坐标转换，\
 		   能够确定features_matrix元素对应的在原始features中的绝对位置 */
-
-		int rpf = 0;
-		int cpf = 0;
+		/* 简而言之，就是 A相对于C的位移 = A相对于B的位移 + B相对于C的位移 */
 		switch (padding_mode){
 			/* features2matrix */
 		case VALID_PADDING: /* (N+2P-K)/S +1 */
@@ -156,7 +174,7 @@ bool features::reshape(int reshape_mode, int kernels_rows,int kernels_cols, int 
 					rkf = i / ((m_cols - m_kernel_cols) / stride + 1);
 					ckf = i - rkf*((m_cols - m_kernel_cols) / stride + 1);
 
-					/* (channel,rpk,cpk,rkf,ckf) -> (rpf,cpf)*/
+					/* (channel,rpk,cpk,rkf,ckf) -> (channel,rpf,cpf)*/
 					//channel=channel;
 					/* A相对于C的位移 = A相对于B的位移 + B相对于C的位移 */
 					rpf = rpk + rkf;/* 元素在原始特征中的行(列)数 = 元素在卷积核中的行(列)数 + 卷积核在特征中的(行列)数 */

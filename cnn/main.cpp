@@ -49,7 +49,7 @@ int main(int argc, char* argv[]){
 	//}
 
 	{
-		features fs(2, 3, 4, 0, 9);
+		features fs(3, 5, 6, 0, 9);
 		fs.show(SHOW_IMAGE_INITAIL_VALUE);
 		fs.reshape(FEATURES2MATRIX);
 		fs.m_features_matrix.show(SHOW_IMAGE_INITAIL_VALUE);

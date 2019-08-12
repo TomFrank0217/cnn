@@ -16,7 +16,7 @@
 
 #define  AVE_VALUE                  127.5
 
-#define KERNEL_ROWS                 3
+#define KERNEL_ROWS                 2
 #define KERNEL_COLS                 3
 
 #define KERNELS2MATRIEX             0
