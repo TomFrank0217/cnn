@@ -15,6 +15,7 @@ m_rows(rows), m_cols(cols)
     if (rows <= 0 || cols <= 0){
         DEBUG_PRINT("matrix::matrix(int rows, int cols)\nrows <= 0 || cols <= 0\n");
     }
+
 	m_rows = rows;
 	m_cols = cols;
     mp_data = new DATA_TYPE[m_rows * m_cols];
