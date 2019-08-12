@@ -19,6 +19,9 @@
 #define KERNEL_ROWS                 3
 #define KERNEL_COLS                 3
 
+#define KERNELS2MATRIEX             0
+#define MATRIEX2KERNELS             1
+
 #define ABS(X)                      ((X)>0.0?(X):-(X))
 #define DELTA                       0.001
 
