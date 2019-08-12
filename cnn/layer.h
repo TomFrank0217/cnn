@@ -9,6 +9,7 @@ public:
     layer();
     layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
         int fts_channels/*kers_channels*/, int fts_rows, int fts_cols);
+    matrix conv();
     ~layer();
 public:
     kernels kers;

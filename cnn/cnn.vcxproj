@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="features.cpp" />
     <ClCompile Include="kernels.cpp" />
+    <ClCompile Include="layer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="matrix.cpp" />
     <ClCompile Include="tensor.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="debug_print.h" />
     <ClInclude Include="features.h" />
     <ClInclude Include="kernels.h" />
+    <ClInclude Include="layer.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="tensor.h" />
   </ItemGroup>

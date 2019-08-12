@@ -19,6 +19,7 @@
 #include "tensor.h"
 #include "kernels.h"
 #include "features.h"
+#include "layer.h"
 
 using namespace cv;
 using namespace std;
@@ -49,18 +50,18 @@ int main(int argc, char* argv[]){
 	//}
 
 	{
-		features fs(3, 5, 6, 0, 9);
-		fs.show(SHOW_IMAGE_INITAIL_VALUE);
-		fs.reshape(FEATURES2MATRIX);
-		fs.m_features_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
+		//features fs(3, 5, 6, 0, 9);
+		//fs.show(SHOW_IMAGE_INITAIL_VALUE);
+		//fs.reshape(FEATURES2MATRIX);
+		//fs.m_features_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
 
-		fs.reshape(MATRIX2FEATURES);
-		fs.m_tensor.show(SHOW_IMAGE_INITAIL_VALUE);
+		//fs.reshape(MATRIX2FEATURES);
+		//fs.m_tensor.show(SHOW_IMAGE_INITAIL_VALUE);
 		//features fs1;
 		//fs1 = fs;
 		//fs1.show();
 	}
-	int x = 0;
+
 	{
 		//kernels kers(2, 3, 3, 4, -2, 2);
 		////kers.reshape();
@@ -79,8 +80,20 @@ int main(int argc, char* argv[]){
 		//	cout << endl;
 		//	(kers.mp_tensors[i]).show(SHOW_IMAGE_INITAIL_VALUE);
 		//}
-		
 	}
+    {
+        //layer(kers_channels,kers_rows,kers_cols,kers_count,fts_channels/*kers_channels*/,fts_rows, fts_cols);
+        layer ly(2, 3, 3, 3, 2, 5, 4);
+        //ly.fts.show(SHOW_IMAGE_INITAIL_VALUE);
+        //bool reshape(int mode = FEATURES2MATRIX, int kernels_rows = KERNEL_ROWS, \
+        //    int kernels_cols = KERNEL_COLS, int stride = 1, int padding_mode = VALID_PADDING);
+        ly.fts.reshape(FEATURES2MATRIX, ly.kers.m_rows, ly.kers.m_cols, 1, VALID_PADDING);
+        //ly.kers.show(SHOW_IMAGE_INITAIL_VALUE, KERNELS2MATRIEX);
+        ly.kers.reshape(KERNELS2MATRIEX);
+        matrix m = ly.conv();
+        m.show();
+    }
+    int x = 0;
  //   string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
 	//cout << file_name << endl;
  //   vector<num_path> vec_path_label;
