@@ -15,7 +15,7 @@ public:
 	kernels& operator=(const kernels& ker_);
 	//bool reshape(int kernel_rows = KERNEL_ROWS, int kernel_cols = KERNEL_COLS, \
 		int stride = 1, int padding_mode = VALID_PADDING);
-	bool show(int image_show_mode = SHOW_IMAGE_INITAIL_VALUE);
+	bool show(int image_show_mode = SHOW_IMAGE_INITAIL_VALUE,int mode=MATRIEX2KERNELS);
 	bool reshape(int mode = KERNELS2MATRIEX);
 public:
 	tensor* mp_tensors0;

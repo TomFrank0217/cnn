@@ -58,11 +58,13 @@ int main(int argc, char* argv[]){
 	//	fs1.show();
 	//}
 	{
-		kernels kers(2, 3, 3, 3, -2, 2);
-		kers.show(SHOW_IMAGE_INITAIL_VALUE);
-		kernels k2 = kers;
-		k2 = kers;
-		k2.show();
+		kernels kers(2, 3, 3, 2, -2, 2);
+		//kers.reshape();
+		kers.show(SHOW_IMAGE_INITAIL_VALUE, KERNELS2MATRIEX);
+		kers.show(SHOW_IMAGE_INITAIL_VALUE, MATRIEX2KERNELS);
+		//kernels k2 = kers;
+		//k2 = kers;
+		//k2.show(SHOW_IMAGE_INITAIL_VALUE, MATRIEX2KERNELS);
 		//cout << endl;
 		//cout << kers.m_channels << "  " << kers.m_rows << "  "\
 		//	<< kers.m_cols << "  " << kers.m_kernels_count << endl;

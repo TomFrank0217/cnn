@@ -141,11 +141,13 @@ bool kernels::show(int image_show_mode, int mode){
 			mp_tensors0[i].show(image_show_mode);
 			std::cout << std::endl;
 		}
+		reshape(KERNELS2MATRIEX);
 		m_kernels_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
 	}
 	else if (MATRIEX2KERNELS == mode){
 		std::cout << "matrix \n" << std::endl;
 		m_kernels_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
+		reshape(MATRIEX2KERNELS);
 		for (int i = 0; i < m_kernels_count; ++i){
 			std::cout << "kernel " << i << std::endl;
 			mp_tensors1[i].show(image_show_mode);
@@ -212,17 +214,19 @@ kernels& kernels::operator=(const kernels& ker_){
 }
 
 bool kernels::reshape(int mode){
+
+	int ROWS = m_channels;
+	int COLS = m_kernels_count;
+	int rows = m_rows;
+	int cols = m_cols;
+	int i = 0;
+	int j = 0;
+
 	switch(mode)
 	{
 		/* (R,C,r,c)->(i,j)
 		(ROW,COL,row,col->(kernels_matrix.row, kernels_matrix.col)) */
 	case KERNELS2MATRIEX:
-		int ROWS = m_channels;
-		int COLS = m_kernels_count;
-		int rows = m_rows;
-		int cols = m_cols;
-		int i = 0;
-		int j = 0;
 		/* todo 此处代码可以优化 for example 交换 R C 的循环顺序 */
 		for (int R = 0; R < ROWS; ++R){
 			for (int C = 0; C < COLS; ++C){
@@ -241,7 +245,7 @@ bool kernels::reshape(int mode){
 	case MATRIEX2KERNELS:
 		int kernels_matrix_rows = m_rows*m_cols*m_channels;
 		int kernels_matrix_cols = m_kernels_count;
-		m_kernels_matrix = matrix(kernels_matrix_rows, kernels_matrix_cols);
+		//m_kernels_matrix = matrix(kernels_matrix_rows, kernels_matrix_cols);
 		/* kernels是个四维张量，要确定m_kernels_matrix（i，j）
 		在kernels种的具体位置需要一个四维向量（ROW,COL,row,col）
 		即确定一个(向量)定位函数loc. st loc(i,j)=（ROW,COL,row,col）*/
@@ -281,9 +285,9 @@ bool kernels::reshape(int mode){
 		/* 以上是核心代码 */
 		break;
 
-	default:
-		std::cout << "bool kernels::reshape(int mode)\n default\n";
-		break;
+	//default:
+	//	std::cout << "bool kernels::reshape(int mode)\n default\n";
+	//	break;
 	}
 
 	return true;
