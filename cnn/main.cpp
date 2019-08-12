@@ -48,20 +48,24 @@ int main(int argc, char* argv[]){
 	//	ts1.show();
 	//}
 
-	//{
-	//	features fs(2, 4, 4, -2, 2);
-	//	fs.show(SHOW_IMAGE_INITAIL_VALUE);
-	//	fs.reshape();
-	//	fs.m_features_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
-	//	features fs1;
-	//	fs1 = fs;
-	//	fs1.show();
-	//}
 	{
-		kernels kers(2, 3, 3, 2, -2, 2);
-		//kers.reshape();
-		kers.show(SHOW_IMAGE_INITAIL_VALUE, KERNELS2MATRIEX);
-		kers.show(SHOW_IMAGE_INITAIL_VALUE, MATRIEX2KERNELS);
+		features fs(2, 3, 4, 0, 9);
+		fs.show(SHOW_IMAGE_INITAIL_VALUE);
+		fs.reshape(FEATURES2MATRIX);
+		fs.m_features_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
+
+		fs.reshape(MATRIX2FEATURES);
+		fs.m_tensor.show(SHOW_IMAGE_INITAIL_VALUE);
+		//features fs1;
+		//fs1 = fs;
+		//fs1.show();
+	}
+	int x = 0;
+	{
+		//kernels kers(2, 3, 3, 4, -2, 2);
+		////kers.reshape();
+		//kers.show(SHOW_IMAGE_INITAIL_VALUE, KERNELS2MATRIEX);
+		//kers.show(SHOW_IMAGE_INITAIL_VALUE, MATRIEX2KERNELS);
 		//kernels k2 = kers;
 		//k2 = kers;
 		//k2.show(SHOW_IMAGE_INITAIL_VALUE, MATRIEX2KERNELS);

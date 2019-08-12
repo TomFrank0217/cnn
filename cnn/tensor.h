@@ -12,7 +12,7 @@ class tensor{
 public:
 	tensor();
 	tensor(const tensor& ts_);
-	tensor(int channels, int rows, int cols, int val);
+	tensor(int channels, int rows, int cols, int val = 0);
 	tensor(int channels, int rows, int cols, DATA_TYPE val);
 	tensor(int channels, int rows, int cols, int min, int max);
 	tensor(int channels, int rows, int cols, DATA_TYPE min, DATA_TYPE max);

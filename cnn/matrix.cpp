@@ -291,6 +291,7 @@ matrix::~matrix(){
 
     //DEBUG_PRINT("matrix destructor called.\n");
     delete[] mp_data;
+	mp_data = NULL;
 }
 
 matrix& matrix::operator=(const matrix &A){

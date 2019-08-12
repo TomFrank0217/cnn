@@ -22,6 +22,9 @@
 #define KERNELS2MATRIEX             0
 #define MATRIEX2KERNELS             1
 
+#define FEATURES2MATRIX             0
+#define MATRIX2FEATURES             1
+
 #define ABS(X)                      ((X)>0.0?(X):-(X))
 #define DELTA                       0.001
 
