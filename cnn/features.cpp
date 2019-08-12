@@ -114,8 +114,6 @@ bool features::reshape(int reshape_mode, int kernels_rows,int kernels_cols, int 
 			/* 留这一段代码的原因是以后参考和注意，要注意正向计算和反向计算的区别 */
 			/* 这就好比前向插值和反向插值的区别 */
 			/* 以上代码虽然正确，但是features中很多元素被重复被计算了K*K次严重浪费计算资源 */
-
-
 			break;
 		case SAME_PADDING:
 			/*todo*/
@@ -124,7 +122,6 @@ bool features::reshape(int reshape_mode, int kernels_rows,int kernels_cols, int 
 		//	break;
 		}
 	}
-
 
 	if (FEATURES2MATRIX == reshape_mode){
 
