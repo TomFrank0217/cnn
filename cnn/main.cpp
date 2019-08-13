@@ -17,7 +17,7 @@
 
 #include "matrix.h"
 //#include "tensor.h"
-//#include "kernels.h"
+#include "kernels.h"
 #include "features.h"
 //#include "layer.h"
 
@@ -58,23 +58,23 @@ int main(int argc, char* argv[]){
 
 	int y = 0;
 	{
-		//kernels kers(2, 3, 3, 4, -2, 2);
-		////kers.reshape();
-		//kers.show(SHOW_IMAGE_INITAIL_VALUE, KERNELS2MATRIEX);
-		//kers.show(SHOW_IMAGE_INITAIL_VALUE, MATRIEX2KERNELS);
-		//kernels k2 = kers;
-		//k2 = kers;
-		//k2.show(SHOW_IMAGE_INITAIL_VALUE, MATRIEX2KERNELS);
-		//cout << endl;
-		//cout << kers.m_channels << "  " << kers.m_rows << "  "\
-		//	<< kers.m_cols << "  " << kers.m_kers_counts << endl;
-		//for (int i = 0; i < kers.m_kers_counts; ++i){
-		//	cout << "kernel " << i << endl;
-		//	cout << kers.mp_tensors[i].m_channels << "  " \
-		//		<< kers.mp_tensors[i].m_rows << "  " << kers.mp_tensors[i].m_cols;
-		//	cout << endl;
-		//	(kers.mp_tensors[i]).show(SHOW_IMAGE_INITAIL_VALUE);
-		//}
+		kernels kers(2, 2, 3, 2, -2, 2);
+		//kers.reshape();
+		kers.show(SHOW_IMAGE_INITAIL_VALUE);
+		kers.show(SHOW_IMAGE_INITAIL_VALUE);
+		kernels k2 = kers;
+		k2 = kers;
+		k2.show(SHOW_IMAGE_INITAIL_VALUE);
+		cout << endl;
+		cout << kers.m_channels << "  " << kers.m_rows << "  "\
+			<< kers.m_cols << "  " << kers.m_kers_counts << endl;
+		for (int i = 0; i < kers.m_kers_counts; ++i){
+			cout << "kernel " << i << endl;
+			cout << kers.mp_kers[i].m_channels << "  " \
+				<< kers.mp_kers[i].m_rows << "  " << kers.mp_kers[i].m_cols;
+			(kers.mp_kers[i]).show(SHOW_IMAGE_INITAIL_VALUE);
+		}
+		int x = 0;
 	}
   //  {
   //      //layer(kers_channels,kers_rows,kers_cols,kers_count,fts_channels/*kers_channels*/,fts_rows, fts_cols);

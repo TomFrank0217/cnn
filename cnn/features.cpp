@@ -165,15 +165,13 @@ bool features::show(int show_image_mode){
 		DEBUG_PRINT("bool features::show()\n  0>= m_channels\n");
 		return false;
 	}
-
 	//DEBUG_PRINT("\n\n\ntensor row=%d  col=%d  \n", m_rows, m_cols);
-	std::cout << std::endl << std::endl;
 	std::cout << "features" << std::endl;
 	for (int i = 0; i < m_channels; ++i){
 		DEBUG_PRINT("matrix(feature) %3d\n", i);
 		mp_matrixes[i].show(show_image_mode);
 	}
-
+	std::cout << std::endl << std::endl;
 	return true;
 }
 

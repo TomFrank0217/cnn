@@ -7,17 +7,18 @@ class kernels{
 public:
 	kernels();
 	kernels(const kernels &ker_);
+	/* todo 似乎把下面两个函数封装成模板类比较合适 */
 	kernels(int channels, int rows, int cols, int kernels_count, int val);
 	kernels(int channels, int rows, int cols, int kernels_count, DATA_TYPE val);
+
+	/* todo 似乎把下面两个函数封装成模板类比较合适 */
 	kernels(int channels, int rows, int cols, int kernels_count, int min, int max);
 	kernels(int channels, int rows, int cols, int kernels_count, DATA_TYPE 
 		    min = -RANDOM_INITIAL_VAL, DATA_TYPE max = RANDOM_INITIAL_VAL); 
 	~kernels();
 	kernels& operator=(const kernels& ker_);
-	//bool reshape(int kernel_rows = KERNEL_ROWS, int kernel_cols = KERNEL_COLS, \
-		int stride = 1, int padding_mode = VALID_PADDING);
-	bool show(int image_show_mode = SHOW_IMAGE_INITAIL_VALUE,int mode=MATRIEX2KERNELS);
-	bool reshape(int mode = KERNELS2MATRIEX);
+	bool show(int image_show_mode = SHOW_IMAGE_INITAIL_VALUE);
+	//bool reshape(int mode = KERNELS2MATRIEX);
 public:
 	kernel* mp_kers;
 	kernel* mp_tensors1;
