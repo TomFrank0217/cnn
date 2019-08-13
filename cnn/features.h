@@ -16,15 +16,17 @@ public:
 	features(int channels, int rows, int cols, int min, int max);
 	/* to understand 为什么特征不需要赋值函数，因为没有指针变量吗？ */
 	features& operator=(const features& fs_);
-	bool reshape(int mode = FEATURES2MATRIX, int kernels_rows = KERNEL_ROWS, \
+	//bool reshape(int reshape_mode = FEATURES2MATRIX, int kernels_rows = KERNEL_ROWS, \
+		int kernels_cols = KERNEL_COLS, int stride = 1, int padding_mode = VALID_PADDING);
+	bool reshape(tensor& tsr, matrix& fts_matrix, int reshape_mode = FEATURES2MATRIX, int kernels_rows = KERNEL_ROWS, \
 		int kernels_cols = KERNEL_COLS, int stride = 1, int padding_mode = VALID_PADDING);
 public:
 	matrix m_features_matrix;
-	int m_kernel_rows;/* 用于padding时候控制features的大小 */
-	int m_kernel_cols;/* 用于padding时候控制features的大小 */
+	int m_kernel_rows;/* 用于padding时候控制features的大小 todo */
+	int m_kernel_cols;/* 用于padding时候控制features的大小 todo */
 	int m_stride;
 	int m_padding_mode;
-	tensor m_tensor; 
+	tensor m_tensor; /* 暂时看上去 m_tensor是没有用的 */
 };
 
 #endif

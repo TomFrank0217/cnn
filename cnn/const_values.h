@@ -8,7 +8,7 @@
 #define SHOW_IMAGE_SCALE_VALUE      0
 #define SHOW_IMAGE_INITAIL_VALUE    1 
 #define SHOW_IMAGE_SHAPE            2
-#define SHOW_IAMGE_CROP_LENGTH      0
+#define SHOW_IMAGE_CROP_LENGTH      0
 #define SHOW_WIDTH                  9
 
 #define VALID_PADDING               0

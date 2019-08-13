@@ -240,8 +240,25 @@ tensor& tensor::operator=(const tensor &ts_){
 		return *this;
 	}
 	
-	delete[] mp_matrixes;
-	mp_matrixes = NULL;
+	if (NULL == ts_.mp_matrixes){
+		std::cout << "(NULL == ts_.mp_matrixes)  tensor::operator=\n";
+		if (NULL == mp_matrixes){
+			m_channels = m_rows = m_cols = 0;
+			return *this;
+		}
+		else{
+			delete[] mp_matrixes;
+			mp_matrixes = NULL;
+			m_channels = m_rows = m_cols = 0;
+			return *this;
+		}
+	}
+
+	if (NULL != mp_matrixes){
+		delete[] mp_matrixes;
+		mp_matrixes = NULL;
+	}
+
 	m_channels = ts_.m_channels;
 	m_rows = ts_.m_rows;
 	m_cols = ts_.m_cols;

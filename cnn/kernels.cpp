@@ -197,7 +197,7 @@ kernels& kernels::operator=(const kernels& ker_){
 	m_kernels_count = ker_.m_kernels_count;
 	m_kernels_matrix = ker_.m_kernels_matrix;
 
-	if (NULL != mp_tensors0 || NULL != mp_tensors1){
+	if (NULL != mp_tensors0 && NULL != mp_tensors1){
 		delete[] mp_tensors0;
 		mp_tensors0 = NULL;
 		delete[] mp_tensors1;
@@ -206,6 +206,11 @@ kernels& kernels::operator=(const kernels& ker_){
 
 	mp_tensors0 = new tensor[m_kernels_count];
 	mp_tensors1 = new tensor[m_kernels_count];
+	if (NULL == mp_tensors0 || NULL == mp_tensors1){
+		std::cout << "(NULL == mp_tensors0 || NULL == mp_tensors1)\
+					 				\n  kernels::operator= \n";
+		return *this;
+	}
 
 	for (int i = 0; i < m_kernels_count; ++i){
 		mp_tensors0[i] = ker_.mp_tensors0[i];

@@ -50,18 +50,17 @@ int main(int argc, char* argv[]){
 	//}
 
 	{
-		//features fs(3, 5, 6, 0, 9);
-		//fs.show(SHOW_IMAGE_INITAIL_VALUE);
-		//fs.reshape(FEATURES2MATRIX);
-		//fs.m_features_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
+		features fs(3, 5, 4, 0, 5);
+		fs.show(SHOW_IMAGE_INITAIL_VALUE);
+		fs.reshape(fs.m_tensor, fs.m_features_matrix, FEATURES2MATRIX);
+		fs.m_features_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
+		fs.m_tensor.show(SHOW_IMAGE_INITAIL_VALUE);
 
-		//fs.reshape(MATRIX2FEATURES);
-		//fs.m_tensor.show(SHOW_IMAGE_INITAIL_VALUE);
-		//features fs1;
-		//fs1 = fs;
-		//fs1.show();
+		fs.reshape(fs.m_tensor, fs.m_features_matrix, MATRIX2FEATURES);
+		fs.m_tensor.show(SHOW_IMAGE_INITAIL_VALUE);
 	}
 
+	int y = 0;
 	{
 		//kernels kers(2, 3, 3, 4, -2, 2);
 		////kers.reshape();
@@ -81,25 +80,25 @@ int main(int argc, char* argv[]){
 		//	(kers.mp_tensors[i]).show(SHOW_IMAGE_INITAIL_VALUE);
 		//}
 	}
-    {
-        //layer(kers_channels,kers_rows,kers_cols,kers_count,fts_channels/*kers_channels*/,fts_rows, fts_cols);
-		layer ly(2, 2, 2, 3, 2, 5, 8);
-        ly.fts.show(SHOW_IMAGE_INITAIL_VALUE);
-        //bool reshape(int mode = FEATURES2MATRIX, int kernels_rows = KERNEL_ROWS, \
-        //    int kernels_cols = KERNEL_COLS, int stride = 1, int padding_mode = VALID_PADDING);
-        ly.fts.reshape(FEATURES2MATRIX, ly.kers.m_rows, ly.kers.m_cols, 1, VALID_PADDING);
+  //  {
+  //      //layer(kers_channels,kers_rows,kers_cols,kers_count,fts_channels/*kers_channels*/,fts_rows, fts_cols);
+		//layer ly(2, 2, 2, 3, 2, 5, 8);
+  //      ly.fts.show(SHOW_IMAGE_INITAIL_VALUE);
+  //      //bool reshape(int mode = FEATURES2MATRIX, int kernels_rows = KERNEL_ROWS, \
+  //      //    int kernels_cols = KERNEL_COLS, int stride = 1, int padding_mode = VALID_PADDING);
+  //      ly.fts.reshape(FEATURES2MATRIX, ly.kers.m_rows, ly.kers.m_cols, 1, VALID_PADDING);
 
-        ly.kers.show(SHOW_IMAGE_INITAIL_VALUE, KERNELS2MATRIEX);
-        ly.kers.reshape(KERNELS2MATRIEX);
+  //      ly.kers.show(SHOW_IMAGE_INITAIL_VALUE, KERNELS2MATRIEX);
+  //      ly.kers.reshape(KERNELS2MATRIEX);
 
-        matrix m = ly.conv();
-		m.show(SHOW_IMAGE_INITAIL_VALUE);
+  //      matrix m = ly.conv();
+		//m.show(SHOW_IMAGE_INITAIL_VALUE);
 
-		ly.reshape(MATRIX2FEATURES);
-		//ly.conv_matrix_fts.show(SHOW_IMAGE_INITAIL_VALUE);
-		ly.reshape(FEATURES2MATRIX);
-		ly.conv_matrix.show();
-    }
+		//ly.reshape(MATRIX2FEATURES);
+		////ly.conv_matrix_fts.show(SHOW_IMAGE_INITAIL_VALUE);
+		//ly.reshape(FEATURES2MATRIX);
+		//ly.conv_matrix.show();
+  //  }
     int x = 0;
  //   string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
 	//cout << file_name << endl;
@@ -156,8 +155,8 @@ bool show(Mat &image, int show_image_mode){
     {
     case SHOW_IMAGE_SHAPE:
         
-        for (int i = SHOW_IAMGE_CROP_LENGTH; i < image.rows - SHOW_IAMGE_CROP_LENGTH; ++i){
-            for (int j = SHOW_IAMGE_CROP_LENGTH; j < image.cols - SHOW_IAMGE_CROP_LENGTH; ++j){
+        for (int i = SHOW_IMAGE_CROP_LENGTH; i < image.rows - SHOW_IMAGE_CROP_LENGTH; ++i){
+            for (int j = SHOW_IMAGE_CROP_LENGTH; j < image.cols - SHOW_IMAGE_CROP_LENGTH; ++j){
                 if (0 == int(image.at<uchar>(i, j)))
                     cout << "  ";
                 else
@@ -172,8 +171,8 @@ bool show(Mat &image, int show_image_mode){
         for (int k = 0; k < SHOW_WIDTH; ++k){
             str += " ";
         }
-        for (int i = SHOW_IAMGE_CROP_LENGTH; i < image.rows - SHOW_IAMGE_CROP_LENGTH; ++i){
-            for (int j = SHOW_IAMGE_CROP_LENGTH; j < image.cols - SHOW_IAMGE_CROP_LENGTH; ++j){
+        for (int i = SHOW_IMAGE_CROP_LENGTH; i < image.rows - SHOW_IMAGE_CROP_LENGTH; ++i){
+            for (int j = SHOW_IMAGE_CROP_LENGTH; j < image.cols - SHOW_IMAGE_CROP_LENGTH; ++j){
                 if (0 == (int)image.at<uchar>(i, j)){
                     cout << str;
                 }

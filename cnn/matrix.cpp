@@ -355,8 +355,8 @@ bool matrix::show(int show_image_mode){
 	switch (show_image_mode)
 	{
 	case SHOW_IMAGE_SHAPE:
-		for (int i = SHOW_IAMGE_CROP_LENGTH; i < m_rows - SHOW_IAMGE_CROP_LENGTH; ++i){
-			for (int j = SHOW_IAMGE_CROP_LENGTH; j < m_cols - SHOW_IAMGE_CROP_LENGTH; ++j){
+		for (int i = SHOW_IMAGE_CROP_LENGTH; i < m_rows - SHOW_IMAGE_CROP_LENGTH; ++i){
+			for (int j = SHOW_IMAGE_CROP_LENGTH; j < m_cols - SHOW_IMAGE_CROP_LENGTH; ++j){
 				if (ABS(AVE_VALUE*(mp_data[i*m_cols + j] + 1.0)) < DELTA)
 					std::cout << "  ";
 				else
@@ -367,8 +367,8 @@ bool matrix::show(int show_image_mode){
 		break;
 
 	case SHOW_IMAGE_SCALE_VALUE:
-		for (int i = SHOW_IAMGE_CROP_LENGTH; i < m_rows - SHOW_IAMGE_CROP_LENGTH; ++i){
-			for (int j = SHOW_IAMGE_CROP_LENGTH; j < m_cols - SHOW_IAMGE_CROP_LENGTH; ++j){
+		for (int i = SHOW_IMAGE_CROP_LENGTH; i < m_rows - SHOW_IMAGE_CROP_LENGTH; ++i){
+			for (int j = SHOW_IMAGE_CROP_LENGTH; j < m_cols - SHOW_IMAGE_CROP_LENGTH; ++j){
 				if (ABS(AVE_VALUE*(mp_data[i*m_cols + j] + 1.0)) < DELTA){
 					for (int k = 0; k < SHOW_WIDTH; ++k){
 						std::cout << " ";
@@ -383,8 +383,8 @@ bool matrix::show(int show_image_mode){
 		break;
 
 	case SHOW_IMAGE_INITAIL_VALUE:
-		for (int i = SHOW_IAMGE_CROP_LENGTH; i < m_rows - SHOW_IAMGE_CROP_LENGTH; ++i){
-			for (int j = SHOW_IAMGE_CROP_LENGTH; j < m_cols - SHOW_IAMGE_CROP_LENGTH; ++j){
+		for (int i = SHOW_IMAGE_CROP_LENGTH; i < m_rows - SHOW_IMAGE_CROP_LENGTH; ++i){
+			for (int j = SHOW_IMAGE_CROP_LENGTH; j < m_cols - SHOW_IMAGE_CROP_LENGTH; ++j){
 				//	if ( ABS(mp_data[i*m_cols + j]) < DELTA){
 				//		for (int k = 0; k < SHOW_WIDTH; ++k){
 				//			std::cout << " ";

@@ -20,6 +20,7 @@ public:
 public:
 	tensor* mp_tensors0;
 	tensor* mp_tensors1;
+	tensor bias;
 	int m_channels;
 	int m_rows;
 	int m_cols;
