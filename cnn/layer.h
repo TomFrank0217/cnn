@@ -10,6 +10,7 @@ public:
     layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
         int fts_channels/*kers_channels*/, int fts_rows, int fts_cols);
     matrix conv();
+	bool reshape(int mode = MATRIEX2KERNELS);
     ~layer();
 public:
     kernels kers;

@@ -142,7 +142,7 @@ bool kernels::show(int image_show_mode, int mode){
 			std::cout << std::endl;
 		}
 		reshape(KERNELS2MATRIEX);
-		m_kernels_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
+		//m_kernels_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
 	}
 	else if (MATRIEX2KERNELS == mode){
 		std::cout << "matrix \n" << std::endl;

@@ -21,7 +21,7 @@ m_rows(rows), m_cols(cols)
     mp_data = new DATA_TYPE[m_rows * m_cols];
     //DEBUG_PRINT("m_p_matrix = new DATA_TYPE[rows * cols];\n");/* to delete */
     if (NULL == mp_data){
-        DEBUG_PRINT("matrix::matrix(int rows, int cols)\nNULL == m_p_data\n");
+        DEBUG_PRINT("matrix::matrix(int rows, int cols)\nNULL == mp_data\n");
     }
     //memset(m_p_matrix, val, m_rows*m_cols*sizeof(DATA_TYPE));
     int n = m_rows*m_cols;
@@ -38,7 +38,7 @@ matrix::matrix(int rows, int cols, int low, int high){
     m_cols = cols;
     mp_data = new DATA_TYPE[rows * cols];
     if (NULL == mp_data){
-        DEBUG_PRINT("matrix::matrix(int rows, int cols)\nNULL == m_p_data\n");
+        DEBUG_PRINT("matrix::matrix(int rows, int cols)\nNULL == mp_data\n");
     }
 
     if (low > high){
@@ -65,7 +65,7 @@ m_rows(rows),m_cols(cols)
     mp_data = new DATA_TYPE[rows * cols];
 
     if (NULL == mp_data){
-        DEBUG_PRINT("matrix::matrix(int rows, int cols)\nNULL == m_p_data\n");
+        DEBUG_PRINT("matrix::matrix(int rows, int cols)\nNULL == mp_data\n");
     }
 
     int n = m_rows*m_cols;
@@ -84,7 +84,7 @@ m_rows(rows),m_cols(cols)
 
     mp_data = new DATA_TYPE[rows * cols];
     if (NULL == mp_data){
-        DEBUG_PRINT("matrix::matrix(int rows, int cols)\nNULL == m_p_data\n");
+        DEBUG_PRINT("matrix::matrix(int rows, int cols)\nNULL == mp_data\n");
     }
     
     srand(matrix::rand_num++);
@@ -112,11 +112,11 @@ matrix matrix::operator+(const matrix & addition_matrix){
     }
 
     if (NULL == mp_data){
-        DEBUG_PRINT("NULL == m_p_data  matrix::operator+\n");
+        DEBUG_PRINT("NULL == mp_data  matrix::operator+\n");
     }
 
     if (NULL == addition_matrix.mp_data){
-        DEBUG_PRINT("NULL == addition_matrix.m_p_data  matrix::operator+\n");
+        DEBUG_PRINT("NULL == addition_matrix.mp_data  matrix::operator+\n");
     }
 
     if (m_rows != addition_matrix.m_rows || m_cols != addition_matrix.m_cols){
@@ -172,11 +172,11 @@ matrix matrix::operator-(const matrix &reduction_matrix){
 	}
 
 	if (NULL == mp_data){
-		DEBUG_PRINT("null == m_p_data  matrix::operator+\n");
+		DEBUG_PRINT("null == mp_data  matrix::operator+\n");
 	}
 
 	if (NULL == reduction_matrix.mp_data){
-		DEBUG_PRINT("null == reduction_matrix.m_p_data  matrix::operator+\n");
+		DEBUG_PRINT("null == reduction_matrix.mp_data  matrix::operator+\n");
 	}
 
 	if (m_rows != reduction_matrix.m_rows || m_cols != reduction_matrix.m_cols){
@@ -249,11 +249,11 @@ matrix matrix::operator*(const matrix &multiplier_matrix){
     }
 
     if (NULL == mp_data){
-        DEBUG_PRINT("NULL == m_p_data  matrix::operator+\n");
+        DEBUG_PRINT("NULL == mp_data  matrix::operator+\n");
     }
 
     if (NULL == multiplier_matrix.mp_data){
-        DEBUG_PRINT("NULL == multiplier_matrix.m_p_data  matrix::operator+\n");
+        DEBUG_PRINT("NULL == multiplier_matrix.mp_data  matrix::operator+\n");
     }
 
     if (this->m_cols != multiplier_matrix.m_rows){
@@ -283,11 +283,13 @@ matrix matrix::operator*(const matrix &multiplier_matrix){
 
 matrix::~matrix(){
     if (m_rows <= 0 || m_cols <= 0){
-        DEBUG_PRINT("m_rows <= 0 || m_cols <= 0  matrix::~matrix()\n");
+        //DEBUG_PRINT("m_rows <= 0 || m_cols <= 0  matrix::~matrix()\n");
+		return;
     }
 
     if (NULL == mp_data){
-        DEBUG_PRINT("NULL == m_p_data  matrix::~matrix()\n");
+        //DEBUG_PRINT("NULL == mp_data  matrix::~matrix()\n");
+		return;
     }
 
     //DEBUG_PRINT("matrix destructor called.\n");
@@ -318,18 +320,18 @@ matrix& matrix::operator=(const matrix &A){
 matrix::matrix(const matrix &A) :\
 m_rows(A.m_rows), m_cols(A.m_cols)
 {
-	DEBUG_PRINT("matrix::matrix(const matrix &A) called\n");
+	//DEBUG_PRINT("matrix::matrix(const matrix &A) called\n");
 	if (A.m_rows <= 0 || A.m_cols <= 0){
 		DEBUG_PRINT("matrix::matrix(const matrix &A)\n A.m_rows <= 0 || A.m_cols <= 0\n");
 	}
 
 	if (NULL == A.mp_data){
-		DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == m_p_data\n");
+		DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == mp_data\n");
 	}
 
 	mp_data = new DATA_TYPE[m_rows*m_cols];
 	if (NULL == mp_data){
-		DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == m_p_data\n");
+		DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == mp_data\n");
 	}
 
 	int element_counts = m_rows*m_cols;

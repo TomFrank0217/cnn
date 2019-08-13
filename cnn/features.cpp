@@ -11,6 +11,11 @@ tensor(feature_channels, features_rows, features_cols, val){
 	m_tensor = tensor();
 }
 
+features::features(int feature_channels, int features_rows, int features_cols, DATA_TYPE val):
+tensor(feature_channels, features_rows, features_cols, val){
+	m_features_matrix = matrix();
+	m_tensor = tensor();
+}
 features::features(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale)
 	     :tensor(image, translation, scale){
 	m_features_matrix = matrix();

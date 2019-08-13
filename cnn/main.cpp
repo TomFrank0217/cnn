@@ -83,15 +83,20 @@ int main(int argc, char* argv[]){
 	}
     {
         //layer(kers_channels,kers_rows,kers_cols,kers_count,fts_channels/*kers_channels*/,fts_rows, fts_cols);
-        layer ly(2, 3, 3, 3, 2, 5, 4);
-        //ly.fts.show(SHOW_IMAGE_INITAIL_VALUE);
+		layer ly(2, 2, 2, 3, 2, 5, 8);
+        ly.fts.show(SHOW_IMAGE_INITAIL_VALUE);
         //bool reshape(int mode = FEATURES2MATRIX, int kernels_rows = KERNEL_ROWS, \
         //    int kernels_cols = KERNEL_COLS, int stride = 1, int padding_mode = VALID_PADDING);
         ly.fts.reshape(FEATURES2MATRIX, ly.kers.m_rows, ly.kers.m_cols, 1, VALID_PADDING);
-        //ly.kers.show(SHOW_IMAGE_INITAIL_VALUE, KERNELS2MATRIEX);
+
+        ly.kers.show(SHOW_IMAGE_INITAIL_VALUE, KERNELS2MATRIEX);
         ly.kers.reshape(KERNELS2MATRIEX);
+
         matrix m = ly.conv();
-        m.show();
+		//m.show(SHOW_IMAGE_INITAIL_VALUE);
+
+		ly.reshape(MATRIX2FEATURES);
+		ly.conv_matrix_fts.show(SHOW_IMAGE_INITAIL_VALUE);
     }
     int x = 0;
  //   string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
