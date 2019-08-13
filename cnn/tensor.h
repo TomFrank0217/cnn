@@ -8,21 +8,18 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-class tensor{
+class features{
 public:
-	tensor();
-	tensor(const tensor& ts_);
-	tensor(int channels, int rows, int cols, int val = 0);
-	tensor(int channels, int rows, int cols, DATA_TYPE val);
-	tensor(int channels, int rows, int cols, int min, int max);
-	tensor(int channels, int rows, int cols, DATA_TYPE min, DATA_TYPE max);
+	features();
+	features(const features& fs_);
+	features(int channels, int rows, int cols, int val = 0);
+	features(int channels, int rows, int cols, DATA_TYPE val);
+	features(int channels, int rows, int cols, int min, int max);
+	features(int channels, int rows, int cols, DATA_TYPE min, DATA_TYPE max);
 	/*  tensor的数值必须归一化到 (-1.0, 1.0) 之间  */
-	tensor::tensor(const cv::Mat &image, DATA_TYPE translation = AVE_VALUE, DATA_TYPE scale = 1.0 / AVE_VALUE);
-	tensor& operator=(const tensor &ts_);
-	 ~tensor();
-	//virtual bool reshape(int kernel_rows = KERNEL_ROWS, int kernel_cols = KERNEL_COLS, \
-		int stride = 1, int padding_mode = VALID_PADDING);
-
+	features(const cv::Mat &image, DATA_TYPE translation = AVE_VALUE, DATA_TYPE scale = 1.0 / AVE_VALUE);
+	features& operator=(const features &fs_);
+	 ~features();
 	 bool show(int image_show_mode = SHOW_IMAGE_INITAIL_VALUE);
 public:
 	matrix *mp_matrixes;
@@ -31,4 +28,6 @@ public:
 	int m_cols;
 };
 
+//typedef features tensor;
+typedef features tensor;
 #endif

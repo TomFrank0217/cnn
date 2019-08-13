@@ -5,14 +5,14 @@ layer::layer(){
     //    = m_kers_cols = m_kers_count = 0;
     //m_fts_channels = m_fts_rows = m_fts_cols = 0;
     kers = kernels();
-    fts = features();
+    fts = featuresssss();
 }
 
 layer::layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
     int fts_channels/*kers_channels*/, int fts_rows, int fts_cols){
     kers = kernels(kers_channels, kers_rows, kers_cols,kers_count,\
 		- RANDOM_INITIAL_VAL, RANDOM_INITIAL_VAL);/* todo kers初始化需要很小的初始值 */
-    fts = features(fts_channels, fts_rows, fts_cols, 0, 1);
+    fts = featuresssss(fts_channels, fts_rows, fts_cols, 0, 1);
 }
 
 layer::~layer(){
@@ -38,7 +38,7 @@ bool layer::reshape(int mode){
 			std::cout << "(conv_features_rows*conv_features_cols != mx.m_rows\
 						 layer::reshape()\n)";
 		}
-		conv_matrix_fts = features(conv_features_channels, conv_features_rows, conv_features_cols, 0.0);
+		conv_matrix_fts = featuresssss(conv_features_channels, conv_features_rows, conv_features_cols, 0.0);
 		/* 此时这个问题和之前的问题相似，但是简单一些 */
 		/* 我们是要求 conv_matrix中第(i,j)元到 conv_matrix_features中对应的(channel,row,col)之间的映射关系*/
 		/* 即求一个映射关系f: (i,j) -> (channel,row,col) */

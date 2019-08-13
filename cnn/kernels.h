@@ -18,9 +18,9 @@ public:
 	bool show(int image_show_mode = SHOW_IMAGE_INITAIL_VALUE,int mode=MATRIEX2KERNELS);
 	bool reshape(int mode = KERNELS2MATRIEX);
 public:
-	tensor* mp_tensors0;
-	tensor* mp_tensors1;
-	tensor bias;
+	features* mp_tensors0;
+	features* mp_tensors1;
+	features bias;
 	int m_channels;
 	int m_rows;
 	int m_cols;

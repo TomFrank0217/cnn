@@ -16,9 +16,9 @@ public:
 public:
 	/* 前向传播后向传播的时候，如果是pooling层，kers设为空 */
     kernels kers;
-    features fts;
+    featuresssss fts;
     matrix conv_matrix;
-    features conv_matrix_fts;
+    featuresssss conv_matrix_fts;
 
 };
 

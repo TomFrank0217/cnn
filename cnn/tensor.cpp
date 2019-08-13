@@ -1,13 +1,13 @@
 #include "tensor.h"
 
-tensor::tensor(){
+features::features(){
 	this->m_rows = 0;
 	this->m_cols = 0;
 	this->m_channels = 0;
 	this->mp_matrixes = NULL;
 }
 
-tensor::tensor(int channels, int rows, int cols, int val) :
+features::features(int channels, int rows, int cols, int val) :
 m_channels(channels), m_rows(rows), m_cols(cols)
 {
 	if (0 >= m_channels){
@@ -39,7 +39,7 @@ m_channels(channels), m_rows(rows), m_cols(cols)
 	return;
 }
 
-tensor::tensor(int tensors_count, int tensors_row, int tensors_col, DATA_TYPE val) :
+features::features(int tensors_count, int tensors_row, int tensors_col, DATA_TYPE val) :
 m_channels(tensors_count), m_rows(tensors_row), m_cols(tensors_col)
 {
 	if (0 >= m_channels){
@@ -71,7 +71,7 @@ m_channels(tensors_count), m_rows(tensors_row), m_cols(tensors_col)
 	return;
 }
 
-tensor::tensor(int channels, int rows, int cols, int min, int max) :\
+features::features(int channels, int rows, int cols, int min, int max) :\
 m_channels(channels), m_rows(rows), m_cols(cols)
 {
 	if (0 >= m_channels){
@@ -103,7 +103,7 @@ m_channels(channels), m_rows(rows), m_cols(cols)
 	return;
 }
 
-tensor::tensor(int tensors_count, int tensors_row, int tensors_col, DATA_TYPE min, DATA_TYPE max) :\
+features::features(int tensors_count, int tensors_row, int tensors_col, DATA_TYPE min, DATA_TYPE max) :\
 m_channels(tensors_count), m_rows(tensors_row), m_cols(tensors_col)
 {
 	if (0 >= m_channels){
@@ -135,7 +135,7 @@ m_channels(tensors_count), m_rows(tensors_row), m_cols(tensors_col)
 	return;
 }
 
-tensor::~tensor(){
+features::~features(){
 	if (NULL == mp_matrixes){
 		return;
 	}
@@ -154,7 +154,7 @@ tensor::~tensor(){
 
 }
 
-bool tensor::show(int show_image_mode){
+bool features::show(int show_image_mode){
 	if (0 >= m_rows || 0 >= m_cols){
 		DEBUG_PRINT("bool tensor::show() \n \
 					0 >= m_tensors_row || 0 >= m_tensors_col\n");
@@ -176,7 +176,7 @@ bool tensor::show(int show_image_mode){
 	return true;
 }
 
-tensor::tensor(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale){
+features::features(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale){
 	//int img_channels = image.channels();
 	this->m_channels = image.channels();
 	this->m_rows = image.rows;
@@ -225,7 +225,7 @@ tensor::tensor(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale){
 //	return true;
 //}
 
-tensor::tensor(const tensor& ts_){
+features::features(const features& ts_){
     m_channels = ts_.m_channels;
 	m_rows = ts_.m_rows;
 	m_cols = ts_.m_cols;
@@ -235,7 +235,7 @@ tensor::tensor(const tensor& ts_){
 	}
 }
 
-tensor& tensor::operator=(const tensor &ts_){
+features& features::operator=(const features &ts_){
 	if (this == &ts_){
 		return *this;
 	}

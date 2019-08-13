@@ -50,7 +50,7 @@ int main(int argc, char* argv[]){
 	//}
 
 	{
-		features fs(3, 5, 4, 0, 5);
+		featuresssss fs(3, 5, 4, 0, 5);
 		fs.show(SHOW_IMAGE_INITAIL_VALUE);
 		fs.reshape(fs.m_tensor, fs.m_features_matrix, FEATURES2MATRIX);
 		fs.m_features_matrix.show(SHOW_IMAGE_INITAIL_VALUE);

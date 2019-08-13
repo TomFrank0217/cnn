@@ -23,16 +23,16 @@ m_channels(channels),m_rows(rows),m_cols(cols),m_kernels_count(kernels_count){
 
 	mp_tensors0 = NULL;
 	mp_tensors1 = NULL;
-	mp_tensors0 = new tensor[kernels_count];
-	mp_tensors1 = new tensor[kernels_count];
+	mp_tensors0 = new features[kernels_count];
+	mp_tensors1 = new features[kernels_count];
 	if (NULL == mp_tensors0 || NULL == mp_tensors1){
 		DEBUG_PRINT("(NULL == mp_tensors0||NULL==mp_tensors1) \n \
 		      kernels(int channels, int rows, int cols, int kernels_count, int val)");
 	}
 
 	for (int i = 0; i < kernels_count; ++i){
-		mp_tensors0[i] = tensor(channels, rows, cols, val);
-		mp_tensors1[i] = tensor(channels, rows, cols, val);
+		mp_tensors0[i] = features(channels, rows, cols, val);
+		mp_tensors1[i] = features(channels, rows, cols, val);
 	}
 }
 
@@ -49,16 +49,16 @@ m_channels(channels), m_rows(rows), m_cols(cols), m_kernels_count(kernels_count)
 
 	mp_tensors0 = NULL;
 	mp_tensors1 = NULL;
-	mp_tensors0 = new tensor[kernels_count];
-	mp_tensors1 = new tensor[kernels_count];
+	mp_tensors0 = new features[kernels_count];
+	mp_tensors1 = new features[kernels_count];
 	if (NULL == mp_tensors0 || NULL == mp_tensors1){
 		DEBUG_PRINT("(NULL == mp_tensors0 || NULL == mp_tensors1) \n \
 					 kernels(int channels, int rows, int cols, int kernels_count, DATA_TYPE val)");
 	}
 
 	for (int i = 0; i < kernels_count; ++i){
-		mp_tensors0[i] = tensor(channels, rows, cols, val);
-		mp_tensors1[i] = tensor(channels, rows, cols, val);
+		mp_tensors0[i] = features(channels, rows, cols, val);
+		mp_tensors1[i] = features(channels, rows, cols, val);
 	}
 }
 
@@ -75,16 +75,16 @@ m_channels(channels), m_rows(rows), m_cols(cols), m_kernels_count(kernels_count)
 
 	mp_tensors0 = NULL;
 	mp_tensors1 = NULL;
-	mp_tensors0 = new tensor[kernels_count];
-	mp_tensors1 = new tensor[kernels_count];
+	mp_tensors0 = new features[kernels_count];
+	mp_tensors1 = new features[kernels_count];
 	if (NULL == mp_tensors0 || NULL == mp_tensors1){
 		DEBUG_PRINT("(NULL == mp_tensors0 || NULL == mp_tensors1) \n \
 					  kernels(int channels, int rows, int cols, int kernels_count, int min, int max)");
 	}
 
 	for (int i = 0; i < kernels_count; ++i){
-		mp_tensors0[i] = tensor(channels, rows, cols, min, max);
-		mp_tensors1[i] = tensor(channels, rows, cols, min, max);
+		mp_tensors0[i] = features(channels, rows, cols, min, max);
+		mp_tensors1[i] = features(channels, rows, cols, min, max);
 	}
 }
 
@@ -101,16 +101,16 @@ m_channels(channels), m_rows(rows), m_cols(cols), m_kernels_count(kernels_count)
 
 	mp_tensors0 = NULL;
 	mp_tensors1 = NULL;
-	mp_tensors0 = new tensor[kernels_count];
-	mp_tensors1 = new tensor[kernels_count];
+	mp_tensors0 = new features[kernels_count];
+	mp_tensors1 = new features[kernels_count];
 	if (NULL == mp_tensors0 || NULL != mp_tensors1){
 		DEBUG_PRINT("(NULL == mp_tensors) \n \
 					 kernels(int channels, int rows, int cols, int kernels_count, DATA_TYPE min, DATA_TYPE max)");
 	}
 
 	for (int i = 0; i < kernels_count; ++i){
-		mp_tensors0[i] = tensor(channels, rows, cols, min, max);
-		mp_tensors1[i] = tensor(channels, rows, cols, min, max);
+		mp_tensors0[i] = features(channels, rows, cols, min, max);
+		mp_tensors1[i] = features(channels, rows, cols, min, max);
 	}
 }
 
@@ -174,8 +174,8 @@ kernels::kernels(const kernels &ker_){
 		mp_tensors1 = NULL;
 	}
 	m_kernels_matrix = ker_.m_kernels_matrix;
-	mp_tensors0 = new tensor[m_kernels_count];
-	mp_tensors1 = new tensor[m_kernels_count];
+	mp_tensors0 = new features[m_kernels_count];
+	mp_tensors1 = new features[m_kernels_count];
 	if (NULL == mp_tensors0 || NULL == mp_tensors1){
 		DEBUG_PRINT("(NULL == mp_tensors0 || NULL == mp_tensors1)\n");
 		return;
@@ -204,8 +204,8 @@ kernels& kernels::operator=(const kernels& ker_){
 		mp_tensors1 = NULL;
 	}
 
-	mp_tensors0 = new tensor[m_kernels_count];
-	mp_tensors1 = new tensor[m_kernels_count];
+	mp_tensors0 = new features[m_kernels_count];
+	mp_tensors1 = new features[m_kernels_count];
 	if (NULL == mp_tensors0 || NULL == mp_tensors1){
 		std::cout << "(NULL == mp_tensors0 || NULL == mp_tensors1)\
 					 				\n  kernels::operator= \n";
@@ -263,7 +263,7 @@ bool kernels::reshape(int mode){
 			delete[] mp_tensors1;
 			mp_tensors1 = NULL;
 		}
-		mp_tensors1 = new tensor[m_kernels_count];
+		mp_tensors1 = new features[m_kernels_count];
 		if (NULL != mp_tensors0){
 			for (int i = 0; i < m_kernels_count; ++i){
 				*(mp_tensors1 + i) = *(mp_tensors0 + i);

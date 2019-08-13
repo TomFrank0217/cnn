@@ -1,45 +1,45 @@
 #include "features.h"
 
-features::features(){
+featuresssss::featuresssss(){
 	m_features_matrix = matrix();
-	m_tensor = tensor();
+	m_tensor = features();
 }
 
-features::features(int feature_channels, int features_rows, int features_cols, int val):\
-tensor(feature_channels, features_rows, features_cols, val){
+featuresssss::featuresssss(int feature_channels, int features_rows, int features_cols, int val):\
+features(feature_channels, features_rows, features_cols, val){
 	m_features_matrix = matrix();
-	m_tensor = tensor();
+	m_tensor = features();
 }
 
-features::features(int feature_channels, int features_rows, int features_cols, DATA_TYPE val):
-tensor(feature_channels, features_rows, features_cols, val){
+featuresssss::featuresssss(int feature_channels, int features_rows, int features_cols, DATA_TYPE val):
+features(feature_channels, features_rows, features_cols, val){
 	m_features_matrix = matrix();
-	m_tensor = tensor();
+	m_tensor = features();
 }
-features::features(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale)
-	     :tensor(image, translation, scale){
+featuresssss::featuresssss(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale)
+	     :features(image, translation, scale){
 	m_features_matrix = matrix();
-	m_tensor = tensor();
+	m_tensor = features();
 }
 
-features::features(int feature_channels, int features_rows, int features_cols, DATA_TYPE min, DATA_TYPE max) : \
-tensor(feature_channels, features_rows, features_cols, min, max)
+featuresssss::featuresssss(int feature_channels, int features_rows, int features_cols, DATA_TYPE min, DATA_TYPE max) : \
+features(feature_channels, features_rows, features_cols, min, max)
 {
 	m_features_matrix = matrix();
-	m_tensor = tensor();
+	m_tensor = features();
 	return;
 }
 
-features::features(int feature_channels, int features_rows, int features_cols, int min, int max) : \
-tensor(feature_channels, features_rows, features_cols, min, max)
+featuresssss::featuresssss(int feature_channels, int features_rows, int features_cols, int min, int max) : \
+features(feature_channels, features_rows, features_cols, min, max)
 {
 	m_features_matrix = matrix();
-	m_tensor = tensor();
+	m_tensor = features();
 	return;
 }
 
 
-features::~features(){
+featuresssss::~featuresssss(){
 	;
 }
 
@@ -203,7 +203,7 @@ features::~features(){
 //	return false;
 //}
 
-bool features::reshape(tensor& tsr, matrix& fts_matrix, int reshape_mode, int kernel_rows, \
+bool featuresssss::reshape(features& tsr, matrix& fts_matrix, int reshape_mode, int kernel_rows, \
 	int kernel_cols, int stride, int padding_mode){
 	if (0 >= kernel_rows || 0 >= kernel_cols){
 		DEBUG_PRINT("(0 >= kernel_rows || 0 >= kernel_cols) \n features::reshape \n");
@@ -216,7 +216,7 @@ bool features::reshape(tensor& tsr, matrix& fts_matrix, int reshape_mode, int ke
 
 	if (FEATURES2MATRIX == reshape_mode){
 		/* fts是输入  fts_matrix是输出 */
-		tsr = tensor(m_channels, m_rows, m_cols, 0.0);
+		tsr = features(m_channels, m_rows, m_cols, 0.0);
 		for (int i = 0; i < tsr.m_channels; ++i){
 			tsr.mp_matrixes[i] = mp_matrixes[i];
 		}
@@ -384,7 +384,7 @@ bool features::reshape(tensor& tsr, matrix& fts_matrix, int reshape_mode, int ke
 	}
 }
 
-features::features(features &fs_){
+featuresssss::featuresssss(featuresssss &fs_){
 	m_channels = fs_.m_channels;
 	m_rows = fs_.m_rows;
 	m_cols = fs_.m_cols;
@@ -408,7 +408,7 @@ features::features(features &fs_){
 	m_tensor = fs_.m_tensor;
 }
 
-features& features::operator=(const features& fs_){
+featuresssss& featuresssss::operator=(const featuresssss& fs_){
 	if (&fs_ == this){
 		return *this;
 	}
