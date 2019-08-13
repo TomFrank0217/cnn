@@ -93,10 +93,12 @@ int main(int argc, char* argv[]){
         ly.kers.reshape(KERNELS2MATRIEX);
 
         matrix m = ly.conv();
-		//m.show(SHOW_IMAGE_INITAIL_VALUE);
+		m.show(SHOW_IMAGE_INITAIL_VALUE);
 
 		ly.reshape(MATRIX2FEATURES);
-		ly.conv_matrix_fts.show(SHOW_IMAGE_INITAIL_VALUE);
+		//ly.conv_matrix_fts.show(SHOW_IMAGE_INITAIL_VALUE);
+		ly.reshape(FEATURES2MATRIX);
+		ly.conv_matrix.show();
     }
     int x = 0;
  //   string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";

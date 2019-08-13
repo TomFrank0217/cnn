@@ -43,7 +43,7 @@ bool layer::reshape(int mode){
 		/* 我们是要求 conv_matrix中第(i,j)元到 conv_matrix_features中对应的(channel,row,col)之间的映射关系*/
 		/* 即求一个映射关系f: (i,j) -> (channel,row,col) */
 		/* 在这儿 matrix(i,j) -> features(channel,row,col) */
-		/* 我们利用后向插值的方法,从 (channel,row,col)出发求的(i,j)的坐标 */
+		/* 我们利用后向插值的方法,从 (channel,row,col)出发求得(i,j)的坐标 */
 		/* 因为f是一个可逆映射，后向插值和前向插值计算量一样，但f不可逆的时候会有区别 */
 		int i = 0;
 		int j = 0;
@@ -66,7 +66,29 @@ bool layer::reshape(int mode){
 		return true;
 	}
 	else if (FEATURES2MATRIX == mode){
-
+		/* 我们是要求conv_matrix_features第(channel,row,col)元到conv_matrix中第(i,j)元之间的映射关系*/
+		/* 即求一个映射关系g: (channel,row,col) -> (i,j) */
+		/* 在这儿 features(channel,row,col) -> matrix(i,j) */
+		/* 我们利用后向插值的方法,从 (i,j)出发求得(channel,row,col)的坐标 */
+		/* 因为g是一个可逆映射，后向插值和前向插值计算量一样，但g不可逆的时候会有区别 */
+		/* f(g(x)) == x ==g(f(x)) f与g互为逆映射 */
+		
+		/* fts.m_features_matrix*kers.m_kernels_matrix; */
+		conv_matrix = matrix(fts.m_features_matrix.m_rows, kers.m_kernels_matrix.m_cols, 0.0);
+		int channel = 0;
+		int row = 0;
+		int col = 0;
+		
+		for (int i = 0; i < conv_matrix.m_rows; ++i){
+			for (int j = 0; j < conv_matrix.m_cols; ++j){
+				channel = j;
+			    row = i / (conv_matrix_fts.m_cols);
+				col = i - row*conv_matrix_fts.m_cols;
+				conv_matrix.mp_data[i*conv_matrix.m_cols + j] = \
+				conv_matrix_fts.mp_matrixes[channel].mp_data[row*conv_matrix_fts.m_cols + col];
+			}
+		}
+		return true;
 	}
 	else{
 		std::cout << "no mode ,layer::reshape(int mode = MATRIEX2KERNELS) \n";
