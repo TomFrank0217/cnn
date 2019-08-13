@@ -1,98 +1,131 @@
-//#include "layer.h"
+#include "layer.h"
+
+layer::layer(){
+    //m_kers_channels = m_kers_rows \
+    //    = m_kers_cols = m_kers_count = 0;
+    //m_fts_channels = m_fts_rows = m_fts_cols = 0;
+    m_kers = kernels();
+    m_fts = features();
+}
+
+layer::layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
+    int fts_channels/*kers_channels*/, int fts_rows, int fts_cols){
+    m_kers = kernels(kers_channels, kers_rows, kers_cols,kers_count,\
+		- 1, 1);/* todo kers初始化需要很小的初始值 */
+	m_fts = features(fts_channels, fts_rows, fts_cols, 0, 1);/* todo 初始化为double 型 */
+}
+
+layer::~layer(){
+    ;
+}
+
+
+matrix layer::conv(){
+	/* todo check two mats */
+	return m_fts_mat*m_kers_mat;
+}
+
+bool layer::reshape(kernels& src_kers, matrix& dst_kers_mat){
+	/* (R,C,r,c)->(i,j)
+	(ROW,COL,row,col->(kernels_matrix.row, kernels_matrix.col)) */
+	/* todo 此处代码可以优化 for example 交换 R C 的循环顺序 */
+	int dst_kers_mat_rows = src_kers.m_channels *src_kers.m_rows*src_kers.m_cols;
+	int dst_kers_mat_cols = src_kers.m_kers_counts;
+	dst_kers_mat = matrix(dst_kers_mat_rows, dst_kers_mat_cols);
+	int i = 0;
+	int j = 0;
+
+	for (int R = 0; R < src_kers.m_channels; ++R){
+		for (int C = 0; C < src_kers.m_kers_counts; ++C){
+			for (int r = 0; r < src_kers.m_rows; ++r){
+				for (int c = 0; c < src_kers.m_cols; ++c){
+					i = R*src_kers.m_rows*src_kers.m_cols + r*src_kers.m_cols + c;
+					j = C;
+					dst_kers_mat.mp_data[i*dst_kers_mat.m_cols + j] = \
+						src_kers.mp_kers[C].mp_matrixes[R].mp_data[r*src_kers.m_cols + c];
+				}
+			}
+		}
+	}
+	return true;
+}
+
+//bool kernels::reshape(int mode){
 //
-//layer::layer(){
-//    //m_kers_channels = m_kers_rows \
-//    //    = m_kers_cols = m_kers_count = 0;
-//    //m_fts_channels = m_fts_rows = m_fts_cols = 0;
-//    kers = kernels();
-//    fts = featuresssss();
-//}
+//	int ROWS = m_channels;
+//	int COLS = m_kers_counts;
+//	int rows = m_rows;
+//	int cols = m_cols;
+//	int i = 0;
+//	int j = 0;
 //
-//layer::layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
-//    int fts_channels/*kers_channels*/, int fts_rows, int fts_cols){
-//    kers = kernels(kers_channels, kers_rows, kers_cols,kers_count,\
-//		- RANDOM_INITIAL_VAL, RANDOM_INITIAL_VAL);/* todo kers初始化需要很小的初始值 */
-//    fts = featuresssss(fts_channels, fts_rows, fts_cols, 0, 1);
-//}
-//
-//layer::~layer(){
-//    ;
-//}
-//
-//matrix layer::conv(){
-//    return fts.m_features_matrix*kers.m_kers_mat;
-//}
-//
-//
-//bool layer::reshape(int mode){
-//	if (MATRIX2FEATURES == mode){
-//		conv_matrix = conv();
-//		int conv_features_channels = conv_matrix.m_cols;
-//			/* todo padding!=0 */
-//		int conv_features_rows = \
-//			(fts.m_rows - kers.m_rows) / fts.m_stride + 1;
-//		/* todo padding!=0 */
-//		int conv_features_cols = \
-//			(fts.m_cols - kers.m_cols) / fts.m_stride + 1;
-//		if (conv_features_rows*conv_features_cols != conv_matrix.m_rows){
-//			std::cout << "(conv_features_rows*conv_features_cols != mx.m_rows\
-//						 layer::reshape()\n)";
-//		}
-//		conv_matrix_fts = featuresssss(conv_features_channels, conv_features_rows, conv_features_cols, 0.0);
-//		/* 此时这个问题和之前的问题相似，但是简单一些 */
-//		/* 我们是要求 conv_matrix中第(i,j)元到 conv_matrix_features中对应的(channel,row,col)之间的映射关系*/
-//		/* 即求一个映射关系f: (i,j) -> (channel,row,col) */
-//		/* 在这儿 matrix(i,j) -> features(channel,row,col) */
-//		/* 我们利用后向插值的方法,从 (channel,row,col)出发求得(i,j)的坐标 */
-//		/* 因为f是一个可逆映射，后向插值和前向插值计算量一样，但f不可逆的时候会有区别 */
-//		int i = 0;
-//		int j = 0;
-//		for (int channel = 0; channel < conv_matrix_fts.m_channels; ++channel){
-//			for (int row = 0; row < conv_matrix_fts.m_rows; ++row){
-//				for (int col = 0; col < conv_matrix_fts.m_cols; ++col){
-//					j = channel;
-//					//row = i / (conv_matrix_fts.m_cols);
-//					//col = i - row*conv_matrix_fts.m_cols;
-//					i = row*conv_matrix_fts.m_cols + col;
-//
-//					//conv_matrix_fts.mp_matrixes[channel].mp_data[row*conv_matrix_fts.m_cols + col] \
-//						= conv_matrix.mp_data[i*conv_matrix.m_cols + j];
-//					conv_matrix_fts.mp_matrixes[j].mp_data[i] = \
-//						conv_matrix.mp_data[i*conv_matrix.m_cols + j];
+//	switch(mode)
+//	{
+//		/* (R,C,r,c)->(i,j)
+//		(ROW,COL,row,col->(kernels_matrix.row, kernels_matrix.col)) */
+//	case KERNELS2MATRIEX:
+//		/* todo 此处代码可以优化 for example 交换 R C 的循环顺序 */
+//		for (int R = 0; R < ROWS; ++R){
+//			for (int C = 0; C < COLS; ++C){
+//				for (int r = 0; r < rows; ++r){
+//					for (int c = 0; c < cols; ++c){
+//						i = R*rows*cols + r*cols + c;
+//						j = C;
+//						m_kers_mat.mp_data[i*m_kers_mat.m_cols + j] = \
+//							mp_kers[C].mp_matrixes[R].mp_data[r*cols + c];
+//					}
 //				}
 //			}
 //		}
-//
-//		return true;
-//	}
-//	else if (FEATURES2MATRIX == mode){
-//		/* 我们是要求conv_matrix_features第(channel,row,col)元到conv_matrix中第(i,j)元之间的映射关系*/
-//		/* 即求一个映射关系g: (channel,row,col) -> (i,j) */
-//		/* 在这儿 features(channel,row,col) -> matrix(i,j) */
-//		/* 我们利用后向插值的方法,从 (i,j)出发求得(channel,row,col)的坐标 */
-//		/* 因为g是一个可逆映射，后向插值和前向插值计算量一样，但g不可逆的时候会有区别 */
-//		/* f(g(x)) == x ==g(f(x)) f与g互为逆映射 */
-//		
-//		/* fts.m_features_matrix*kers.m_kers_mat; */
-//		conv_matrix = matrix(fts.m_features_matrix.m_rows, kers.m_kers_mat.m_cols, 0.0);
-//		int channel = 0;
+//		/* 此处是核心代码 */
+//		break;
+//	case MATRIEX2KERNELS:
+//		int kernels_matrix_rows = m_rows*m_cols*m_channels;
+//		int kernels_matrix_cols = m_kers_counts;
+//		//m_kers_mat = matrix(kernels_matrix_rows, kernels_matrix_cols);
+//		/* kernels是个四维张量，要确定m_kers_mat（i，j）
+//		在kernels种的具体位置需要一个四维向量（ROW,COL,row,col）
+//		即确定一个(向量)定位函数loc. st loc(i,j)=（ROW,COL,row,col）*/
+//		int ROW = 0;
+//		int COL = 0;
 //		int row = 0;
 //		int col = 0;
-//		
-//		for (int i = 0; i < conv_matrix.m_rows; ++i){
-//			for (int j = 0; j < conv_matrix.m_cols; ++j){
-//				channel = j;
-//			    row = i / (conv_matrix_fts.m_cols);
-//				col = i - row*conv_matrix_fts.m_cols;
-//				conv_matrix.mp_data[i*conv_matrix.m_cols + j] = \
-//				conv_matrix_fts.mp_matrixes[channel].mp_data[row*conv_matrix_fts.m_cols + col];
+//		int index = 0;
+//		if (NULL != mp_tensors1){
+//			delete[] mp_tensors1;
+//			mp_tensors1 = NULL;
+//		}
+//		mp_tensors1 = new kernel[m_kers_counts];
+//		if (NULL != mp_kers){
+//			for (int i = 0; i < m_kers_counts; ++i){
+//				*(mp_tensors1 + i) = *(mp_kers + i);
 //			}
 //		}
-//		return true;
+//		else{
+//			std::cout << "if (NULL != mp_kers)\n \
+//						 bool kernels::reshape(int mode)\n";
+//			return false;
+//		}
+//
+//		for (int i = 0; i < kernels_matrix_rows; ++i){
+//			for (int j = 0; j < kernels_matrix_cols; ++j){
+//				;/* todo 此处代码可以优化 */
+//				ROW = i / (m_rows*m_cols);
+//				COL = j;
+//				index = i - ROW*m_rows*m_cols;
+//				row = index / m_cols;
+//				col = index - row*m_cols;
+//				mp_tensors1[COL].mp_matrixes[ROW].mp_data[row*m_cols + col] \
+//					= m_kers_mat.mp_data[i*kernels_matrix_cols + j];
+//			}
+//		}
+//		/* 以上是核心代码 */
+//		break;
+//
+//	//default:
+//	//	std::cout << "bool kernels::reshape(int mode)\n default\n";
+//	//	break;
 //	}
-//	else{
-//		std::cout << "no mode ,layer::reshape(int mode = MATRIEX2KERNELS) \n";
-//		return false;
-//	}
+//
 //	return true;
 //}

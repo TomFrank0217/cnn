@@ -161,7 +161,6 @@
     <ClInclude Include="kernels.h" />
     <ClInclude Include="layer.h" />
     <ClInclude Include="matrix.h" />
-    <ClInclude Include="reshape.h" />
     <ClInclude Include="features.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

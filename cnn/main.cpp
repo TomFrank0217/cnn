@@ -19,7 +19,7 @@
 //#include "tensor.h"
 #include "kernels.h"
 #include "features.h"
-//#include "layer.h"
+#include "layer.h"
 
 using namespace cv;
 using namespace std;
@@ -58,43 +58,43 @@ int main(int argc, char* argv[]){
 
 	int y = 0;
 	{
-		kernels kers(2, 2, 3, 2, -2, 2);
-		//kers.reshape();
-		kers.show(SHOW_IMAGE_INITAIL_VALUE);
-		kers.show(SHOW_IMAGE_INITAIL_VALUE);
-		kernels k2 = kers;
-		k2 = kers;
-		k2.show(SHOW_IMAGE_INITAIL_VALUE);
-		cout << endl;
-		cout << kers.m_channels << "  " << kers.m_rows << "  "\
-			<< kers.m_cols << "  " << kers.m_kers_counts << endl;
-		for (int i = 0; i < kers.m_kers_counts; ++i){
-			cout << "kernel " << i << endl;
-			cout << kers.mp_kers[i].m_channels << "  " \
-				<< kers.mp_kers[i].m_rows << "  " << kers.mp_kers[i].m_cols;
-			(kers.mp_kers[i]).show(SHOW_IMAGE_INITAIL_VALUE);
-		}
-		int x = 0;
+		//kernels kers(2, 2, 3, 2, -2, 2);
+		////kers.reshape();
+		//kers.show(SHOW_IMAGE_INITAIL_VALUE);
+		//kers.show(SHOW_IMAGE_INITAIL_VALUE);
+		//kernels k2 = kers;
+		//k2 = kers;
+		//k2.show(SHOW_IMAGE_INITAIL_VALUE);
+		//cout << endl;
+		//cout << kers.m_channels << "  " << kers.m_rows << "  "\
+		//	<< kers.m_cols << "  " << kers.m_kers_counts << endl;
+		//for (int i = 0; i < kers.m_kers_counts; ++i){
+		//	cout << "kernel " << i << endl;
+		//	cout << kers.mp_kers[i].m_channels << "  " \
+		//		<< kers.mp_kers[i].m_rows << "  " << kers.mp_kers[i].m_cols;
+		//	(kers.mp_kers[i]).show(SHOW_IMAGE_INITAIL_VALUE);
+		//}
+		//int x = 0;
 	}
-  //  {
-  //      //layer(kers_channels,kers_rows,kers_cols,kers_count,fts_channels/*kers_channels*/,fts_rows, fts_cols);
-		//layer ly(2, 2, 2, 3, 2, 5, 8);
-  //      ly.fts.show(SHOW_IMAGE_INITAIL_VALUE);
-  //      //bool reshape(int mode = FEATURES2MATRIX, int kernels_rows = KERNEL_ROWS, \
-  //      //    int kernels_cols = KERNEL_COLS, int stride = 1, int padding_mode = VALID_PADDING);
-  //      ly.fts.reshape(FEATURES2MATRIX, ly.kers.m_rows, ly.kers.m_cols, 1, VALID_PADDING);
+    {
+        //layer(kers_channels,kers_rows,kers_cols,kers_count,fts_channels/*kers_channels*/,fts_rows, fts_cols);
+		layer ly(2, 2, 2, 3, 2, 5, 8);
+        ly.m_kers.show();
+		//bool layer::reshape(kernels& src_kers, matrix& dst_kers_mat)
+		ly.reshape(ly.m_kers, ly.m_kers_mat);
+		ly.m_kers_mat.show();
 
-  //      ly.kers.show(SHOW_IMAGE_INITAIL_VALUE, KERNELS2MATRIEX);
-  //      ly.kers.reshape(KERNELS2MATRIEX);
+  //      ly.kers.show(show_image_initail_value, kernels2matriex);
+  //      ly.kers.reshape(kernels2matriex);
 
   //      matrix m = ly.conv();
-		//m.show(SHOW_IMAGE_INITAIL_VALUE);
+		//m.show(show_image_initail_value);
 
-		//ly.reshape(MATRIX2FEATURES);
-		////ly.conv_matrix_fts.show(SHOW_IMAGE_INITAIL_VALUE);
-		//ly.reshape(FEATURES2MATRIX);
+		//ly.reshape(matrix2features);
+		//ly.conv_matrix_fts.show(show_image_initail_value);
+		//ly.reshape(features2matrix);
 		//ly.conv_matrix.show();
-  //  }
+    }
     int x = 0;
  //   string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
 	//cout << file_name << endl;

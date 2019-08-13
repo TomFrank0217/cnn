@@ -53,9 +53,6 @@
     <ClInclude Include="layer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="reshape.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="featuresssss.h">
       <Filter>头文件</Filter>
     </ClInclude>
