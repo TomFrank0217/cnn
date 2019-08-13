@@ -1,125 +1,121 @@
 #include "kernels.h"
 
 kernels::kernels(){
-	mp_tensors0 = NULL;
+	mp_kers = NULL;
 	mp_tensors1 = NULL;
 	m_channels = 0;
 	m_rows = 0;
 	m_cols = 0;
-	m_kernels_count = 0;
-	m_kernels_matrix = matrix();
+	m_kers_counts = 0;
+	m_kers_mat = matrix();
 }
 
-kernels::kernels(int channels, int rows, int cols, int kernels_count, int val):\
-m_channels(channels),m_rows(rows),m_cols(cols),m_kernels_count(kernels_count){
-	if (0 >= channels || 0 >= rows || 0 >= cols || 0 >= kernels_count){
+kernels::kernels(int channels, int rows, int cols, int kernels_counts, int val):\
+m_channels(channels),m_rows(rows),m_cols(cols),m_kers_counts(kernels_counts){
+	if (0 >= channels || 0 >= rows || 0 >= cols || 0 >= kernels_counts){
 		DEBUG_PRINT("(0 >= channels || 0 >= rows || 0 >= cols || 0 >= kernels_count) \n \
 					kernels(int channels, int rows, int cols, int kernels_count, int val)");
 	}
 
-	int kernels_matrix_rows = m_rows*m_cols*m_channels;
-	int kernels_matrix_cols = m_kernels_count;
-	m_kernels_matrix = matrix(kernels_matrix_rows, kernels_matrix_cols);
+	int kers_mat_rows = m_rows*m_cols*m_channels;
+	int kers_mat_cols = m_kers_counts;
+	m_kers_mat = matrix(kers_mat_rows, kers_mat_cols);
 
-	mp_tensors0 = NULL;
+	mp_kers = NULL;
 	mp_tensors1 = NULL;
-	mp_tensors0 = new features[kernels_count];
-	mp_tensors1 = new features[kernels_count];
-	if (NULL == mp_tensors0 || NULL == mp_tensors1){
-		DEBUG_PRINT("(NULL == mp_tensors0||NULL==mp_tensors1) \n \
+	mp_kers = new kernel[kernels_counts];
+	mp_tensors1 = new kernel[kernels_counts];
+	if (NULL == mp_kers || NULL == mp_tensors1){
+		DEBUG_PRINT("(NULL == mp_kers||NULL==mp_tensors1) \n \
 		      kernels(int channels, int rows, int cols, int kernels_count, int val)");
 	}
 
-	for (int i = 0; i < kernels_count; ++i){
-		mp_tensors0[i] = features(channels, rows, cols, val);
-		mp_tensors1[i] = features(channels, rows, cols, val);
+	for (int i = 0; i < m_kers_counts; ++i){
+		mp_kers[i] = kernel(channels, rows, cols, val);
+		mp_tensors1[i] = kernel(channels, rows, cols, val);
 	}
 }
 
-kernels::kernels(int channels, int rows, int cols, int kernels_count, DATA_TYPE val):\
-m_channels(channels), m_rows(rows), m_cols(cols), m_kernels_count(kernels_count){
-	if (0 >= channels || 0 >= rows || 0 >= cols || 0 >= kernels_count){
+kernels::kernels(int channels, int rows, int cols, int kernels_counts, DATA_TYPE val):\
+m_channels(channels), m_rows(rows), m_cols(cols), m_kers_counts(kernels_counts){
+	if (0 >= channels || 0 >= rows || 0 >= cols || 0 >= kernels_counts){
 		DEBUG_PRINT("(0 >= channels || 0 >= rows || 0 >= cols || 0 >= kernels_count) \n \
 					 kernels(int channels, int rows, int cols, int kernels_count, DATA_TYPE val)");
 	}
 
 	int kernels_matrix_rows = m_rows*m_cols*m_channels;
-	int kernels_matrix_cols = m_kernels_count;
-	m_kernels_matrix = matrix(kernels_matrix_rows, kernels_matrix_cols);
+	int kernels_matrix_cols = m_kers_counts;
+	m_kers_mat = matrix(kernels_matrix_rows, kernels_matrix_cols);
 
-	mp_tensors0 = NULL;
-	mp_tensors1 = NULL;
-	mp_tensors0 = new features[kernels_count];
-	mp_tensors1 = new features[kernels_count];
-	if (NULL == mp_tensors0 || NULL == mp_tensors1){
-		DEBUG_PRINT("(NULL == mp_tensors0 || NULL == mp_tensors1) \n \
+	mp_kers = new kernel[kernels_counts];
+	mp_tensors1 = new kernel[kernels_counts];
+	if (NULL == mp_kers || NULL == mp_tensors1){
+		DEBUG_PRINT("(NULL == mp_kers || NULL == mp_tensors1) \n \
 					 kernels(int channels, int rows, int cols, int kernels_count, DATA_TYPE val)");
 	}
 
-	for (int i = 0; i < kernels_count; ++i){
-		mp_tensors0[i] = features(channels, rows, cols, val);
-		mp_tensors1[i] = features(channels, rows, cols, val);
+	for (int i = 0; i < kernels_counts; ++i){
+		mp_kers[i] = kernel(channels, rows, cols, val);
+		mp_tensors1[i] = kernel(channels, rows, cols, val);
 	}
 }
 
-kernels::kernels(int channels, int rows, int cols, int kernels_count, int min, int max):\
-m_channels(channels), m_rows(rows), m_cols(cols), m_kernels_count(kernels_count){
-	if (0 >= channels || 0 >= rows || 0 >= cols || 0 >= kernels_count){
+kernels::kernels(int channels, int rows, int cols, int kernels_counts, int min, int max):\
+m_channels(channels), m_rows(rows), m_cols(cols), m_kers_counts(kernels_counts){
+	if (0 >= channels || 0 >= rows || 0 >= cols || 0 >= kernels_counts){
 		DEBUG_PRINT("(0 >= channels || 0 >= rows || 0 >= cols || 0 >= kernels_count) \n \
 					kernels(int channels, int rows, int cols, int kernels_count, int min, int max)");
 	}
 
 	int kernels_matrix_rows = m_rows*m_cols*m_channels;
-	int kernels_matrix_cols = m_kernels_count;
-	m_kernels_matrix = matrix(kernels_matrix_rows, kernels_matrix_cols);
+	int kernels_matrix_cols = m_kers_counts;
+	m_kers_mat = matrix(kernels_matrix_rows, kernels_matrix_cols);
 
-	mp_tensors0 = NULL;
-	mp_tensors1 = NULL;
-	mp_tensors0 = new features[kernels_count];
-	mp_tensors1 = new features[kernels_count];
-	if (NULL == mp_tensors0 || NULL == mp_tensors1){
-		DEBUG_PRINT("(NULL == mp_tensors0 || NULL == mp_tensors1) \n \
+	mp_kers = new kernel[kernels_counts];
+	mp_tensors1 = new kernel[kernels_counts];
+	if (NULL == mp_kers || NULL == mp_tensors1){
+		DEBUG_PRINT("(NULL == mp_kers || NULL == mp_tensors1) \n \
 					  kernels(int channels, int rows, int cols, int kernels_count, int min, int max)");
 	}
 
-	for (int i = 0; i < kernels_count; ++i){
-		mp_tensors0[i] = features(channels, rows, cols, min, max);
-		mp_tensors1[i] = features(channels, rows, cols, min, max);
+	for (int i = 0; i < kernels_counts; ++i){
+		mp_kers[i] = kernel(channels, rows, cols, min, max);
+		mp_tensors1[i] = kernel(channels, rows, cols, min, max);
 	}
 }
 
 kernels::kernels(int channels, int rows, int cols, int kernels_count, DATA_TYPE min, DATA_TYPE max):\
-m_channels(channels), m_rows(rows), m_cols(cols), m_kernels_count(kernels_count){
+m_channels(channels), m_rows(rows), m_cols(cols), m_kers_counts(kernels_count){
 	if (0 >= channels || 0 >= rows || 0 >= cols || 0 >= kernels_count){
 		DEBUG_PRINT("(0 >= channels || 0 >= rows || 0 >= cols || 0 >= kernels_count) \n \
 					kernels(int channels, int rows, int cols, int kernels_count, DATA_TYPE min, DATA_TYPE max)");
 	}
 
 	int kernels_matrix_rows = m_rows*m_cols*m_channels;
-	int kernels_matrix_cols = m_kernels_count;
-	m_kernels_matrix = matrix(kernels_matrix_rows, kernels_matrix_cols);
+	int kernels_matrix_cols = m_kers_counts;
+	m_kers_mat = matrix(kernels_matrix_rows, kernels_matrix_cols);
 
-	mp_tensors0 = NULL;
+	mp_kers = NULL;
 	mp_tensors1 = NULL;
-	mp_tensors0 = new features[kernels_count];
-	mp_tensors1 = new features[kernels_count];
-	if (NULL == mp_tensors0 || NULL != mp_tensors1){
+	mp_kers = new kernel[kernels_count];
+	mp_tensors1 = new kernel[kernels_count];
+	if (NULL == mp_kers || NULL != mp_tensors1){
 		DEBUG_PRINT("(NULL == mp_tensors) \n \
 					 kernels(int channels, int rows, int cols, int kernels_count, DATA_TYPE min, DATA_TYPE max)");
 	}
 
 	for (int i = 0; i < kernels_count; ++i){
-		mp_tensors0[i] = features(channels, rows, cols, min, max);
-		mp_tensors1[i] = features(channels, rows, cols, min, max);
+		mp_kers[i] = kernel(channels, rows, cols, min, max);
+		mp_tensors1[i] = kernel(channels, rows, cols, min, max);
 	}
 }
 
-
 kernels::~kernels(){
-	if (NULL != mp_tensors0){
-		delete[] mp_tensors0;
-		mp_tensors0 = NULL;
+	if (NULL != mp_kers){
+		delete[] mp_kers;
+		mp_kers = NULL;
 	}
+
 	if (NULL != mp_tensors1){
 		delete[] mp_tensors1;
 		mp_tensors1 = NULL;
@@ -136,19 +132,19 @@ kernels::~kernels(){
 bool kernels::show(int image_show_mode, int mode){
 	if (KERNELS2MATRIEX == mode){
 		std::cout << "kernels\n" << std::endl;
-		for (int i = 0; i < m_kernels_count; ++i){
+		for (int i = 0; i < m_kers_counts; ++i){
 			std::cout << "kernel " << i << std::endl;
-			mp_tensors0[i].show(image_show_mode);
+			mp_kers[i].show(image_show_mode);
 			std::cout << std::endl;
 		}
 		reshape(KERNELS2MATRIEX);
-		m_kernels_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
+		m_kers_mat.show(SHOW_IMAGE_INITAIL_VALUE);
 	}
 	else if (MATRIEX2KERNELS == mode){
 		std::cout << "matrix \n" << std::endl;
-		m_kernels_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
+		m_kers_mat.show(SHOW_IMAGE_INITAIL_VALUE);
 		reshape(MATRIEX2KERNELS);
-		for (int i = 0; i < m_kernels_count; ++i){
+		for (int i = 0; i < m_kers_counts; ++i){
 			std::cout << "kernel " << i << std::endl;
 			mp_tensors1[i].show(image_show_mode);
 			std::cout << std::endl;
@@ -166,22 +162,22 @@ kernels::kernels(const kernels &ker_){
 	m_channels = ker_.m_channels;
 	m_rows = ker_.m_rows;
 	m_cols = ker_.m_cols;
-	m_kernels_count = ker_.m_kernels_count;
-	if (NULL != mp_tensors0||NULL!=mp_tensors1){
-		delete[] mp_tensors0;
-		mp_tensors0 = NULL;
+	m_kers_counts = ker_.m_kers_counts;
+	if (NULL != mp_kers||NULL!=mp_tensors1){
+		delete[] mp_kers;
+		mp_kers = NULL;
 		delete[] mp_tensors1;
 		mp_tensors1 = NULL;
 	}
-	m_kernels_matrix = ker_.m_kernels_matrix;
-	mp_tensors0 = new features[m_kernels_count];
-	mp_tensors1 = new features[m_kernels_count];
-	if (NULL == mp_tensors0 || NULL == mp_tensors1){
-		DEBUG_PRINT("(NULL == mp_tensors0 || NULL == mp_tensors1)\n");
+	m_kers_mat = ker_.m_kers_mat;
+	mp_kers = new kernel[m_kers_counts];
+	mp_tensors1 = new kernel[m_kers_counts];
+	if (NULL == mp_kers || NULL == mp_tensors1){
+		DEBUG_PRINT("(NULL == mp_kers || NULL == mp_tensors1)\n");
 		return;
 	}
-	for (int i = 0; i < m_kernels_count; ++i){
-		mp_tensors0[i] = ker_.mp_tensors0[i];
+	for (int i = 0; i < m_kers_counts; ++i){
+		mp_kers[i] = ker_.mp_kers[i];
 		mp_tensors1[i] = ker_.mp_tensors1[i];
 	}
 
@@ -194,26 +190,26 @@ kernels& kernels::operator=(const kernels& ker_){
 	m_channels = ker_.m_channels;
 	m_rows = ker_.m_rows;
 	m_cols = ker_.m_cols;
-	m_kernels_count = ker_.m_kernels_count;
-	m_kernels_matrix = ker_.m_kernels_matrix;
+	m_kers_counts = ker_.m_kers_counts;
+	m_kers_mat = ker_.m_kers_mat;
 
-	if (NULL != mp_tensors0 && NULL != mp_tensors1){
-		delete[] mp_tensors0;
-		mp_tensors0 = NULL;
+	if (NULL != mp_kers && NULL != mp_tensors1){
+		delete[] mp_kers;
+		mp_kers = NULL;
 		delete[] mp_tensors1;
 		mp_tensors1 = NULL;
 	}
 
-	mp_tensors0 = new features[m_kernels_count];
-	mp_tensors1 = new features[m_kernels_count];
-	if (NULL == mp_tensors0 || NULL == mp_tensors1){
-		std::cout << "(NULL == mp_tensors0 || NULL == mp_tensors1)\
+	mp_kers = new kernel[m_kers_counts];
+	mp_tensors1 = new kernel[m_kers_counts];
+	if (NULL == mp_kers || NULL == mp_tensors1){
+		std::cout << "(NULL == mp_kers || NULL == mp_tensors1)\
 					 				\n  kernels::operator= \n";
 		return *this;
 	}
 
-	for (int i = 0; i < m_kernels_count; ++i){
-		mp_tensors0[i] = ker_.mp_tensors0[i];
+	for (int i = 0; i < m_kers_counts; ++i){
+		mp_kers[i] = ker_.mp_kers[i];
 		mp_tensors1[i] = ker_.mp_tensors1[i];
 	}
 }
@@ -221,7 +217,7 @@ kernels& kernels::operator=(const kernels& ker_){
 bool kernels::reshape(int mode){
 
 	int ROWS = m_channels;
-	int COLS = m_kernels_count;
+	int COLS = m_kers_counts;
 	int rows = m_rows;
 	int cols = m_cols;
 	int i = 0;
@@ -239,8 +235,8 @@ bool kernels::reshape(int mode){
 					for (int c = 0; c < cols; ++c){
 						i = R*rows*cols + r*cols + c;
 						j = C;
-						m_kernels_matrix.mp_data[i*m_kernels_matrix.m_cols + j] = \
-							mp_tensors0[C].mp_matrixes[R].mp_data[r*cols + c];
+						m_kers_mat.mp_data[i*m_kers_mat.m_cols + j] = \
+							mp_kers[C].mp_matrixes[R].mp_data[r*cols + c];
 					}
 				}
 			}
@@ -249,9 +245,9 @@ bool kernels::reshape(int mode){
 		break;
 	case MATRIEX2KERNELS:
 		int kernels_matrix_rows = m_rows*m_cols*m_channels;
-		int kernels_matrix_cols = m_kernels_count;
-		//m_kernels_matrix = matrix(kernels_matrix_rows, kernels_matrix_cols);
-		/* kernels是个四维张量，要确定m_kernels_matrix（i，j）
+		int kernels_matrix_cols = m_kers_counts;
+		//m_kers_mat = matrix(kernels_matrix_rows, kernels_matrix_cols);
+		/* kernels是个四维张量，要确定m_kers_mat（i，j）
 		在kernels种的具体位置需要一个四维向量（ROW,COL,row,col）
 		即确定一个(向量)定位函数loc. st loc(i,j)=（ROW,COL,row,col）*/
 		int ROW = 0;
@@ -263,14 +259,14 @@ bool kernels::reshape(int mode){
 			delete[] mp_tensors1;
 			mp_tensors1 = NULL;
 		}
-		mp_tensors1 = new features[m_kernels_count];
-		if (NULL != mp_tensors0){
-			for (int i = 0; i < m_kernels_count; ++i){
-				*(mp_tensors1 + i) = *(mp_tensors0 + i);
+		mp_tensors1 = new kernel[m_kers_counts];
+		if (NULL != mp_kers){
+			for (int i = 0; i < m_kers_counts; ++i){
+				*(mp_tensors1 + i) = *(mp_kers + i);
 			}
 		}
 		else{
-			std::cout << "if (NULL != mp_tensors0)\n \
+			std::cout << "if (NULL != mp_kers)\n \
 						 bool kernels::reshape(int mode)\n";
 			return false;
 		}
@@ -284,7 +280,7 @@ bool kernels::reshape(int mode){
 				row = index / m_cols;
 				col = index - row*m_cols;
 				mp_tensors1[COL].mp_matrixes[ROW].mp_data[row*m_cols + col] \
-					= m_kernels_matrix.mp_data[i*kernels_matrix_cols + j];
+					= m_kers_mat.mp_data[i*kernels_matrix_cols + j];
 			}
 		}
 		/* 以上是核心代码 */

@@ -146,21 +146,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="features.cpp" />
+    <ClCompile Include="featuresssss.cpp" />
     <ClCompile Include="kernels.cpp" />
     <ClCompile Include="layer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="matrix.cpp" />
-    <ClCompile Include="tensor.cpp" />
+    <ClCompile Include="reshape.cpp" />
+    <ClCompile Include="features.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="const_values.h" />
     <ClInclude Include="debug_print.h" />
-    <ClInclude Include="features.h" />
+    <ClInclude Include="featuresssss.h" />
     <ClInclude Include="kernels.h" />
     <ClInclude Include="layer.h" />
     <ClInclude Include="matrix.h" />
-    <ClInclude Include="tensor.h" />
+    <ClInclude Include="reshape.h" />
+    <ClInclude Include="features.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

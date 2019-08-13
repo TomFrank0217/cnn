@@ -1,32 +1,38 @@
-#ifndef  _FEATURE_H_
-#define _FEATURE_H_
+#ifndef _FEATURES_H_
+#define _FEATURES_H_
 
-#include "tensor.h"
+#include "matrix.h"
+#include "const_values.h"
 
-class featuresssss :public features{
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
+class features{
 public:
-	featuresssss();
-	/* to understand 为什么特征不需要复制构造函数，因为没有指针变量吗？ */
-	featuresssss(featuresssss &fs_);
-    featuresssss(int feature_channels, int features_rows, int features_cols, int val);
-	featuresssss(int feature_channels, int features_rows, int features_cols, DATA_TYPE val);
-	featuresssss(const cv::Mat &image, DATA_TYPE translation = AVE_VALUE, DATA_TYPE scale = 1.0 / AVE_VALUE);
-	~featuresssss();
-	featuresssss(int channels, int rows, int cols, DATA_TYPE min, DATA_TYPE max);
-	featuresssss(int channels, int rows, int cols, int min, int max);
-	/* to understand 为什么特征不需要赋值函数，因为没有指针变量吗？ */
-	featuresssss& operator=(const featuresssss& fs_);
-	//bool reshape(int reshape_mode = FEATURES2MATRIX, int kernels_rows = KERNEL_ROWS, \
-		int kernels_cols = KERNEL_COLS, int stride = 1, int padding_mode = VALID_PADDING);
-	bool reshape(features& tsr, matrix& fts_matrix, int reshape_mode = FEATURES2MATRIX, int kernels_rows = KERNEL_ROWS, \
-		int kernels_cols = KERNEL_COLS, int stride = 1, int padding_mode = VALID_PADDING);
+	features();
+	features(const features& fs_);
+	features(int channels, int rows, int cols, int val = 0);
+	features(int channels, int rows, int cols, DATA_TYPE val);
+	features(int channels, int rows, int cols, int min, int max);
+	features(int channels, int rows, int cols, DATA_TYPE min, DATA_TYPE max);
+	/*  图像features的数值必须归一化到 (-1.0, 1.0) 之间  */
+	features(const cv::Mat &image, DATA_TYPE translation = AVE_VALUE, DATA_TYPE scale = 1.0 / AVE_VALUE);
+	features& operator=(const features &fs_);
+	 ~features();
+	 //bool reshape(features& tsr, matrix& fts_matrix, int reshape_mode = FEATURES2MATRIX, int kernels_rows = KERNEL_ROWS, \
+	 //	 		int kernels_cols = KERNEL_COLS, int stride = 1, int padding_mode = VALID_PADDING);
+	 bool show(int image_show_mode = SHOW_IMAGE_INITAIL_VALUE);
+
 public:
-	matrix m_features_matrix;
-	int m_kernel_rows;/* 用于padding时候控制features的大小 todo */
-	int m_kernel_cols;/* 用于padding时候控制features的大小 todo */
-	int m_stride;
-	int m_padding_mode;
-	features m_tensor; /* 暂时看上去 m_tensor是没有用的 */
+	matrix *mp_matrixes;
+	int m_channels;
+	int m_rows;
+	int m_cols;
 };
+/* 虽然kernel和features相同 但是kernel不能使用features中的一些方法 */
+/* 1. features(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale);*/
+/* 2. bool reshape(features& tsr, matrix& fts_matrix, int reshape_mode,int kernels_rows,int kernels_cols, int stride, int padding_mode);*/
+typedef features kernel;
 
 #endif

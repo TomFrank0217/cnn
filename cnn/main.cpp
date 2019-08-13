@@ -16,10 +16,10 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 #include "matrix.h"
-#include "tensor.h"
-#include "kernels.h"
+//#include "tensor.h"
+//#include "kernels.h"
 #include "features.h"
-#include "layer.h"
+//#include "layer.h"
 
 using namespace cv;
 using namespace std;
@@ -34,30 +34,26 @@ bool show(Mat &image, int show_image_mode = SHOW_IMAGE_SCALE_VALUE);
 bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name);
 
 int main(int argc, char* argv[]){
-	//matrix A(3, 3, -3, 3);
- //   matrix B(3, 3, -5, 3);
- //   matrix C = 1 - A;
- //   A.show(SHOW_IMAGE_INITAIL_VALUE);
- //   B.show(SHOW_IMAGE_INITAIL_VALUE);
-	//C.show(SHOW_IMAGE_INITAIL_VALUE);
-
-	//{
-	//	tensor ts(5, 3, 3, -2, 2);
-	//	ts.show(SHOW_IMAGE_INITAIL_VALUE);
-	//	tensor ts1;
-	//	ts1 = ts;
-	//	ts1.show();
-	//}
-
 	{
-		featuresssss fs(3, 5, 4, 0, 5);
-		fs.show(SHOW_IMAGE_INITAIL_VALUE);
-		fs.reshape(fs.m_tensor, fs.m_features_matrix, FEATURES2MATRIX);
-		fs.m_features_matrix.show(SHOW_IMAGE_INITAIL_VALUE);
-		fs.m_tensor.show(SHOW_IMAGE_INITAIL_VALUE);
-
-		fs.reshape(fs.m_tensor, fs.m_features_matrix, MATRIX2FEATURES);
-		fs.m_tensor.show(SHOW_IMAGE_INITAIL_VALUE);
+		//matrix A(3, 3, 0, 1);
+		//matrix B(3, 3, 0, 1);
+		//A.show(SHOW_IMAGE_INITAIL_VALUE);
+		//B.show(SHOW_IMAGE_INITAIL_VALUE);
+		////matrix C = A*B;
+		//matrix C = 2*A;
+		//C = C;
+		//C.show(SHOW_IMAGE_INITAIL_VALUE);
+		//int xx = 0;
+	}
+	{
+		//features fs(3, 5, 4, 0, 5);
+		//fs.show(SHOW_IMAGE_INITAIL_VALUE);
+		//features fs2(fs);
+		//fs2.show(SHOW_IMAGE_INITAIL_VALUE);
+		//fs2 = fs2;
+		//fs2.show(SHOW_IMAGE_INITAIL_VALUE);
+		//fs = fs2;
+		//fs.show(SHOW_IMAGE_INITAIL_VALUE);
 	}
 
 	int y = 0;
@@ -71,8 +67,8 @@ int main(int argc, char* argv[]){
 		//k2.show(SHOW_IMAGE_INITAIL_VALUE, MATRIEX2KERNELS);
 		//cout << endl;
 		//cout << kers.m_channels << "  " << kers.m_rows << "  "\
-		//	<< kers.m_cols << "  " << kers.m_kernels_count << endl;
-		//for (int i = 0; i < kers.m_kernels_count; ++i){
+		//	<< kers.m_cols << "  " << kers.m_kers_counts << endl;
+		//for (int i = 0; i < kers.m_kers_counts; ++i){
 		//	cout << "kernel " << i << endl;
 		//	cout << kers.mp_tensors[i].m_channels << "  " \
 		//		<< kers.mp_tensors[i].m_rows << "  " << kers.mp_tensors[i].m_cols;

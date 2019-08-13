@@ -21,16 +21,19 @@
     <ClCompile Include="matrix.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="tensor.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="kernels.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="features.cpp">
+    <ClCompile Include="layer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="layer.cpp">
+    <ClCompile Include="reshape.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="featuresssss.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="features.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,13 +47,16 @@
     <ClInclude Include="debug_print.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="tensor.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="kernels.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="layer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="reshape.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="featuresssss.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="features.h">
