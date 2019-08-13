@@ -14,7 +14,7 @@ public:
 	/* todo 似乎把下面两个函数封装成模板类比较合适 */
 	kernels(int channels, int rows, int cols, int kernels_count, int min, int max);
 	kernels(int channels, int rows, int cols, int kernels_count, DATA_TYPE 
-		    min = -RANDOM_INITIAL_VAL, DATA_TYPE max = RANDOM_INITIAL_VAL); 
+		    min, DATA_TYPE max); 
 	~kernels();
 	kernels& operator=(const kernels& ker_);
 	bool show(int image_show_mode = SHOW_IMAGE_INITAIL_VALUE);
