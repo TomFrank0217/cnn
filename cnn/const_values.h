@@ -9,7 +9,7 @@
 #define SHOW_IMAGE_INITAIL_VALUE    1 
 #define SHOW_IMAGE_SHAPE            2
 #define SHOW_IAMGE_CROP_LENGTH      0
-#define SHOW_WIDTH                  7
+#define SHOW_WIDTH                  9
 
 #define VALID_PADDING               0
 #define SAME_PADDING                1

@@ -11,7 +11,7 @@ layer::layer(){
 layer::layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
     int fts_channels/*kers_channels*/, int fts_rows, int fts_cols){
     kers = kernels(kers_channels, kers_rows, kers_cols,kers_count,\
-        0, 1);/* todo kers初始化需要很小的初始值 */
+		- RANDOM_INITIAL_VAL, RANDOM_INITIAL_VAL);/* todo kers初始化需要很小的初始值 */
     fts = features(fts_channels, fts_rows, fts_cols, 0, 1);
 }
 

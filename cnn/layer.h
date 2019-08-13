@@ -7,6 +7,7 @@
 class layer{
 public:
     layer();
+	/* todo layer层的初始化 即卷积核与特征的初始化 */
     layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
         int fts_channels/*kers_channels*/, int fts_rows, int fts_cols);
     matrix conv();
@@ -17,13 +18,7 @@ public:
     features fts;
     matrix conv_matrix;
     features conv_matrix_fts;
-    //int m_kers_channels;
-    //int m_kers_rows;
-    //int m_kers_cols;
-    //int m_kers_count;
-    //int m_fts_channels;/* == m_kers_channels */
-    //int m_fts_rows;
-    //int m_fts_cols;
+
 };
 
 #endif
