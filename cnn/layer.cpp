@@ -224,10 +224,9 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 				cpf = cpk + ckf;/* 元素在原始特征中的列数 = 元素在卷积核(二维)中的列数 + 卷积核(二维)在特征中的列数 */
 				/* 元素在卷积核中的位置是指元素相对于卷积核左上方元素而言 */
 				/* 卷积核在特征图中的位置是指卷积核左上方元素相对于特征图左上方元素的位置 */
-				std::cout << "i=" << i << " j=" << j << std::endl;
 				dst_fts_mat.mp_data[i*dst_fts_mat.m_cols + j] = \
 					src_fts.mp_matrixes[channel].mp_data[rpf*src_fts.m_cols + cpf];
-				std::cout << "i=" << i << " j=" << j << std::endl;
+				//std::cout << "i=" << i << " j=" << j << std::endl;
 			}
 		}
 		break;
@@ -289,23 +288,24 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 		/* 以下代码虽然正确，但是features中很多元素被重复被计算了K*K次严重浪费计算资源 */
 		for (int i = 0; i < src_fts_mat_diff.m_rows; ++i){
 			for (int j = 0; j < src_fts_mat_diff.m_cols; ++j){
-				/* g: (i,j) -> (channel,rpk,cpk,rkf,ckf) */
-				channel = j / (m_kers.m_rows*m_kers.m_cols);/* 此处乘法可以优化 */
-				index_in_kernel = j - channel*(m_kers.m_rows*m_kers.m_cols);
-				rpk = index_in_kernel / m_kers.m_cols;
-				cpk = index_in_kernel - rpk*m_kers.m_cols;
-				rkf = i / ( (src_fts_mat_diff.m_cols - m_kers.m_cols)/stride + 1 );
-				ckf = i - rkf*((src_fts_mat_diff.m_cols - m_kers.m_cols)/stride + 1);
-
-				/* h: (channel,rpk,cpk,rkf,ckf) -> (channel,rpf,cpf) */
-				//channel = channel;
-				rpf = rpk + rkf;
-				cpf = cpk + ckf;
-				//tsr.mp_matrixes[channel].mp_data[rpf*mp_matrixes[0].m_cols + cpf]\
-															//	= fts_matrix.mp_data[i*m_features_matrix.m_cols + j];
-				dst_fts_diff.mp_matrixes[channel].mp_data[rpf*dst_fts_diff.mp_matrixes[0].m_cols + cpf]\
-					= src_fts_mat_diff.mp_data[i*src_fts_mat_diff.m_cols + j];
-			}
+					/* g: (i,j) -> (channel,rpk,cpk,rkf,ckf) */
+					channel = j / (m_kers.m_rows*m_kers.m_cols);/* 此处乘法可以优化 */
+					index_in_kernel = j - channel*(m_kers.m_rows*m_kers.m_cols);
+					rpk = index_in_kernel / m_kers.m_cols;
+					cpk = index_in_kernel - rpk*m_kers.m_cols;
+					/* this bug take me a lot of time finally i solve it
+					rkf = i / ( (src_fts_mat_diff.m_cols - m_kers.m_cols)/stride + 1 );
+					ckf = i - rkf*((src_fts_mat_diff.m_cols - m_kers.m_cols)/stride + 1);
+					 about two hours 8th Aug 2019 19:35 solved  successful */
+					rkf = i / ( (dst_fts_diff.m_cols - m_kers.m_cols)/stride + 1 );
+					ckf = i - rkf*((dst_fts_diff.m_cols - m_kers.m_cols)/stride + 1);
+					/* h: (channel,rpk,cpk,rkf,ckf) -> (channel,rpf,cpf) */
+					//channel = channel;
+					rpf = rpk + rkf;
+					cpf = cpk + ckf;
+					dst_fts_diff.mp_matrixes[channel].mp_data[rpf*dst_fts_diff.m_cols + cpf]\
+									= src_fts_mat_diff.mp_data[i*src_fts_mat_diff.m_cols + j];
+				}
 		}
 		break;
 	case SAME_PADDING:
@@ -314,7 +314,6 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 		//default:
 		//	break;
 	}
-	//dst_fts_diff.show();
 	return true;
 }
 bool layer::reshape(matrix& src_conv_mat, features& dst_conv_mat2fts){
