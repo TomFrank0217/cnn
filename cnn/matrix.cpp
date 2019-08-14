@@ -299,41 +299,50 @@ matrix::~matrix(){
 
 matrix& matrix::operator=(const matrix &A){
 
-    //DEBUG_PRINT("matrix matrix::operator = (const matrix &A)\n");
     if (this == &A){
         return *this;
     }
-	if (0 >= A.m_rows || 0 >= A.m_cols){
-		DEBUG_PRINT("(0 >= A.m_rows || 0 >= A.m_cols)  matrix::operator= \n");
-		return;
+
+	if (0 >= A.m_rows || 0 >= A.m_cols || NULL == A.mp_data){
+		DEBUG_PRINT("(0 >= A.m_rows || 0 >= A.m_cols)  \
+					NULL == A.mp_data matrix::operator= \n");
+		m_rows = m_cols = 0;
+		if (NULL != mp_data){
+			delete[] mp_data;
+			mp_data = NULL;
+		}
+		return *this;
 	}
+	/* 以下A所有值已经合法 */
 	if (NULL == mp_data){
 		m_rows = A.m_rows;
 		m_cols = A.m_cols;
 		mp_data = new DATA_TYPE[m_rows*m_cols];
 	}
-	else{
-		m_rows = A.m_rows;
-		m_cols = A.m_cols;
+	else{//mp_data!=NULL
 		if (m_rows*m_cols != A.m_rows*A.m_cols){
 			delete[] mp_data;
 			mp_data = NULL;
+			m_rows = A.m_rows;
+			m_cols = A.m_cols;
 			mp_data = new DATA_TYPE[m_rows*m_cols];
 		}
 		else{
+			m_rows = A.m_rows;
+			m_cols = A.m_cols;
 			/* mp_data不需要重新申请空间，减少计算量 */
 		}
 	}
 
     int n = m_rows*m_cols;
+	DATA_TYPE *pdata = A.mp_data;
     for (int i = 0; i < n; ++i){
-        mp_data[i] = A.mp_data[i];
+		mp_data[i] = pdata[i];
     }
 
     return *this;
 }
-matrix::matrix(const matrix &A) :\
-m_rows(A.m_rows), m_cols(A.m_cols)
+matrix::matrix(const matrix &A)\
 {
 	//DEBUG_PRINT("matrix::matrix(const matrix &A) called\n");
 	if (A.m_rows <= 0 || A.m_cols <= 0){
@@ -344,28 +353,29 @@ m_rows(A.m_rows), m_cols(A.m_cols)
 	if (NULL == A.mp_data){
 		DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == mp_data\n");
 		mp_data = A.mp_data;
+		m_rows = m_cols = 0;
 		return;
 	}
 
-	if (m_rows*m_cols != A.m_rows*A.m_cols){
-		if (NULL != mp_data){
-			delete[] mp_data;
-			mp_data = NULL;
-		}
-		mp_data = new DATA_TYPE[m_rows*m_cols];
+	if (NULL != mp_data){
+		/* 不是所有的非空指针都能释放的,野指针指向的是未知内存 */
+		/* 在这里因为是复制构造函数，所以初始值不需要释放 */
+		//delete[] mp_data;//todo to understand
+		//mp_data = NULL;
 	}
-	else{
-		m_rows = A.m_rows;
-		m_cols = A.m_cols;
-	}
+	m_rows = A.m_rows;
+	m_cols = A.m_cols;
+	mp_data = new DATA_TYPE[m_rows*m_cols];
+
 	if (NULL == mp_data){
 		DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == mp_data\n");
 		return;
 	}
 
 	int element_counts = m_rows*m_cols;
+	DATA_TYPE* pdata = A.mp_data;
 	for (int i = 0; i < element_counts; ++i){
-		mp_data[i] = A.mp_data[i];
+		mp_data[i] = pdata[i];
 	}
 }
 
@@ -489,7 +499,7 @@ matrix operator*(const DATA_TYPE val, const matrix &multiplier_matrix){
 		DEBUG_PRINT("NULL == multiplier_matrix.mp_data  matrix::operator*\n");
 	}
 	matrix result_matrix(multiplier_matrix);
-	int elements_count = multiplier_matrix.m_rows*multiplier_matrix.m_cols;
+	int elements_count = result_matrix.m_rows*result_matrix.m_cols;
 	DATA_TYPE *p_result_data = result_matrix.mp_data;
 	for (int i = 0; i < elements_count; ++i){
 		p_result_data[i] *= val;

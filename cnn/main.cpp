@@ -35,15 +35,17 @@ bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name
 
 int main(int argc, char* argv[]){
 	{
-		//matrix A(3, 3, 0, 1);
-		//matrix B(3, 3, 0, 1);
-		//A.show(SHOW_IMAGE_INITAIL_VALUE);
-		//B.show(SHOW_IMAGE_INITAIL_VALUE);
-		////matrix C = A*B;
-		//matrix C = 2*A;
-		//C = C;
-		//C.show(SHOW_IMAGE_INITAIL_VALUE);
-		//int xx = 0;
+		matrix A(3, 3, 0, 1);
+		matrix B(3, 3, 0, 1);
+		A.show(SHOW_IMAGE_INITAIL_VALUE);
+		B.show(SHOW_IMAGE_INITAIL_VALUE);
+		//matrix C = A*B;
+		2 * A;
+		matrix C = 2*A;
+		C = C;
+		C = A * 5;
+		C.show(SHOW_IMAGE_INITAIL_VALUE);
+		int xx = 0;
 	}
 	{
 		//features fs(3, 5, 4, 0, 5);
@@ -78,13 +80,13 @@ int main(int argc, char* argv[]){
 	}
     {
         //layer(kers_channels,kers_rows,kers_cols,kers_count,fts_channels/*kers_channels*/,fts_rows, fts_cols);
-		layer ly(2, 3, 3, 2, 2, 5, 8);
-        ly.m_kers.show();
-		//bool layer::reshape(kernels& src_kers, matrix& dst_kers_mat)
-		ly.reshape(ly.m_kers, ly.m_kers_mat);
-		//ly.m_kers_mat.show();
-		ly.reshape_(ly.m_kers_mat, ly.m_kers);
-		ly.m_kers.show();
+		//layer ly(2, 3, 3, 2, 2, 5, 8);
+  //      ly.m_kers.show();
+		////bool layer::reshape(kernels& src_kers, matrix& dst_kers_mat)
+		//ly.reshape(ly.m_kers, ly.m_kers_mat);
+		////ly.m_kers_mat.show();
+		//ly.reshape_(ly.m_kers_mat, ly.m_kers);
+		//ly.m_kers.show();
   //      ly.kers.show(show_image_initail_value, kernels2matriex);
   //      ly.kers.reshape(kernels2matriex);
 

@@ -14,7 +14,6 @@ public:
     matrix(int rows, int cols, DATA_TYPE min, DATA_TYPE max);
     matrix(const matrix &A);
     ~matrix();
-	
 	bool show(int show_image_mode = SHOW_IMAGE_INITAIL_VALUE);
 
 	friend matrix operator+(const DATA_TYPE val, const matrix &addition_matrix);

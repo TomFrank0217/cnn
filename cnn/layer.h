@@ -40,7 +40,7 @@ public:
 	kernels m_kers_diffs;
 	matrix m_kers_mat;
 	matrix m_kers_mat_diff;
-	kernels m_kers_diffs;
+	kernels m_kers_mat_diffs;
 
 	matrix m_conv_mat;
 	matrix conv_mat_diff;
