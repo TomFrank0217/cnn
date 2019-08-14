@@ -12,7 +12,7 @@ public:
 	/* todo layer层的初始化 即卷积核与特征的初始化 */
     layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
         int fts_channels/*kers_channels*/, int fts_rows, int fts_cols);
-    matrix conv();
+	matrix conv();
 	/* reshape是前向 reshape_是后向 */
 	bool reshape(features& src_fts, matrix& dst_fts_mat);
 	bool reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff);

@@ -477,7 +477,7 @@ bool matrix::show(int show_image_mode){
 matrix operator+(const DATA_TYPE val, const matrix &addition_matrix){
 	if (addition_matrix.m_rows <= 0 || addition_matrix.m_cols <= 0){
 		DEBUG_PRINT("addition_matrix.m_rows <= 0 || addition_matrix.m_cols <= 0\n \
-																				matrix::operator+\n");
+					 matrix::operator+\n");
 	}
 
 	if (NULL == addition_matrix.mp_data){

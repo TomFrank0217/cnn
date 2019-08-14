@@ -149,7 +149,6 @@ features::~features(){
 	//    DEBUG_PRINT("i=%d\n", i);
 	//    delete (m_p_kernels + i);/* todo */
 	//}
-	//delete m_p_kernels;
 	return;
 
 }
@@ -219,10 +218,6 @@ features::features(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale)
 	}
 	return;
 }
-
-//bool tensor::reshape(int kernels_width, int kernels_height, int stride, int padding_mode){
-//	return true;
-//}
 
 features::features(const features& ts_){
 

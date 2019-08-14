@@ -35,10 +35,14 @@ layer::layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
 	/* todo 初始化为double 型 */
 	m_fts = features(fts_channels, fts_rows, fts_cols, 0, 1);
 	m_fts_diff = features(fts_channels, fts_rows, fts_cols, 0, 1);
-	m_fts_diffs = features();
-	m_fts_mat = matrix();
-	m_fts_mat_diff = matrix();
-	m_fts_mat_diffs = matrix();
+	m_fts_diffs = features(fts_channels, fts_rows, fts_cols, 0, 1);
+	int r = (fts_rows - kers_rows) / stride + 1;
+	r *= ((fts_cols- kers_cols) / stride + 1);
+	int c = kers_rows*kers_cols*kers_channels;
+	
+	m_fts_mat = matrix(r, c);
+	m_fts_mat_diff = matrix(r, c);
+	m_fts_mat_diffs = matrix(r, c);
 
 	/* todo kers初始化需要很小的初始值 */
 	m_kers = kernels(kers_channels, kers_rows, kers_cols, kers_count, - 1, 1);
@@ -50,12 +54,17 @@ layer::layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
 	m_kers_mat_diff = matrix(kers_mat_rows, kers_mat_cols, 0.0);
 	m_kers_mat_diffs = matrix(kers_mat_rows, kers_mat_cols, 0.0);
 
-	m_conv_mat = matrix();
-	conv_mat_diff = matrix();
-	conv_mat_diffs = matrix();
-	m_conv_mat2fts = features();
-	conv_mat2fts_diff = features();
-	conv_mat2fts_diffs = features();
+	int rows = m_fts_mat.m_rows;
+	int cols = m_kers_mat.m_cols;
+	m_conv_mat = matrix(rows, cols, 0.0);
+	conv_mat_diff = matrix(rows, cols, 0.0);
+	conv_mat_diffs = matrix(rows, cols, 0.0);
+	/* todo not VALID_PADDING*/
+	int m = (m_fts.m_rows - m_kers.m_rows) / stride + 1;
+	int n = (m_fts.m_cols - m_kers.m_cols) / stride + 1;
+	m_conv_mat2fts = features(m_kers.m_channels, m, n, 0.0);
+	conv_mat2fts_diff = features(m_kers.m_channels, m, n, 0.0);
+	conv_mat2fts_diffs = features(m_kers.m_channels, m, n, 0.0);
 }
 
 layer::~layer(){
@@ -65,7 +74,10 @@ layer::~layer(){
 
 matrix layer::conv(){
 	/* todo check two mats */
-	return m_fts_mat*m_kers_mat;
+	reshape(m_fts, m_fts_mat);
+	reshape(m_kers, m_kers_mat);
+	m_conv_mat = m_fts_mat*m_kers_mat;
+	return  m_conv_mat;
 }
 
 bool layer::reshape(kernels& src_kers, matrix& dst_kers_mat){
@@ -303,5 +315,48 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 		//default:
 		//	break;
 	}
+	return true;
+}
+bool layer::reshape(matrix& src_conv_mat, features& dst_conv_mat2fts){
+	if (NULL == src_conv_mat.mp_data){
+		DEBUG_PRINT("(NULL == src_conv_mat.mp_data)  \
+					layer::reshape\n");
+		return false;
+	}
+	if (NULL == dst_conv_mat2fts.mp_matrixes){
+		int channels = m_kers.m_kers_counts;
+		if (VALID_PADDING == padding_mode){
+			int rows = (m_fts.m_rows - m_kers.m_rows) / stride + 1;
+			int cols = (m_fts.m_cols - m_kers.m_cols) / stride + 1;
+			dst_conv_mat2fts = features(channels, rows, cols);
+		}
+		else{
+			/* todo */
+			DEBUG_PRINT("(VALID_PADDING == padding_mode)\n");
+			return false;
+		}
+	}
+
+	/* conv_mat(i,j) -> out_features(channel,row,col) */
+	/* src -> dst */
+	/* 根据后向插值的思路 我们需要找到这样的一个映射关系 f */
+	/* s.t. f: (channel,row,col) -> (i,j) */
+	int i = 0;
+	int j = 0;
+	for (int channel = 0; channel < dst_conv_mat2fts.m_channels; ++channel){
+		for (int row = 0; row < dst_conv_mat2fts.m_rows; ++row){
+			for (int col = 0; col < dst_conv_mat2fts.m_cols; ++col){
+				j = channel;
+				i = row*dst_conv_mat2fts.m_cols + col;
+
+				//dst_conv_mat2fts.mp_matrixes[channel].mp_data[row*dst_conv_mat2fts.m_cols + col]
+				dst_conv_mat2fts.mp_matrixes[channel].mp_data[i]
+					= src_conv_mat.mp_data[i*src_conv_mat.m_cols + j];
+			}
+		}
+	}
+	return true;
+}
+bool layer::reshape_(features& src_conv_mat2fts_diff, matrix& dst_conv_mat_diff){
 	return true;
 }

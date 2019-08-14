@@ -50,10 +50,10 @@
     <ClInclude Include="layer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="featuresssss.h">
+    <ClInclude Include="features.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="features.h">
+    <ClInclude Include="featuresssss.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
