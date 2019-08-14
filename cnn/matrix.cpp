@@ -303,13 +303,28 @@ matrix& matrix::operator=(const matrix &A){
     if (this == &A){
         return *this;
     }
+	if (0 >= A.m_rows || 0 >= A.m_cols){
+		DEBUG_PRINT("(0 >= A.m_rows || 0 >= A.m_cols)  matrix::operator= \n");
+		return;
+	}
+	if (NULL == mp_data){
+		m_rows = A.m_rows;
+		m_cols = A.m_cols;
+		mp_data = new DATA_TYPE[m_rows*m_cols];
+	}
+	else{
+		m_rows = A.m_rows;
+		m_cols = A.m_cols;
+		if (m_rows*m_cols != A.m_rows*A.m_cols){
+			delete[] mp_data;
+			mp_data = NULL;
+			mp_data = new DATA_TYPE[m_rows*m_cols];
+		}
+		else{
+			/* mp_data不需要重新申请空间，减少计算量 */
+		}
+	}
 
-    delete[] mp_data;
-    mp_data = NULL;
-    this->m_rows = A.m_rows;
-    this->m_cols = A.m_cols;
-
-    mp_data = new DATA_TYPE[m_rows*m_cols];
     int n = m_rows*m_cols;
     for (int i = 0; i < n; ++i){
         mp_data[i] = A.mp_data[i];
@@ -323,15 +338,29 @@ m_rows(A.m_rows), m_cols(A.m_cols)
 	//DEBUG_PRINT("matrix::matrix(const matrix &A) called\n");
 	if (A.m_rows <= 0 || A.m_cols <= 0){
 		DEBUG_PRINT("matrix::matrix(const matrix &A)\n A.m_rows <= 0 || A.m_cols <= 0\n");
+		return;
 	}
 
 	if (NULL == A.mp_data){
 		DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == mp_data\n");
+		mp_data = A.mp_data;
+		return;
 	}
 
-	mp_data = new DATA_TYPE[m_rows*m_cols];
+	if (m_rows*m_cols != A.m_rows*A.m_cols){
+		if (NULL != mp_data){
+			delete[] mp_data;
+			mp_data = NULL;
+		}
+		mp_data = new DATA_TYPE[m_rows*m_cols];
+	}
+	else{
+		m_rows = A.m_rows;
+		m_cols = A.m_cols;
+	}
 	if (NULL == mp_data){
 		DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == mp_data\n");
+		return;
 	}
 
 	int element_counts = m_rows*m_cols;

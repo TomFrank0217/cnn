@@ -28,19 +28,26 @@ public:
 	/* 前向传播后向传播的时候，如果是pooling层，kers,conv_mat,conv_mat2fts设为空 */
 
 	features m_fts;
-	//features m_fts_diff;
+	features m_fts_diff;
+	/* diffs=diff(1)+diff(2)+diff(3)+...+diff(batch_size-1)+diff(batch_size) */
+	features m_fts_diffs;
 	matrix m_fts_mat;
-	//matrix m_fts_mat_diff;
+	matrix m_fts_mat_diff;
+	matrix m_fts_mat_diffs;
 
 	kernels m_kers;
-	//kernels m_kers_diff;
+	kernels m_kers_diff;
+	kernels m_kers_diffs;
 	matrix m_kers_mat;
-	//matrix m_kers_mat_diff;
-	
+	matrix m_kers_mat_diff;
+	kernels m_kers_diffs;
+
 	matrix m_conv_mat;
-	//matrix conv_mat_diff;
+	matrix conv_mat_diff;
+	matrix conv_mat_diffs;
     features m_conv_mat2fts;
-	//features conv_mat2fts_diff;
+	features conv_mat2fts_diff;
+	features conv_mat2fts_diffs;
 };
 
 #endif
