@@ -357,6 +357,34 @@ bool layer::reshape(matrix& src_conv_mat, features& dst_conv_mat2fts){
 	}
 	return true;
 }
+
 bool layer::reshape_(features& src_conv_mat2fts_diff, matrix& dst_conv_mat_diff){
+	if (NULL == src_conv_mat2fts_diff.mp_matrixes){
+		DEBUG_PRINT("(NULL == src_conv_mat2fts_diff.mp_matrixes)\n");
+		return false;
+	}
+	if (NULL == dst_conv_mat_diff.mp_data){
+		int rows = src_conv_mat2fts_diff.m_rows*src_conv_mat2fts_diff.m_cols;
+		int cols = src_conv_mat2fts_diff.m_channels;
+		dst_conv_mat_diff = matrix(rows, cols);
+	}
+
+	/* diff_features -> diff_matrix */
+	/* (channel,row,col) -> (i,j) */
+	/* 根据后向插值,要求 f:(i,j) -> (channel,row,col)的关系 */
+	int channel = 0;
+	int row = 0;
+	int col = 0;
+	/* 以下过程可以优化 */
+	for (int i = 0; i < dst_conv_mat_diff.m_rows; ++i){
+		for (int j = 0; j < dst_conv_mat_diff.m_cols; ++j){
+			channel = j;
+			row = i / src_conv_mat2fts_diff.m_cols;
+			col = i - row*src_conv_mat2fts_diff.m_cols;
+			dst_conv_mat_diff.mp_data[i*dst_conv_mat_diff.m_cols + j] = \
+				src_conv_mat2fts_diff.mp_matrixes[channel].\
+				mp_data[row*src_conv_mat2fts_diff.m_cols + col];
+		}
+	}
 	return true;
 }

@@ -90,19 +90,22 @@ int main(int argc, char* argv[]){
 	//}
     {
         //layer(kers_channels,kers_rows,kers_cols,kers_count,fts_channels/*kers_channels*/,fts_rows, fts_cols);
-		layer ly(2, 2, 2, 2, 2, 2, 3);
+		layer ly(2, 2, 2, 2, 2, 5, 5);
         //ly.m_kers.show();
 		//bool layer::reshape(kernels& src_kers, matrix& dst_kers_mat)
 		//ly.reshape(ly.m_kers, ly.m_kers_mat);
 		//ly.m_kers_mat.show();
 		//ly.reshape_(ly.m_kers_mat, ly.m_kers);
 		//ly.m_kers.show();
-		ly.m_fts.show();
-		ly.m_kers.show();
+		//ly.m_fts.show();
+		//ly.m_kers.show();
 		ly.conv();
 		ly.m_conv_mat.show();
 		ly.reshape(ly.m_conv_mat, ly.m_conv_mat2fts);
 		ly.m_conv_mat2fts.show();
+		matrix xxxx;
+		ly.reshape_(ly.m_conv_mat2fts, xxxx);
+		xxxx.show();
 		//ly.reshape(ly.m_fts, ly.m_fts_mat);
 		//ly.m_fts_mat.show();
 		//ly.reshape_(ly.m_fts_mat, ly.m_fts);
