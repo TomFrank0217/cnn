@@ -2,7 +2,6 @@
 
 kernels::kernels(){
 	mp_kers = NULL;
-	mp_tensors1 = NULL;
 	m_channels = 0;
 	m_rows = 0;
 	m_cols = 0;
@@ -22,17 +21,14 @@ m_channels(channels),m_rows(rows),m_cols(cols),m_kers_counts(kernels_counts){
 	m_kers_mat = matrix(kers_mat_rows, kers_mat_cols);
 
 	mp_kers = NULL;
-	mp_tensors1 = NULL;
 	mp_kers = new kernel[kernels_counts];
-	mp_tensors1 = new kernel[kernels_counts];
-	if (NULL == mp_kers || NULL == mp_tensors1){
-		DEBUG_PRINT("(NULL == mp_kers||NULL==mp_tensors1) \n \
+	if (NULL == mp_kers){
+		DEBUG_PRINT("(NULL == mp_kers \
 		      kernels(int channels, int rows, int cols, int kernels_count, int val)");
 	}
 
 	for (int i = 0; i < m_kers_counts; ++i){
 		mp_kers[i] = kernel(channels, rows, cols, val);
-		mp_tensors1[i] = kernel(channels, rows, cols, val);
 	}
 }
 
@@ -48,15 +44,13 @@ m_channels(channels), m_rows(rows), m_cols(cols), m_kers_counts(kernels_counts){
 	m_kers_mat = matrix(kernels_matrix_rows, kernels_matrix_cols);
 
 	mp_kers = new kernel[kernels_counts];
-	mp_tensors1 = new kernel[kernels_counts];
-	if (NULL == mp_kers || NULL == mp_tensors1){
-		DEBUG_PRINT("(NULL == mp_kers || NULL == mp_tensors1) \n \
+	if (NULL == mp_kers){
+		DEBUG_PRINT("(NULL == mp_kers \n \
 					 kernels(int channels, int rows, int cols, int kernels_count, DATA_TYPE val)");
 	}
 
 	for (int i = 0; i < kernels_counts; ++i){
 		mp_kers[i] = kernel(channels, rows, cols, val);
-		mp_tensors1[i] = kernel(channels, rows, cols, val);
 	}
 }
 
@@ -72,15 +66,13 @@ m_channels(channels), m_rows(rows), m_cols(cols), m_kers_counts(kernels_counts){
 	m_kers_mat = matrix(kernels_matrix_rows, kernels_matrix_cols);
 
 	mp_kers = new kernel[kernels_counts];
-	mp_tensors1 = new kernel[kernels_counts];
-	if (NULL == mp_kers || NULL == mp_tensors1){
-		DEBUG_PRINT("(NULL == mp_kers || NULL == mp_tensors1) \n \
+	if (NULL == mp_kers){
+		DEBUG_PRINT("(NULL == mp_kers \n \
 					  kernels(int channels, int rows, int cols, int kernels_count, int min, int max)");
 	}
 
 	for (int i = 0; i < kernels_counts; ++i){
 		mp_kers[i] = kernel(channels, rows, cols, min, max);
-		mp_tensors1[i] = kernel(channels, rows, cols, min, max);
 	}
 }
 
@@ -96,17 +88,14 @@ m_channels(channels), m_rows(rows), m_cols(cols), m_kers_counts(kernels_count){
 	m_kers_mat = matrix(kernels_matrix_rows, kernels_matrix_cols);
 
 	mp_kers = NULL;
-	mp_tensors1 = NULL;
 	mp_kers = new kernel[kernels_count];
-	mp_tensors1 = new kernel[kernels_count];
-	if (NULL == mp_kers || NULL != mp_tensors1){
+	if (NULL == mp_kers){
 		DEBUG_PRINT("(NULL == mp_tensors) \n \
 					 kernels(int channels, int rows, int cols, int kernels_count, DATA_TYPE min, DATA_TYPE max)");
 	}
 
 	for (int i = 0; i < kernels_count; ++i){
 		mp_kers[i] = kernel(channels, rows, cols, min, max);
-		mp_tensors1[i] = kernel(channels, rows, cols, min, max);
 	}
 }
 
@@ -114,11 +103,6 @@ kernels::~kernels(){
 	if (NULL != mp_kers){
 		delete[] mp_kers;
 		mp_kers = NULL;
-	}
-
-	if (NULL != mp_tensors1){
-		delete[] mp_tensors1;
-		mp_tensors1 = NULL;
 	}
 }
 
@@ -140,26 +124,22 @@ bool kernels::show(int image_show_mode){
 }
 
 kernels::kernels(const kernels &ker_){
-	m_channels = ker_.m_channels;
-	m_rows = ker_.m_rows;
-	m_cols = ker_.m_cols;
-	m_kers_counts = ker_.m_kers_counts;
-	if (NULL != mp_kers||NULL!=mp_tensors1){
+	//m_channels = ker_.m_channels;
+	//m_rows = ker_.m_rows;
+	//m_cols = ker_.m_cols;
+	//m_kers_counts = ker_.m_kers_counts;
+	if (NULL != mp_kers){
 		delete[] mp_kers;
 		mp_kers = NULL;
-		delete[] mp_tensors1;
-		mp_tensors1 = NULL;
 	}
 	m_kers_mat = ker_.m_kers_mat;
 	mp_kers = new kernel[m_kers_counts];
-	mp_tensors1 = new kernel[m_kers_counts];
-	if (NULL == mp_kers || NULL == mp_tensors1){
-		DEBUG_PRINT("(NULL == mp_kers || NULL == mp_tensors1)\n");
+	if (NULL == mp_kers){
+		DEBUG_PRINT("(NULL == mp_kers \n");
 		return;
 	}
 	for (int i = 0; i < m_kers_counts; ++i){
 		mp_kers[i] = ker_.mp_kers[i];
-		mp_tensors1[i] = ker_.mp_tensors1[i];
 	}
 
 }
@@ -174,24 +154,19 @@ kernels& kernels::operator=(const kernels& ker_){
 	m_kers_counts = ker_.m_kers_counts;
 	m_kers_mat = ker_.m_kers_mat;
 
-	if (NULL != mp_kers && NULL != mp_tensors1){
+	if (NULL != mp_kers){
 		delete[] mp_kers;
 		mp_kers = NULL;
-		delete[] mp_tensors1;
-		mp_tensors1 = NULL;
 	}
 
 	mp_kers = new kernel[m_kers_counts];
-	mp_tensors1 = new kernel[m_kers_counts];
-	if (NULL == mp_kers || NULL == mp_tensors1){
-		std::cout << "(NULL == mp_kers || NULL == mp_tensors1)\
-					 				\n  kernels::operator= \n";
+	if (NULL == mp_kers){
+		std::cout << "(NULL == mp_kers \n  kernels::operator= \n";
 		return *this;
 	}
 
 	for (int i = 0; i < m_kers_counts; ++i){
 		mp_kers[i] = ker_.mp_kers[i];
-		mp_tensors1[i] = ker_.mp_tensors1[i];
 	}
 }
 
