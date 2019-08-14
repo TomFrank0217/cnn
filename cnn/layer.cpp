@@ -30,22 +30,25 @@ layer::layer(){
 
 layer::layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
     int fts_channels/*kers_channels*/, int fts_rows, int fts_cols){
+
+	/* ly.m_fts_mat, ly.m_fts */
+
 	padding_mode = VALID_PADDING;
 	stride = STRIDE;
 	/* todo 初始化为double 型 */
-	m_fts = features(fts_channels, fts_rows, fts_cols, 0, 1);
-	m_fts_diff = features(fts_channels, fts_rows, fts_cols, 0, 1);
-	m_fts_diffs = features(fts_channels, fts_rows, fts_cols, 0, 1);
+	m_fts = features(fts_channels, fts_rows, fts_cols, -2.0, 2.0);
+	m_fts_diff = features(fts_channels, fts_rows, fts_cols, 0.0, 1.0);
+	m_fts_diffs = features(fts_channels, fts_rows, fts_cols, 0.0, 1.0);
+
 	int r = (fts_rows - kers_rows) / stride + 1;
 	r *= ((fts_cols- kers_cols) / stride + 1);
 	int c = kers_rows*kers_cols*kers_channels;
-	
-	m_fts_mat = matrix(r, c);
-	m_fts_mat_diff = matrix(r, c);
-	m_fts_mat_diffs = matrix(r, c);
+	m_fts_mat = matrix(r, c, 0.0);
+	m_fts_mat_diff = matrix(r, c, 0.0);
+	m_fts_mat_diffs = matrix(r, c, 0.0);
 
 	/* todo kers初始化需要很小的初始值 */
-	m_kers = kernels(kers_channels, kers_rows, kers_cols, kers_count, - 1, 1);
+	m_kers = kernels(kers_channels, kers_rows, kers_cols, kers_count, - 2, 2);
 	m_kers_diff = kernels(kers_channels, kers_rows, kers_cols, kers_count, -1, 1);
 	m_kers_diffs = kernels(kers_channels, kers_rows, kers_cols, kers_count, -1, 1);
 	int kers_mat_rows = m_kers.m_channels *m_kers.m_rows*m_kers.m_cols;
@@ -204,6 +207,7 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 		/* 下面是核心代码 features2matrix */
 		/* todo 此处计算可以优化 */
 		for (int i = 0; i < dst_fts_mat.m_rows; ++i){
+			int sss = 0;
 			for (int j = 0; j < dst_fts_mat.m_cols; ++j){
 				/* (i,j) -> (channel,rpk,cpk,rkf,ckf) */
 				channel = j / (m_kers.m_rows*m_kers.m_cols);
@@ -220,8 +224,10 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 				cpf = cpk + ckf;/* 元素在原始特征中的列数 = 元素在卷积核(二维)中的列数 + 卷积核(二维)在特征中的列数 */
 				/* 元素在卷积核中的位置是指元素相对于卷积核左上方元素而言 */
 				/* 卷积核在特征图中的位置是指卷积核左上方元素相对于特征图左上方元素的位置 */
+				std::cout << "i=" << i << " j=" << j << std::endl;
 				dst_fts_mat.mp_data[i*dst_fts_mat.m_cols + j] = \
 					src_fts.mp_matrixes[channel].mp_data[rpf*src_fts.m_cols + cpf];
+				std::cout << "i=" << i << " j=" << j << std::endl;
 			}
 		}
 		break;
@@ -237,6 +243,7 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 
 bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 {
+	//src_fts_mat_diff.show();
 	/* 此处是核心代码 */
 	/* 将 feature_matrix(i,j) 回归到原始的的 features(channel,rpf,cpf) */
 	/* 就是要学习这样的一个映射关系f-1, */
@@ -246,8 +253,8 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 	int rpf = 0;    /* rpf row_pixel_feature 是features_matrix第(i,j)个pixel 在原始特征图中的行数 */
 	int cpf = 0;    /* cpf col_pixel_feature 是features_matrix第(i,j)个pixel 在原始特征图中的列数 */
 
-	int rpk = 0;/* rpk 是features_matrix第(i,j)个pixel 在卷积核(二维)中的行数 */
-	int cpk = 0;/* cpk 是features_matrix第(i,j)个pixel 在卷积核(二维)中的列数 */
+	int rpk = 0;/* rpk row_pixel_kernel 是features_matrix第(i,j)个pixel 在卷积核(二维)中的行数 */
+	int cpk = 0;/* cpk col_pixel_kernel 是features_matrix第(i,j)个pixel 在卷积核(二维)中的列数 */
 	/* rkf 是features_matrix第(i,j)个pixel 对应的二维卷积核(左上方元素)在特征中的行数 */
 	int rkf = 0;
 	/* ckf 是features_matrix第(i,j)个pixel 对应的二维卷积核(左上方元素)在特征中的列数 */
@@ -258,11 +265,6 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 	if (NULL == src_fts_mat_diff.mp_data){
 		std::cout << "(NULL == src_fts_mat_diff.mp_data)"
 			<< "layer::reshape_" << std::endl;
-		return false;
-	}
-	
-	if (NULL == src_fts_mat_diff.mp_data){
-		std::cout << "(NULL == src_fts_mat_diff.mp_data)"<< "layer::reshape_\n";
 		return false;
 	}
 
@@ -292,8 +294,8 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 				index_in_kernel = j - channel*(m_kers.m_rows*m_kers.m_cols);
 				rpk = index_in_kernel / m_kers.m_cols;
 				cpk = index_in_kernel - rpk*m_kers.m_cols;
-				rkf = i / ((src_fts_mat_diff.m_cols - m_kers.m_cols) / stride + 1);
-				ckf = i - rkf*((src_fts_mat_diff.m_cols - m_kers.m_cols) / stride + 1);
+				rkf = i / ( (src_fts_mat_diff.m_cols - m_kers.m_cols)/stride + 1 );
+				ckf = i - rkf*((src_fts_mat_diff.m_cols - m_kers.m_cols)/stride + 1);
 
 				/* h: (channel,rpk,cpk,rkf,ckf) -> (channel,rpf,cpf) */
 				//channel = channel;
@@ -301,13 +303,10 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 				cpf = cpk + ckf;
 				//tsr.mp_matrixes[channel].mp_data[rpf*mp_matrixes[0].m_cols + cpf]\
 															//	= fts_matrix.mp_data[i*m_features_matrix.m_cols + j];
-				dst_fts_diff.mp_matrixes[channel].mp_data[rpf*dst_fts_diff.m_cols + cpf]\
+				dst_fts_diff.mp_matrixes[channel].mp_data[rpf*dst_fts_diff.mp_matrixes[0].m_cols + cpf]\
 					= src_fts_mat_diff.mp_data[i*src_fts_mat_diff.m_cols + j];
 			}
 		}
-		/* 留这一段代码的原因是以后参考和注意，要注意正向计算和反向计算的区别 */
-		/* 这就好比前向插值和反向插值的区别 */
-		/* 以上代码虽然正确，但是features中很多元素被重复被计算了K*K次严重浪费计算资源 todo */
 		break;
 	case SAME_PADDING:
 		/*todo*/
@@ -315,6 +314,7 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 		//default:
 		//	break;
 	}
+	//dst_fts_diff.show();
 	return true;
 }
 bool layer::reshape(matrix& src_conv_mat, features& dst_conv_mat2fts){

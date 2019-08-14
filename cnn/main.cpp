@@ -88,35 +88,46 @@ int main(int argc, char* argv[]){
 	//	}
 	//	int x = 0;
 	//}
-    {
-        //layer(kers_channels,kers_rows,kers_cols,kers_count,fts_channels/*kers_channels*/,fts_rows, fts_cols);
-		layer ly(2, 2, 2, 2, 2, 5, 5);
-        //ly.m_kers.show();
-		//bool layer::reshape(kernels& src_kers, matrix& dst_kers_mat)
+	{
+		//layer(kers_channels,kers_rows,kers_cols,kers_count,fts_channels/*kers_channels*/,fts_rows, fts_cols);
+		layer ly(2, 2, 2, 1, 1, 5, 5);
+
+		//      ly.m_kers.show();
+		////bool layer::reshape(kernels& src_kers, matrix& dst_kers_mat)
 		//ly.reshape(ly.m_kers, ly.m_kers_mat);
 		//ly.m_kers_mat.show();
-		//ly.reshape_(ly.m_kers_mat, ly.m_kers);
-		//ly.m_kers.show();
-		//ly.m_fts.show();
-		//ly.m_kers.show();
-		ly.conv();
-		ly.m_conv_mat.show();
-		ly.reshape(ly.m_conv_mat, ly.m_conv_mat2fts);
-		ly.m_conv_mat2fts.show();
-		matrix xxxx;
-		ly.reshape_(ly.m_conv_mat2fts, xxxx);
-		xxxx.show();
-		//ly.reshape(ly.m_fts, ly.m_fts_mat);
-		//ly.m_fts_mat.show();
-		//ly.reshape_(ly.m_fts_mat, ly.m_fts);
-		//ly.m_fts.show();
-  //      matrix m = ly.conv();
-		//m.show(show_image_initail_value);
+		//kernels kkk;
+		//ly.reshape_(ly.m_kers_mat, kkk);
+		//kkk.show();
 
+		//ly.m_fts.show();
+		//ly.m_kers.show();
+		//ly.conv();
+		//ly.m_conv_mat.show();
+		//ly.reshape(ly.m_conv_mat, ly.m_conv_mat2fts);
+		//ly.m_conv_mat2fts.show();
+		//matrix xxxx;
+		//ly.reshape_(ly.m_conv_mat2fts, xxxx);
+		//xxxx.show();
+
+		ly.m_fts.show();
+		ly.reshape(ly.m_fts, ly.m_fts_mat);
+		ly.m_fts.show();
+		ly.m_fts_mat.show();
+
+		ly.reshape_(ly.m_fts_mat, ly.m_fts);
+		ly.m_fts.show();
+		// ly.m_fts_mat.show();
+		//.reshape_(ly.m_fts_mat, fff);
+		//ly.reshape_(ly.m_fts_mat, ly.m_fts);
+		//fff.show();
+		
+		//fff.show();
 		//ly.reshape(matrix2features);
 		//ly.conv_matrix_fts.show(show_image_initail_value);
 		//ly.reshape(features2matrix);
 		//ly.conv_matrix.show();
+		int x = 0;
     }
     int x = 0;
  //   string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";

@@ -10,6 +10,7 @@ features::features(){
 features::features(int channels, int rows, int cols, int val) :
 m_channels(channels), m_rows(rows), m_cols(cols)
 {
+
 	if (0 >= m_channels){
 		DEBUG_PRINT("0 >= m_tensors_count\n");
 		return;
