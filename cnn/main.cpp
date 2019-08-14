@@ -57,36 +57,36 @@ int main(int argc, char* argv[]){
 	//		//}
 	//	}
 	//}
-	{
-		features fs(3, 5, 4, 0, 5);
-		fs.show(SHOW_IMAGE_INITAIL_VALUE);
-		features fs2(fs);
-		fs2.show(SHOW_IMAGE_INITAIL_VALUE);
-		fs2 = fs2;
-		fs2.show(SHOW_IMAGE_INITAIL_VALUE);
-		fs = fs2;
-		fs.show(SHOW_IMAGE_INITAIL_VALUE);
-	}
+	//{
+	//	features fs(3, 5, 4, 0, 5);
+	//	fs.show(SHOW_IMAGE_INITAIL_VALUE);
+	//	features fs2(fs);
+	//	fs2.show(SHOW_IMAGE_INITAIL_VALUE);
+	//	fs2 = fs2;
+	//	fs2.show(SHOW_IMAGE_INITAIL_VALUE);
+	//	fs = fs2;
+	//	fs.show(SHOW_IMAGE_INITAIL_VALUE);
+	//}
 
 	int y = 0;
 	{
-		//kernels kers(2, 2, 3, 2, -2, 2);
-		////kers.reshape();
-		//kers.show(SHOW_IMAGE_INITAIL_VALUE);
-		//kers.show(SHOW_IMAGE_INITAIL_VALUE);
-		//kernels k2 = kers;
-		//k2 = kers;
-		//k2.show(SHOW_IMAGE_INITAIL_VALUE);
-		//cout << endl;
-		//cout << kers.m_channels << "  " << kers.m_rows << "  "\
-		//	<< kers.m_cols << "  " << kers.m_kers_counts << endl;
-		//for (int i = 0; i < kers.m_kers_counts; ++i){
-		//	cout << "kernel " << i << endl;
-		//	cout << kers.mp_kers[i].m_channels << "  " \
-		//		<< kers.mp_kers[i].m_rows << "  " << kers.mp_kers[i].m_cols;
-		//	(kers.mp_kers[i]).show(SHOW_IMAGE_INITAIL_VALUE);
-		//}
-		//int x = 0;
+		kernels kers(2, 2, 3, 2, -2, 2);
+		//kers.reshape();
+		kers.show(SHOW_IMAGE_INITAIL_VALUE);
+		kers.show(SHOW_IMAGE_INITAIL_VALUE);
+		kernels k2 = kers;
+		k2 = kers;
+		k2.show(SHOW_IMAGE_INITAIL_VALUE);
+		cout << endl;
+		cout << kers.m_channels << "  " << kers.m_rows << "  "\
+			<< kers.m_cols << "  " << kers.m_kers_counts << endl;
+		for (int i = 0; i < kers.m_kers_counts; ++i){
+			cout << "kernel " << i << endl;
+			cout << kers.mp_kers[i].m_channels << "  " \
+				<< kers.mp_kers[i].m_rows << "  " << kers.mp_kers[i].m_cols;
+			(kers.mp_kers[i]).show(SHOW_IMAGE_INITAIL_VALUE);
+		}
+		int x = 0;
 	}
     {
         //layer(kers_channels,kers_rows,kers_cols,kers_count,fts_channels/*kers_channels*/,fts_rows, fts_cols);

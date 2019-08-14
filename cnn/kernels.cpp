@@ -124,14 +124,15 @@ bool kernels::show(int image_show_mode){
 }
 
 kernels::kernels(const kernels &ker_){
-	//m_channels = ker_.m_channels;
-	//m_rows = ker_.m_rows;
-	//m_cols = ker_.m_cols;
-	//m_kers_counts = ker_.m_kers_counts;
-	if (NULL != mp_kers){
-		delete[] mp_kers;
-		mp_kers = NULL;
-	}
+	m_channels = ker_.m_channels;
+	m_rows = ker_.m_rows;
+	m_cols = ker_.m_cols;
+	m_kers_counts = ker_.m_kers_counts;
+	/* todo 此处是否应该释放指针指向的内存 如果释放会不会出现matrix和features复制构造函数相同的问题 */
+	//if (NULL != mp_kers){
+	//	delete[] mp_kers;
+	//	mp_kers = NULL;
+	//}
 	//m_kers_mat = ker_.m_kers_mat;
 	mp_kers = new kernel[m_kers_counts];
 	if (NULL == mp_kers){
