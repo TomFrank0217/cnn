@@ -171,9 +171,9 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 
 	int rpk = 0;/* rpk 是features_matrix第(i,j)个pixel 在卷积核(二维)中的行数 */
 	int cpk = 0;/* cpk 是features_matrix第(i,j)个pixel 在卷积核(二维)中的列数 */
-	/* rkf 是features_matrix第(i,j)个pixel 在二维卷积核(左上方元素)在特征中的行数 */
+	/* rkf 是features_matrix第(i,j)个pixel 对应的二维卷积核(左上方元素)在特征中的行数 */
 	int rkf = 0;
-	/*ckf 是features_matrix第(i,j)个pixel 在二维卷积核(左上方元素)在特征中的列数 */
+	/* ckf 是features_matrix第(i,j)个pixel 对应的二维卷积核(左上方元素)在特征中的列数 */
 	int ckf = 0;
 	/* 我们学习的并不是直接得到 f: (i,j) -> (channel,rpf,cpf) 的映射关系 */
 	/* 实际上我们寻找到两个映射关系 g和h,  s.t. f=h*g 这样的一个复合函数的关系 */
@@ -198,7 +198,6 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 				index_in_kernel = j - channel*(m_kers.m_rows*m_kers.m_cols);
 				rpk = index_in_kernel / m_kers.m_cols;
 				cpk = index_in_kernel - rpk*m_kers.m_cols;
-				//rkf = i / ((tsr.m_cols - kernel_cols) / stride + 1);
 				rkf = i / ((src_fts.m_cols - m_kers.m_cols) / stride + 1);
 				ckf = i - rkf*((src_fts.m_cols - m_kers.m_cols) / stride + 1);
 
@@ -223,6 +222,86 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 	return true;
 }
 
-bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_mat_diff){
+
+bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
+{
+	/* 此处是核心代码 */
+	/* 将 feature_matrix(i,j) 回归到原始的的 features(channel,rpf,cpf) */
+	/* 就是要学习这样的一个映射关系f-1, */
+	/* s.t. f-1: (channel,rpf,cpf) -> (i,j) */
+	/* 这是一个后向插值的过程 可以减轻很多计算量 ，相比于下面被注释的前向插值而言 */
+	int channel = 0;/* channel channel_in_features 是features_matrix第(i,j)个pixel 在原始特征图中的通道数 */
+	int rpf = 0;    /* rpf row_pixel_feature 是features_matrix第(i,j)个pixel 在原始特征图中的行数 */
+	int cpf = 0;    /* cpf col_pixel_feature 是features_matrix第(i,j)个pixel 在原始特征图中的列数 */
+
+	int rpk = 0;/* rpk 是features_matrix第(i,j)个pixel 在卷积核(二维)中的行数 */
+	int cpk = 0;/* cpk 是features_matrix第(i,j)个pixel 在卷积核(二维)中的列数 */
+	/* rkf 是features_matrix第(i,j)个pixel 对应的二维卷积核(左上方元素)在特征中的行数 */
+	int rkf = 0;
+	/* ckf 是features_matrix第(i,j)个pixel 对应的二维卷积核(左上方元素)在特征中的列数 */
+	int ckf = 0;
+	/* index_in_kernel辅助变量，描述元素相对于单个(二维)卷积核的相对位置）*/
+	int index_in_kernel = 0;
+	
+	if (NULL == src_fts_mat_diff.mp_data){
+		std::cout << "(NULL == src_fts_mat_diff.mp_data)"
+			<< "layer::reshape_" << std::endl;
+		return false;
+	}
+	
+	if (NULL == src_fts_mat_diff.mp_data){
+		std::cout << "(NULL == src_fts_mat_diff.mp_data)"<< "layer::reshape_\n";
+		return false;
+	}
+
+	if (NULL == dst_fts_diff.mp_matrixes){
+		std::cout << "(NULL == dst_fts_diff.mp_matrixes)" 
+			<< "layer::reshape_" << std::endl;
+		dst_fts_diff = features(m_fts.m_channels, m_fts.m_rows, m_fts.m_cols);
+	}
+	switch (padding_mode)
+	{
+	case VALID_PADDING:
+		/* (i,j) (g)-> (channel,rpk,cpk,rkf,ckf) (h)-> (channel,rpf,cpf) */
+		/* (i,j) (f)-> (channel,rpf,cpf)  是一个不可逆过程 */
+		/* 所以  (channel,rpf,cpf) (f-1)-> (i,j)  的f-1实际上是一个多射过程 */
+		/* 具体的怎么把这一段代码写出来还需要思考 */
+		/* todo */
+		//for (channel = 0; channel < m_tensor.m_channels; ++channel){
+		//	for (rpf = 0; rpf < m_tensor.m_rows; ++rpf){
+		//		for (cpf = 0; cpf < m_tensor.m_cols; ++cpf){}}}
+
+		/* mat -> features */
+		/* 以下代码虽然正确，但是features中很多元素被重复被计算了K*K次严重浪费计算资源 */
+		for (int i = 0; i < src_fts_mat_diff.m_rows; ++i){
+			for (int j = 0; j < src_fts_mat_diff.m_cols; ++j){
+				/* g: (i,j) -> (channel,rpk,cpk,rkf,ckf) */
+				channel = j / (m_kers.m_rows*m_kers.m_cols);/* 此处乘法可以优化 */
+				index_in_kernel = j - channel*(m_kers.m_rows*m_kers.m_cols);
+				rpk = index_in_kernel / m_kers.m_cols;
+				cpk = index_in_kernel - rpk*m_kers.m_cols;
+				rkf = i / ((src_fts_mat_diff.m_cols - m_kers.m_cols) / stride + 1);
+				ckf = i - rkf*((src_fts_mat_diff.m_cols - m_kers.m_cols) / stride + 1);
+
+				/* h: (channel,rpk,cpk,rkf,ckf) -> (channel,rpf,cpf) */
+				//channel = channel;
+				rpf = rpk + rkf;
+				cpf = cpk + ckf;
+				//tsr.mp_matrixes[channel].mp_data[rpf*mp_matrixes[0].m_cols + cpf]\
+															//	= fts_matrix.mp_data[i*m_features_matrix.m_cols + j];
+				dst_fts_diff.mp_matrixes[channel].mp_data[rpf*dst_fts_diff.m_cols + cpf]\
+					= src_fts_mat_diff.mp_data[i*src_fts_mat_diff.m_cols + j];
+			}
+		}
+		/* 留这一段代码的原因是以后参考和注意，要注意正向计算和反向计算的区别 */
+		/* 这就好比前向插值和反向插值的区别 */
+		/* 以上代码虽然正确，但是features中很多元素被重复被计算了K*K次严重浪费计算资源 todo */
+		break;
+	case SAME_PADDING:
+		/*todo*/
+		break;
+		//default:
+		//	break;
+	}
 	return true;
 }

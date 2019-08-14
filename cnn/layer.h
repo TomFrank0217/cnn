@@ -15,7 +15,7 @@ public:
     matrix conv();
 	/* reshape是前向 reshape_是后向 */
 	bool reshape(features& src_fts, matrix& dst_fts_mat);
-	bool reshape_(matrix& src_fts_mat_diff, features& dst_fts_mat_diff);
+	bool reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff);
 
 	bool reshape(kernels& src_kers, matrix& dst_kers_mat);
 	bool reshape_(matrix& src_kers_mat_diff, kernels& dst_kers_mat_diff);
