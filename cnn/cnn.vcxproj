@@ -149,6 +149,7 @@
     <ClCompile Include="featuresssss.cpp" />
     <ClCompile Include="kernels.cpp" />
     <ClCompile Include="layer.cpp" />
+    <ClCompile Include="layer_parameters.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="matrix.cpp" />
     <ClCompile Include="features.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="featuresssss.h" />
     <ClInclude Include="kernels.h" />
     <ClInclude Include="layer.h" />
+    <ClInclude Include="layers_parameters.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="features.h" />
   </ItemGroup>

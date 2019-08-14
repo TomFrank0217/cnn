@@ -107,6 +107,7 @@ int main(int argc, char* argv[]){
 		//matrix xxxx;
 		//ly.reshape_(ly.m_conv_mat2fts, xxxx);
 		//xxxx.show();
+
 		int channels = 2;
 		layer ly(channels, 2, 2, 1, channels, 3, 3);
 		ly.m_fts.show();
@@ -126,7 +127,6 @@ int main(int argc, char* argv[]){
 		//ly.conv_matrix.show();
 
     }
-    int x = 0;
  //   string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
 	//cout << file_name << endl;
  //   vector<num_path> vec_path_label;

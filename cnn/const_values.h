@@ -4,7 +4,7 @@
 #define DATA_TYPE                   double
 
 #define RANDOM_INITIAL_VAL          0.01
-#define INITIAL_NUMBER              0
+#define INITIAL_NUMBER              1
 
 #define SHOW_IMAGE_SCALE_VALUE      0
 #define SHOW_IMAGE_INITAIL_VALUE    1 
@@ -30,5 +30,9 @@
 
 #define ABS(X)                      ((X)>0.0?(X):-(X))
 #define DELTA                       0.001
+
+#define CONVOLUTION_LAYER           0
+#define POOLING_LAYER               1
+#define FULLCONNECTION_LAYER        2
 
 #endif
