@@ -202,8 +202,9 @@
 ////	DEBUG_PRINT("do nothing \n features::reshape \n");
 ////	return false;
 ////}
-//
-////bool featuresssss::reshape(features& tsr, matrix& fts_matrix, int reshape_mode, int kernel_rows, \
+////
+//bool features::reshape(int reshape_mode, int kernels_rows, int kernels_cols, int stride, int padding_mode){
+//bool featuresssss::reshape(features& tsr, matrix& fts_matrix, int reshape_mode, int kernel_rows, \
 ////	int kernel_cols, int stride, int padding_mode){
 ////	if (0 >= kernel_rows || 0 >= kernel_cols){
 ////		DEBUG_PRINT("(0 >= kernel_rows || 0 >= kernel_cols) \n features::reshape \n");
