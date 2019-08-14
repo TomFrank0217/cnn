@@ -21,12 +21,11 @@ public:
 	//bool reshape(int mode = KERNELS2MATRIEX);
 public:
 	kernel* mp_kers;
-	kernel* mp_tensors1;
 	int m_channels;
 	int m_rows;
 	int m_cols;
 	int m_kers_counts;
-    matrix m_kers_mat;
+    //matrix m_kers_mat;
 };
 
 #endif

@@ -6,7 +6,7 @@ kernels::kernels(){
 	m_rows = 0;
 	m_cols = 0;
 	m_kers_counts = 0;
-	m_kers_mat = matrix();
+	//m_kers_mat = matrix();
 }
 
 kernels::kernels(int channels, int rows, int cols, int kernels_counts, int val):\
@@ -18,7 +18,7 @@ m_channels(channels),m_rows(rows),m_cols(cols),m_kers_counts(kernels_counts){
 
 	int kers_mat_rows = m_rows*m_cols*m_channels;
 	int kers_mat_cols = m_kers_counts;
-	m_kers_mat = matrix(kers_mat_rows, kers_mat_cols);
+	//m_kers_mat = matrix(kers_mat_rows, kers_mat_cols);
 
 	mp_kers = NULL;
 	mp_kers = new kernel[kernels_counts];
@@ -41,7 +41,7 @@ m_channels(channels), m_rows(rows), m_cols(cols), m_kers_counts(kernels_counts){
 
 	int kernels_matrix_rows = m_rows*m_cols*m_channels;
 	int kernels_matrix_cols = m_kers_counts;
-	m_kers_mat = matrix(kernels_matrix_rows, kernels_matrix_cols);
+	//m_kers_mat = matrix(kernels_matrix_rows, kernels_matrix_cols);
 
 	mp_kers = new kernel[kernels_counts];
 	if (NULL == mp_kers){
@@ -63,7 +63,7 @@ m_channels(channels), m_rows(rows), m_cols(cols), m_kers_counts(kernels_counts){
 
 	int kernels_matrix_rows = m_rows*m_cols*m_channels;
 	int kernels_matrix_cols = m_kers_counts;
-	m_kers_mat = matrix(kernels_matrix_rows, kernels_matrix_cols);
+	//m_kers_mat = matrix(kernels_matrix_rows, kernels_matrix_cols);
 
 	mp_kers = new kernel[kernels_counts];
 	if (NULL == mp_kers){
@@ -85,7 +85,7 @@ m_channels(channels), m_rows(rows), m_cols(cols), m_kers_counts(kernels_count){
 
 	int kernels_matrix_rows = m_rows*m_cols*m_channels;
 	int kernels_matrix_cols = m_kers_counts;
-	m_kers_mat = matrix(kernels_matrix_rows, kernels_matrix_cols);
+	//m_kers_mat = matrix(kernels_matrix_rows, kernels_matrix_cols);
 
 	mp_kers = NULL;
 	mp_kers = new kernel[kernels_count];
@@ -132,7 +132,7 @@ kernels::kernels(const kernels &ker_){
 		delete[] mp_kers;
 		mp_kers = NULL;
 	}
-	m_kers_mat = ker_.m_kers_mat;
+	//m_kers_mat = ker_.m_kers_mat;
 	mp_kers = new kernel[m_kers_counts];
 	if (NULL == mp_kers){
 		DEBUG_PRINT("(NULL == mp_kers \n");
@@ -152,7 +152,7 @@ kernels& kernels::operator=(const kernels& ker_){
 	m_rows = ker_.m_rows;
 	m_cols = ker_.m_cols;
 	m_kers_counts = ker_.m_kers_counts;
-	m_kers_mat = ker_.m_kers_mat;
+	//m_kers_mat = ker_.m_kers_mat;
 
 	if (NULL != mp_kers){
 		delete[] mp_kers;
