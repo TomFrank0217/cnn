@@ -118,13 +118,13 @@ int main(int argc, char* argv[]){
 		//.reshape_(ly.m_fts_mat, fff);
 		//ly.reshape_(ly.m_fts_mat, ly.m_fts);
 		//fff.show();
-		
+	
 		//fff.show();
 		//ly.reshape(matrix2features);
 		//ly.conv_matrix_fts.show(show_image_initail_value);
 		//ly.reshape(features2matrix);
 		//ly.conv_matrix.show();
-		int x = 0;
+
     }
     int x = 0;
  //   string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";

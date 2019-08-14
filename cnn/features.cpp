@@ -10,7 +10,6 @@ features::features(){
 features::features(int channels, int rows, int cols, int val) :
 m_channels(channels), m_rows(rows), m_cols(cols)
 {
-
 	if (0 >= m_channels){
 		DEBUG_PRINT("0 >= m_tensors_count\n");
 		return;
@@ -146,12 +145,7 @@ features::~features(){
 	}
 
 	delete[] mp_matrixes;
-	//for (int i = 0; i < m_kers_counts; ++i){
-	//    DEBUG_PRINT("i=%d\n", i);
-	//    delete (m_p_kernels + i);/* todo */
-	//}
 	return;
-
 }
 
 bool features::show(int show_image_mode){
@@ -197,14 +191,12 @@ features::features(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale)
 	switch (m_channels)
 	{
 	case 1:
-		//int k = -1;
 		for (int i = 0; i < m_rows; ++i){
 			for (int j = 0; j < m_cols; ++j){
 				mp_matrixes[0].mp_data[k] = \
 					DATA_TYPE((int)image.at<uchar>(i, j)) - translation;
 				mp_matrixes[0].mp_data[k] *= scale;
 				++k;
-				//
 			}
 		}
 		break;

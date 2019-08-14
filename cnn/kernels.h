@@ -18,7 +18,6 @@ public:
 	~kernels();
 	kernels& operator=(const kernels& ker_);
 	bool show(int image_show_mode = SHOW_IMAGE_INITAIL_VALUE);
-	//bool reshape(int mode = KERNELS2MATRIEX);
 public:
 	kernel* mp_kers;
 	int m_channels;

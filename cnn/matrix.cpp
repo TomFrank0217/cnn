@@ -103,8 +103,6 @@ m_rows(rows),m_cols(cols)
     }
 }
 
-
-
 matrix matrix::operator+(const matrix & addition_matrix){
     if (m_rows <= 0 || m_cols <= 0){
         DEBUG_PRINT("m_rows <= 0 || m_cols <= 0  matrix::operator+\n");
@@ -162,7 +160,6 @@ matrix matrix::operator+(DATA_TYPE addition_num){
 
 	return sum_matrix;
 }
-
 
 matrix matrix::operator-(const matrix &reduction_matrix){
 
@@ -231,13 +228,7 @@ matrix matrix::operator*(const DATA_TYPE val){
 	if (NULL == mp_data){
 		DEBUG_PRINT("NULL == mp_data  matrix::operator*\n");
 	}
-	matrix xxxxxxxxxx(*this);
-	//DEBUG_PRINT("mp_data=%x   ", xxxxxxxxxx.mp_data);
-	//DEBUG_PRINT("*mp_data=%x\n ", *xxxxxxxxxx.mp_data);
 	matrix multiplier_matrix(*this);
-
-	//DEBUG_PRINT("multiplier_matrix.mp_data=%x   ", multiplier_matrix.mp_data);
-	//DEBUG_PRINT("*multiplier_matrix.mp_data=%x\n ", *multiplier_matrix.mp_data);
 
 	int elements_count = m_rows*m_cols;
 	DATA_TYPE *p_data = multiplier_matrix.mp_data;
@@ -415,7 +406,6 @@ bool matrix::show(int show_image_mode){
 
 	int num = 0;
 	int k = -1;
-
 	//std::string  zero_str = "  ", nonzero_str = "**";
 	std::string str;
 	switch (show_image_mode)

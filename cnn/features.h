@@ -33,7 +33,7 @@ public:
 };
 /* 虽然kernel和features相同 但是kernel不能使用features中的一些方法 */
 /* 1. features(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale);*/
-/* 2. bool reshape(features& tsr, matrix& fts_matrix, int reshape_mode,int kernels_rows,int kernels_cols, int stride, int padding_mode);*/
+/* 2. bool reshape(features&,matrix&,int,int,int,int,int);*/
 typedef features kernel;
 
 #endif

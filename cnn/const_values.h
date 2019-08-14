@@ -4,6 +4,7 @@
 #define DATA_TYPE                   double
 
 #define RANDOM_INITIAL_VAL          0.01
+#define INITIAL_NUMBER              0
 
 #define SHOW_IMAGE_SCALE_VALUE      0
 #define SHOW_IMAGE_INITAIL_VALUE    1 

@@ -3,9 +3,7 @@
 layer::layer(){
 	padding_mode = VALID_PADDING;
 	stride = STRIDE;
-    //m_kers_channels = m_kers_rows \
-    //    = m_kers_cols = m_kers_count = 0;
-    //m_fts_channels = m_fts_rows = m_fts_cols = 0;
+
 	m_fts = features();
 	m_fts_diff = features();
 	m_fts_diffs = features();
@@ -30,44 +28,45 @@ layer::layer(){
 
 layer::layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
     int fts_channels/*kers_channels*/, int fts_rows, int fts_cols){
-
-	/* ly.m_fts_mat, ly.m_fts */
-
+	if (kers_channels != fts_channels){
+		DEBUG_PRINT("(kers_channels != fts_channels)\n");
+		return;
+	}
 	padding_mode = VALID_PADDING;
 	stride = STRIDE;
 	/* todo 初始化为double 型 */
-	m_fts = features(fts_channels, fts_rows, fts_cols, -2.0, 2.0);
-	m_fts_diff = features(fts_channels, fts_rows, fts_cols, 0.0, 1.0);
-	m_fts_diffs = features(fts_channels, fts_rows, fts_cols, 0.0, 1.0);
+	m_fts = features(fts_channels, fts_rows, fts_cols, -INITIAL_NUMBER, INITIAL_NUMBER);
+	m_fts_diff = features(fts_channels, fts_rows, fts_cols, -INITIAL_NUMBER, INITIAL_NUMBER);
+	m_fts_diffs = features(fts_channels, fts_rows, fts_cols, -INITIAL_NUMBER, INITIAL_NUMBER);
 
 	int r = (fts_rows - kers_rows) / stride + 1;
 	r *= ((fts_cols- kers_cols) / stride + 1);
 	int c = kers_rows*kers_cols*kers_channels;
 	m_fts_mat = matrix(r, c, 0.0);
-	m_fts_mat_diff = matrix(r, c, 0.0);
-	m_fts_mat_diffs = matrix(r, c, 0.0);
+	m_fts_mat_diff = matrix(r, c, INITIAL_NUMBER);
+	m_fts_mat_diffs = matrix(r, c, INITIAL_NUMBER);
 
 	/* todo kers初始化需要很小的初始值 */
-	m_kers = kernels(kers_channels, kers_rows, kers_cols, kers_count, - 2, 2);
-	m_kers_diff = kernels(kers_channels, kers_rows, kers_cols, kers_count, -1, 1);
-	m_kers_diffs = kernels(kers_channels, kers_rows, kers_cols, kers_count, -1, 1);
+	m_kers = kernels(kers_channels, kers_rows, kers_cols, kers_count, -INITIAL_NUMBER, INITIAL_NUMBER);
+	m_kers_diff = kernels(kers_channels, kers_rows, kers_cols, kers_count, -INITIAL_NUMBER, INITIAL_NUMBER);
+	m_kers_diffs = kernels(kers_channels, kers_rows, kers_cols, kers_count, -INITIAL_NUMBER, INITIAL_NUMBER);
 	int kers_mat_rows = m_kers.m_channels *m_kers.m_rows*m_kers.m_cols;
 	int kers_mat_cols = m_kers.m_kers_counts;
-	m_kers_mat = matrix(kers_mat_rows, kers_mat_cols, 0.0);
-	m_kers_mat_diff = matrix(kers_mat_rows, kers_mat_cols, 0.0);
-	m_kers_mat_diffs = matrix(kers_mat_rows, kers_mat_cols, 0.0);
+	m_kers_mat = matrix(kers_mat_rows, kers_mat_cols, INITIAL_NUMBER);
+	m_kers_mat_diff = matrix(kers_mat_rows, kers_mat_cols, INITIAL_NUMBER);
+	m_kers_mat_diffs = matrix(kers_mat_rows, kers_mat_cols, INITIAL_NUMBER);
 
 	int rows = m_fts_mat.m_rows;
 	int cols = m_kers_mat.m_cols;
-	m_conv_mat = matrix(rows, cols, 0.0);
-	conv_mat_diff = matrix(rows, cols, 0.0);
-	conv_mat_diffs = matrix(rows, cols, 0.0);
+	m_conv_mat = matrix(rows, cols, INITIAL_NUMBER);
+	conv_mat_diff = matrix(rows, cols, INITIAL_NUMBER);
+	conv_mat_diffs = matrix(rows, cols, INITIAL_NUMBER);
 	/* todo not VALID_PADDING*/
 	int m = (m_fts.m_rows - m_kers.m_rows) / stride + 1;
 	int n = (m_fts.m_cols - m_kers.m_cols) / stride + 1;
-	m_conv_mat2fts = features(m_kers.m_channels, m, n, 0.0);
-	conv_mat2fts_diff = features(m_kers.m_channels, m, n, 0.0);
-	conv_mat2fts_diffs = features(m_kers.m_channels, m, n, 0.0);
+	m_conv_mat2fts = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
+	conv_mat2fts_diff = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
+	conv_mat2fts_diffs = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
 }
 
 layer::~layer(){

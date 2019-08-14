@@ -106,12 +106,6 @@ kernels::~kernels(){
 	}
 }
 
-
-//bool kernels::reshape(){
-	//todo
-	//return true;
-//}
-
 /* bool show(int image_show_mode = SHOW_IMAGE_INITAIL_VALUE, int mode = MATRIEX2KERNELS) */
 bool kernels::show(int image_show_mode){
 	std::cout << "kernels\n" << std::endl;
