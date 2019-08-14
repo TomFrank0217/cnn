@@ -228,21 +228,29 @@ features::features(const features& ts_){
 
 	if (NULL == mp_matrixes){
 		DEBUG_PRINT("(NULL == mp_matrixes)   features(const features& ts_)\n");
-		return;
+		mp_matrixes = new matrix[ts_.m_channels];
+		m_channels = ts_.m_channels;
+		m_rows = ts_.m_rows;
+		m_cols = ts_.m_cols;
 	}
 	else{
-		//if (m_channels == ts_.m_channels&&m_rows*m_cols == ts_.m_rows*ts_.m_cols){
-		//	;/* 内存一致，不重新申请空间 */
-		//}
-		//else{
+		/* mp_matrixes 不为空一定要释放吗，会不会有空指针 */
+		/* todo 是否可以只写m_channels == ts_.m_channels 好像不行 */
+		if (m_channels == ts_.m_channels&&m_rows*m_cols == ts_.m_rows*ts_.m_cols){
+			;/* 内存一致，不重新申请空间 */
+			m_channels = ts_.m_channels;
+			m_rows = ts_.m_rows;
+			m_cols = ts_.m_cols;
+		}
+		else{
 			if (NULL == mp_matrixes){
 				;
 			}
 			else{
-				delete[] mp_matrixes;/* 此处会出错 */
+				delete[] mp_matrixes;/* todo 尚未定义乘法加法减法此处会出错 */
 			}
 			mp_matrixes = new matrix[m_channels];
-		//}
+		}
 	}
 	if (NULL == mp_matrixes){
 		DEBUG_PRINT("(NULL == mp_matrixes) features(const features&) \n");

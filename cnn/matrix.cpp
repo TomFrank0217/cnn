@@ -231,9 +231,15 @@ matrix matrix::operator*(const DATA_TYPE val){
 	if (NULL == mp_data){
 		DEBUG_PRINT("NULL == mp_data  matrix::operator*\n");
 	}
-
+	matrix xxxxxxxxxx(*this);
+	//DEBUG_PRINT("mp_data=%x   ", xxxxxxxxxx.mp_data);
+	//DEBUG_PRINT("*mp_data=%x\n ", *xxxxxxxxxx.mp_data);
 	matrix multiplier_matrix(*this);
-	int elements_count = this->m_rows*this->m_cols;
+
+	//DEBUG_PRINT("multiplier_matrix.mp_data=%x   ", multiplier_matrix.mp_data);
+	//DEBUG_PRINT("*multiplier_matrix.mp_data=%x\n ", *multiplier_matrix.mp_data);
+
+	int elements_count = m_rows*m_cols;
 	DATA_TYPE *p_data = multiplier_matrix.mp_data;
 	for (int i = 0; i < elements_count; ++i){
 		p_data[i] *= val;
@@ -298,6 +304,8 @@ matrix::~matrix(){
 
     //DEBUG_PRINT("matrix destructor called.\n");
     delete[] mp_data;
+	//DEBUG_PRINT("mp_data=%x  ", mp_data);
+	//DEBUG_PRINT("mp_data=%x\n", *mp_data);
 	mp_data = NULL;
 }
 
@@ -346,35 +354,48 @@ matrix& matrix::operator=(const matrix &A){
 
     return *this;
 }
-matrix::matrix(const matrix &A)\
+matrix::matrix(const matrix &A)
 {
+	static int i = 0;
+	i++;
+	if (NULL != mp_data){
+		std::cout << i << "  ";
+		std::cout << mp_data << std::endl;
+	}
+	if (this == &A){
+		return;
+	}
 	//DEBUG_PRINT("matrix::matrix(const matrix &A) called\n");
 	if (A.m_rows <= 0 || A.m_cols <= 0){
 		mp_data = NULL;
 		m_rows = m_cols = 0;
-		DEBUG_PRINT("matrix::matrix(const matrix &A)\n A.m_rows <= 0 || A.m_cols <= 0\n");
+		DEBUG_PRINT("matrix::matrix(const matrix &A)\n \
+					A.m_rows <= 0 || A.m_cols <= 0\n");
 		return;
 	}
-
 	if (NULL == A.mp_data){
-		DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == mp_data\n");
+		//DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == mp_data\n");
 		mp_data =NULL;
 		m_rows = m_cols = 0;
 		return;
 	}
 
-	if (NULL != mp_data){
+	if (true||NULL != mp_data){
 		/* 不是所有的非空指针都能释放的,野指针指向的是未知内存 */
 		/* 在这里因为是复制构造函数，所以初始值不需要释放 */
-		delete[] mp_data;//todo to understand
-		mp_data = NULL;
+		/* todo to understand 以上的说法是对的吗 2*A 报错为什么 */
+		//DEBUG_PRINT("mp_data=%x\n", mp_data);
+		//DEBUG_PRINT("mp_data=%x", *mp_data);
+		int x = 0;
+		//delete[] mp_data;//todo to understand
+		//mp_data = NULL;
 	}
 	m_rows = A.m_rows;
 	m_cols = A.m_cols;
 	mp_data = new DATA_TYPE[m_rows*m_cols];
-
 	if (NULL == mp_data){
-		DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == mp_data\n");
+		//DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == mp_data\n");
+		m_rows = m_cols = 0;
 		return;
 	}
 

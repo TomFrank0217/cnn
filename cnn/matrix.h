@@ -12,7 +12,9 @@ public:
     matrix(int rows, int cols, int min, int max);
     matrix(int rows, int cols, DATA_TYPE val);
     matrix(int rows, int cols, DATA_TYPE min, DATA_TYPE max);
-    matrix(const matrix &A);
+	matrix(const matrix &A);/* todo */
+	matrix& operator=(const matrix &A); /* to understand & */
+	// matrix operator=(const matrix &A); /* to understand & */
     ~matrix();
 	bool show(int show_image_mode = SHOW_IMAGE_INITAIL_VALUE);
 
@@ -28,8 +30,6 @@ public:
 	matrix operator*(const matrix &multiplier_matrix);
 	matrix operator*(const DATA_TYPE val);
 
-    matrix& operator=(const matrix &A); /* to understand & */
-    // matrix operator=(const matrix &A); /* to understand & */
 public:
     int m_rows;
     int m_cols;
