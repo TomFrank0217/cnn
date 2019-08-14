@@ -225,21 +225,41 @@ features::features(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale)
 //}
 
 features::features(const features& ts_){
-    m_channels = ts_.m_channels;
-	m_rows = ts_.m_rows;
-	m_cols = ts_.m_cols;
-	mp_matrixes = new matrix[m_channels];
+ //   m_channels = ts_.m_channels;
+	//m_rows = ts_.m_rows;
+	//m_cols = ts_.m_cols;
+	if (NULL == mp_matrixes){
+		DEBUG_PRINT("(NULL == mp_matrixes)   features(const features& ts_)\n");
+	}
+	else{
+		if (m_channels == ts_.m_channels&&m_rows*m_cols == ts_.m_rows*ts_.m_cols){
+			;/* 内存一致，不重新申请空间 */
+		}
+		else{
+			if (NULL == mp_matrixes){
+				;
+			}
+			else{
+				delete[] mp_matrixes;
+			}
+			mp_matrixes = new matrix[m_channels];
+		}
+	}
+	if (NULL == mp_matrixes){
+		DEBUG_PRINT("(NULL == mp_matrixes) features(const features&) \n");
+		return;
+	}
 	for (int i = 0; i < m_channels; ++i){
 		mp_matrixes[i] = ts_.mp_matrixes[i];
 	}
 }
 
-features& features::operator=(const features &ts_){
-	if (this == &ts_){
+features& features::operator=(const features &fs_){
+	if (this == &fs_){
 		return *this;
 	}
 	
-	if (NULL == ts_.mp_matrixes){
+	if (NULL == fs_.mp_matrixes){
 		std::cout << "(NULL == ts_.mp_matrixes)  tensor::operator=\n";
 		if (NULL == mp_matrixes){
 			m_channels = m_rows = m_cols = 0;
@@ -254,17 +274,22 @@ features& features::operator=(const features &ts_){
 	}
 
 	if (NULL != mp_matrixes){
-		delete[] mp_matrixes;
-		mp_matrixes = NULL;
+		if (m_channels == fs_.m_channels&&m_rows*m_cols == fs_.m_rows*fs_.m_cols){
+			;
+		}
+		else{
+			delete[] mp_matrixes;
+			mp_matrixes = NULL;
+		}
 	}
 
-	m_channels = ts_.m_channels;
-	m_rows = ts_.m_rows;
-	m_cols = ts_.m_cols;
+	m_channels = fs_.m_channels;
+	m_rows = fs_.m_rows;
+	m_cols = fs_.m_cols;
 
 	mp_matrixes = new matrix[m_channels];
 	for (int i = 0; i < m_channels; i++){
-		mp_matrixes[i] = ts_.mp_matrixes[i];
+		mp_matrixes[i] = fs_.mp_matrixes[i];
 	}
 
 	return *this;
