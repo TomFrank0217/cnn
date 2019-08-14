@@ -151,7 +151,6 @@
     <ClCompile Include="layer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="matrix.cpp" />
-    <ClCompile Include="reshape.cpp" />
     <ClCompile Include="features.cpp" />
   </ItemGroup>
   <ItemGroup>

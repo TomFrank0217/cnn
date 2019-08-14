@@ -27,9 +27,6 @@
     <ClCompile Include="layer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="reshape.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="featuresssss.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
