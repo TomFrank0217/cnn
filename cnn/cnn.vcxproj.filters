@@ -33,7 +33,7 @@
     <ClCompile Include="features.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="layer_parameters.cpp">
+    <ClCompile Include="layers_parameters.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

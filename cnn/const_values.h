@@ -35,4 +35,5 @@
 #define POOLING_LAYER               1
 #define FULLCONNECTION_LAYER        2
 
+#define LAYERS_COUNTS               7
 #endif

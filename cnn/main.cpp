@@ -20,6 +20,8 @@
 #include "kernels.h"
 #include "features.h"
 #include "layer.h"
+#include "layers_parameters.h"
+//#include "layers_parameters.cpp"
 
 using namespace cv;
 using namespace std;
@@ -34,6 +36,13 @@ bool show(Mat &image, int show_image_mode = SHOW_IMAGE_SCALE_VALUE);
 bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name);
 
 int main(int argc, char* argv[]){
+
+    int layers_counts = sizeof(layers_parameters[0]);
+    for (int i = 0; i < LAYERS_COUNTS; ++i){
+        std::cout << layers_parameters[i].kernel_channels << std::endl;
+    }
+    std::cout << layers_counts << std::endl;
+    int xxx = 0;
 	//{
 	//	matrix A(3, 3, 0, 1);
 	//	matrix B(3, 3, 0, 1);
@@ -108,13 +117,13 @@ int main(int argc, char* argv[]){
 		//ly.reshape_(ly.m_conv_mat2fts, xxxx);
 		//xxxx.show();
 
-		int channels = 2;
-		layer ly(channels, 2, 2, 1, channels, 3, 3);
-		ly.m_fts.show();
-		ly.reshape(ly.m_fts, ly.m_fts_mat);
-		ly.m_fts_mat.show();
-		ly.reshape_(ly.m_fts_mat, ly.m_fts);
-		ly.m_fts.show(SHOW_IMAGE_INITAIL_VALUE);
+		//int channels = 2;
+		//layer ly(channels, 2, 2, 1, channels, 3, 3);
+		//ly.m_fts.show();
+		//ly.reshape(ly.m_fts, ly.m_fts_mat);
+		//ly.m_fts_mat.show();
+		//ly.reshape_(ly.m_fts_mat, ly.m_fts);
+		//ly.m_fts.show(SHOW_IMAGE_INITAIL_VALUE);
 		// ly.m_fts_mat.show();
 		//.reshape_(ly.m_fts_mat, fff);
 		//ly.reshape_(ly.m_fts_mat, ly.m_fts);

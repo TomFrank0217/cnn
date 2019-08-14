@@ -8,8 +8,8 @@ typedef struct layer_parameters{
 	int kernel_cols;
 	int kernel_counts;
 	int pooling_size;
-}layer_parameters;
+};//layer_parameters;
 
-/*extern*/ layer_parameters layers_parameters[];
+extern layer_parameters layers_parameters[];
 
 #endif

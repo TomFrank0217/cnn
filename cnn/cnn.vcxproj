@@ -149,7 +149,7 @@
     <ClCompile Include="featuresssss.cpp" />
     <ClCompile Include="kernels.cpp" />
     <ClCompile Include="layer.cpp" />
-    <ClCompile Include="layer_parameters.cpp" />
+    <ClCompile Include="layers_parameters.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="matrix.cpp" />
     <ClCompile Include="features.cpp" />

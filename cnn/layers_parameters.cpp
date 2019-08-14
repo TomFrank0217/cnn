@@ -1,7 +1,7 @@
 #include "layers_parameters.h"
 #include "const_values.h"
-layer_parameters layers_parameters[] = {
-	layer_parameters{
+layer_parameters layers_parameters[LAYERS_COUNTS] = {
+    layer_parameters{//1
 		CONVOLUTION_LAYER,
 		1,
 		5,
@@ -9,52 +9,52 @@ layer_parameters layers_parameters[] = {
 		6,
 		-1
 	},
-	layer_parameters{
+    layer_parameters{//2
 		POOLING_LAYER,
 		-1,
 		-1,
 		-1,
 		-1,
-		2
+		 2
 	},
-	layer_parameters{
+    layer_parameters{//3
 		CONVOLUTION_LAYER,
-		6,
-		5,
-		5,
+		 6,
+		 5,
+		 5,
 		16,
 		-1
 	},
-	layer_parameters{
+    layer_parameters{//4
 		POOLING_LAYER,
 		-1,
 		-1,
 		-1,
 		-1,
-		2
+		 2
 	},
-	layer_parameters{
+    layer_parameters{//5
 		FULLCONNECTION_LAYER,
 		16,
-		1,
-		1,
-		120,
+		 1,
+		 1,
+	   120,
 		-1
 	},
-	layer_parameters{
+    layer_parameters{//6
 		FULLCONNECTION_LAYER,
-		120,
+	  120,
 		1,
 		1,
-		84,
-		-1
+	   84,
+	   -1
 	},
-	layer_parameters{
+    layer_parameters{//7
 		FULLCONNECTION_LAYER,
-		84,
+	   84,
 		1,
 		1,
-		10
-		- 1
+	   10
+	   -1
 	}	
 };
