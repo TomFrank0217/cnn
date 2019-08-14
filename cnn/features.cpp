@@ -225,25 +225,24 @@ features::features(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale)
 //}
 
 features::features(const features& ts_){
- //   m_channels = ts_.m_channels;
-	//m_rows = ts_.m_rows;
-	//m_cols = ts_.m_cols;
+
 	if (NULL == mp_matrixes){
 		DEBUG_PRINT("(NULL == mp_matrixes)   features(const features& ts_)\n");
+		return;
 	}
 	else{
-		if (m_channels == ts_.m_channels&&m_rows*m_cols == ts_.m_rows*ts_.m_cols){
-			;/* 内存一致，不重新申请空间 */
-		}
-		else{
+		//if (m_channels == ts_.m_channels&&m_rows*m_cols == ts_.m_rows*ts_.m_cols){
+		//	;/* 内存一致，不重新申请空间 */
+		//}
+		//else{
 			if (NULL == mp_matrixes){
 				;
 			}
 			else{
-				delete[] mp_matrixes;
+				delete[] mp_matrixes;/* 此处会出错 */
 			}
 			mp_matrixes = new matrix[m_channels];
-		}
+		//}
 	}
 	if (NULL == mp_matrixes){
 		DEBUG_PRINT("(NULL == mp_matrixes) features(const features&) \n");

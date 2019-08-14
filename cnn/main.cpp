@@ -41,21 +41,21 @@ int main(int argc, char* argv[]){
 		B.show(SHOW_IMAGE_INITAIL_VALUE);
 		//matrix C = A*B;
 		2 * A;
-		matrix C = 2*A;
-		C = C;
-		C = A * 5;
-		C.show(SHOW_IMAGE_INITAIL_VALUE);
+		//matrix C = 2*A;
+		//C = C;
+		//C = A * 5;
+		//C.show(SHOW_IMAGE_INITAIL_VALUE);
 		int xx = 0;
 	}
 	{
-		//features fs(3, 5, 4, 0, 5);
-		//fs.show(SHOW_IMAGE_INITAIL_VALUE);
-		//features fs2(fs);
-		//fs2.show(SHOW_IMAGE_INITAIL_VALUE);
-		//fs2 = fs2;
-		//fs2.show(SHOW_IMAGE_INITAIL_VALUE);
-		//fs = fs2;
-		//fs.show(SHOW_IMAGE_INITAIL_VALUE);
+		features fs(3, 5, 4, 0, 5);
+		fs.show(SHOW_IMAGE_INITAIL_VALUE);
+		features fs2(fs);
+		fs2.show(SHOW_IMAGE_INITAIL_VALUE);
+		fs2 = fs2;
+		fs2.show(SHOW_IMAGE_INITAIL_VALUE);
+		fs = fs2;
+		fs.show(SHOW_IMAGE_INITAIL_VALUE);
 	}
 
 	int y = 0;

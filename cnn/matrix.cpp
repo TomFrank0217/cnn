@@ -5,15 +5,18 @@
 
 int matrix::rand_num = 0;
 
-matrix::matrix(int rows, int cols, int val):\
-m_rows(rows), m_cols(cols)
+matrix::matrix(int rows, int cols, int val)
 {
     if (0 == rows && 0 == cols){
+		m_rows = m_cols = 0;
         mp_data = NULL;
         return;
     }
     if (rows <= 0 || cols <= 0){
+		m_rows = m_cols = 0;
+		mp_data = NULL;
         DEBUG_PRINT("matrix::matrix(int rows, int cols)\nrows <= 0 || cols <= 0\n");
+		return;
     }
 
 	m_rows = rows;
@@ -22,6 +25,7 @@ m_rows(rows), m_cols(cols)
     //DEBUG_PRINT("m_p_matrix = new DATA_TYPE[rows * cols];\n");/* to delete */
     if (NULL == mp_data){
         DEBUG_PRINT("matrix::matrix(int rows, int cols)\nNULL == mp_data\n");
+		return;
     }
     //memset(m_p_matrix, val, m_rows*m_cols*sizeof(DATA_TYPE));
     int n = m_rows*m_cols;
@@ -346,13 +350,15 @@ matrix::matrix(const matrix &A)\
 {
 	//DEBUG_PRINT("matrix::matrix(const matrix &A) called\n");
 	if (A.m_rows <= 0 || A.m_cols <= 0){
+		mp_data = NULL;
+		m_rows = m_cols = 0;
 		DEBUG_PRINT("matrix::matrix(const matrix &A)\n A.m_rows <= 0 || A.m_cols <= 0\n");
 		return;
 	}
 
 	if (NULL == A.mp_data){
 		DEBUG_PRINT("matrix::matrix(const matrix &A)\n NULL == mp_data\n");
-		mp_data = A.mp_data;
+		mp_data =NULL;
 		m_rows = m_cols = 0;
 		return;
 	}
@@ -360,8 +366,8 @@ matrix::matrix(const matrix &A)\
 	if (NULL != mp_data){
 		/* 不是所有的非空指针都能释放的,野指针指向的是未知内存 */
 		/* 在这里因为是复制构造函数，所以初始值不需要释放 */
-		//delete[] mp_data;//todo to understand
-		//mp_data = NULL;
+		delete[] mp_data;//todo to understand
+		mp_data = NULL;
 	}
 	m_rows = A.m_rows;
 	m_cols = A.m_cols;
@@ -498,6 +504,7 @@ matrix operator*(const DATA_TYPE val, const matrix &multiplier_matrix){
 	if (NULL == multiplier_matrix.mp_data){
 		DEBUG_PRINT("NULL == multiplier_matrix.mp_data  matrix::operator*\n");
 	}
+	/* check -> matrix(const& mat)*/
 	matrix result_matrix(multiplier_matrix);
 	int elements_count = result_matrix.m_rows*result_matrix.m_cols;
 	DATA_TYPE *p_result_data = result_matrix.mp_data;
