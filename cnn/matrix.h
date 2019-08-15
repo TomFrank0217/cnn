@@ -29,6 +29,7 @@ public:
 	friend matrix operator*(const DATA_TYPE val, const matrix &multiplier_matrix);
 	matrix operator*(const matrix &multiplier_matrix);
 	matrix operator*(const DATA_TYPE val);
+	matrix hadamard_product(const matrix& matrix_);
 
 public:
     int m_rows;

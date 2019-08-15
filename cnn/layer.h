@@ -31,10 +31,10 @@ public:
 	features m_fts;
 	features m_fts_diff;
 	/* diffs=diff(1)+diff(2)+diff(3)+...+diff(batch_size-1)+diff(batch_size) */
-	features m_fts_diffs;
+	features m_fts_diffs;/* m_fts_diff不需要累计，只是用于传播,这个变量是不是可以去掉 */
 	matrix m_fts_mat;
 	matrix m_fts_mat_diff;
-	matrix m_fts_mat_diffs;
+	matrix m_fts_mat_diffs;/* m_fts_mat_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
 
 	kernels m_kers;
 	kernels m_kers_diff;
@@ -43,12 +43,12 @@ public:
 	matrix m_kers_mat_diff;
 	matrix m_kers_mat_diffs;
 
-	matrix m_conv_mat;
-	matrix conv_mat_diff;
-	matrix conv_mat_diffs;
+	matrix m_conv_mat;  matrix m_relu_mask; /* 0,1矩阵 表示正负 */  matrix m_conv_relu_mat;
+	matrix conv_mat_diff;  matrix m_conv_relu_mat_diff;
+	matrix conv_mat_diffs;/* conv_mat_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
     features m_conv_mat2fts;
 	features conv_mat2fts_diff;
-	features conv_mat2fts_diffs;
+	features conv_mat2fts_diffs;/* conv_mat2fts_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
 };
 
 #endif

@@ -525,3 +525,15 @@ matrix operator*(const DATA_TYPE val, const matrix &multiplier_matrix){
 
 	return result_matrix;
 }
+
+matrix matrix::hadamard_product(const matrix& matrix_){
+	matrix hada_product = matrix_;
+	/* todo check ппап */
+	for (int i = 0; i < m_rows; ++i){
+		for (int j = 0; j < m_cols; ++j){
+			hada_product.mp_data[i*m_rows + j] = \
+				mp_data[i*m_cols + j];
+		}
+	}
+	return hada_product;
+}
