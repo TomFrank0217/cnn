@@ -393,3 +393,103 @@ bool features::operator+=(const features& add_features){
         return false;
     }
 }
+
+features features::operator-(DATA_TYPE minus_num){
+    if (0 >= m_rows || 0 >= m_cols){
+        DEBUG_PRINT("(0 >= m_rows || 0 >= m_cols) features::operator- \n");
+        return *this;
+    }
+    if (NULL == mp_matrixes){
+        DEBUG_PRINT("(NULL == mp_matrixes) features::operator- \n");
+        return *this;
+    }
+
+    features fts_(*this);
+    for (int i = 0; i < m_channels; ++i){
+        fts_.mp_matrixes[i] -= minus_num;
+    }
+
+    return fts_;
+}
+
+bool features::operator-=(DATA_TYPE minus_num){
+    if (0 >= m_rows || 0 >= m_cols || 0 > m_channels){
+        DEBUG_PRINT("(0 >= m_rows || 0 >= m_cols) || 0>=m_channels features::operator-= \n");
+        return false;
+    }
+    if (NULL == mp_matrixes){
+        DEBUG_PRINT("(NULL == mp_matrixes) features::operator-= \n");
+        return false;
+    }
+
+    for (int i = 0; i < m_channels; ++i){
+        mp_matrixes[i] -= minus_num;
+    }
+
+    return true;
+}
+
+features operator-(const DATA_TYPE minus_num, const features &minus_features){
+    if (0 >= minus_features.m_rows || 0 >= minus_features.m_cols || 0 > minus_features.m_channels){
+        DEBUG_PRINT("(0 >= m_rows || 0 >= m_cols) || 0>=m_channels features::operator+ \n");
+        return features();
+    }
+    if (NULL == minus_features.mp_matrixes){
+        DEBUG_PRINT("(NULL == mp_matrixes) features::operator+ \n");
+        return features();
+    }
+
+
+    features fts_(minus_features.m_channels, minus_features.m_rows, minus_features.m_cols, minus_num);
+    for (int i = 0; i < minus_features.m_channels; ++i){
+        fts_.mp_matrixes[i] -= minus_features.mp_matrixes[i];
+    }
+    return fts_;
+}
+
+
+features features::operator-(const features &minus_features){
+    if (NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols){
+        DEBUG_PRINT("(NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols)\
+                                        					features::operator-(const features &minus_features)\n");
+        return features();
+    }
+
+    if (NULL == minus_features.mp_matrixes || 0 >= minus_features.m_channels || 0 >= m_rows || 0 >= m_cols){
+        DEBUG_PRINT("(NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols)\
+                                        															features::operator-(const features &minus_features)\n");
+        return features();
+    }
+
+    features result_features(*this);
+    if (m_channels == minus_features.m_channels&&m_rows == minus_features.m_cols&&m_cols == minus_features.m_cols){
+        for (int i = 0; i < m_channels; ++i){
+            result_features.mp_matrixes[i] += minus_features.mp_matrixes[i];
+        }
+    }
+    return result_features;
+}
+
+bool features::operator-=(const features& minus_features){
+    if (NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols){
+        DEBUG_PRINT("(NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols)\
+                                                                                					features::operator-(const features &minus_features)\n");
+        return false;
+    }
+
+    if (NULL == minus_features.mp_matrixes || 0 >= minus_features.m_channels || 0 >= m_rows || 0 >= m_cols){
+        DEBUG_PRINT("(NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols)\
+                                                                                															features::operator-=(const features &minus_features)\n");
+        return false;
+    }
+
+    if (m_channels == minus_features.m_channels&&m_rows == minus_features.m_cols&&m_cols == minus_features.m_cols){
+        for (int i = 0; i < m_channels; ++i){
+            mp_matrixes[i] -= minus_features.mp_matrixes[i];
+        }
+        return true;
+    }
+    else{
+        return false;
+    }
+}
