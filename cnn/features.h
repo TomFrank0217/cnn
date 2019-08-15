@@ -23,7 +23,7 @@ public:
 	friend features operator+(const DATA_TYPE add_num, const features &add_features);//friend matrix operator+(const DATA_TYPE val, const matrix &add_matrix);
 	
 	features operator+(const features &add_features);//matrix operator+(const matrix &add_matrix);
-	//bool operator+=(const matrix&add_matrix);
+    bool operator+=(const features& add_features);//bool operator+=(const matrix&add_matrix);
 
 	//friend matrix operator-(const DATA_TYPE val, const matrix &reduction_matrix);
 	//matrix operator-(DATA_TYPE reduction_num);

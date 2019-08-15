@@ -55,12 +55,6 @@ int main(int argc, char* argv[]){
 		//A.show(SHOW_IMAGE_INITAIL_VALUE);
 		//B.show(SHOW_IMAGE_INITAIL_VALUE);
 		//matrix C = A*B;
-		//C.show();
-		A - 2;
-		2 - A;
-		A * 2;
-		///*2 * A;*/
-		//matrix C = 2*A;
 		//C = C;
 		//C = A * 5;
 		////C.show(SHOW_IMAGE_INITAIL_VALUE);
@@ -75,16 +69,22 @@ int main(int argc, char* argv[]){
 		}
 	int xyz = 0;
 	//}
-	//{//todo
-	//	features fs(1, 2, 2, 0, 2);
-	//	fs.show(SHOW_IMAGE_INITAIL_VALUE);
-	//	fs += 1;
-	//	fs.show(SHOW_IMAGE_INITAIL_VALUE);
-	//	//1 + fs;
-	//	fs + 1;
-	//	//fs = 1 + fs;
-	//	//fs.show(SHOW_IMAGE_INITAIL_VALUE);
-	//}
+	{//todo
+		features fs(1, 2, 2, 0, 2);
+		fs.show(SHOW_IMAGE_INITAIL_VALUE);
+		
+        fs = fs + 1;
+        fs.show(SHOW_IMAGE_INITAIL_VALUE);
+        fs += 1;
+        fs.show(SHOW_IMAGE_INITAIL_VALUE);
+		fs = 1 + fs;
+        fs.show(SHOW_IMAGE_INITAIL_VALUE);
+        features f2(fs);
+        f2 += fs;
+        f2.show(SHOW_IMAGE_INITAIL_VALUE);
+        f2 = fs + f2;/* 此处指针视乎可以优化 */
+		f2.show(SHOW_IMAGE_INITAIL_VALUE);
+	}
 	int xy = 0;
 	//int y = 0;
 	//{

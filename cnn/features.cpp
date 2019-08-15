@@ -306,8 +306,6 @@ features features::operator+(DATA_TYPE add_num){
 	}
 
 	features fts_(*this);
-	features fff = fts_;
-	return fff;
 	for (int i = 0; i < m_channels; ++i){
 		fts_.mp_matrixes[i] += add_num;
 	}
@@ -350,6 +348,7 @@ features operator+(const DATA_TYPE add_num, const features &add_features){
 
 	return fts_;
 }
+
 features features::operator+(const features &add_features){
 	if (NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols){
 		DEBUG_PRINT("(NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols)\
@@ -362,4 +361,35 @@ features features::operator+(const features &add_features){
 															features::operator+(const features &add_features)\n");
 		return *this;
 	}
+    features sum_features(*this);
+    if (m_channels == add_features.m_channels&&m_rows == add_features.m_cols&&m_cols == add_features.m_cols){
+        for (int i = 0; i < m_channels; ++i){
+            sum_features.mp_matrixes[i] += add_features.mp_matrixes[i];
+        }
+    }
+    return sum_features;
+}
+
+bool features::operator+=(const features& add_features){
+    if (NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols){
+        DEBUG_PRINT("(NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols)\
+                                        					features::operator+(const features &add_features)\n");
+        return false;
+    }
+
+    if (NULL == add_features.mp_matrixes || 0 >= add_features.m_channels || 0 >= m_rows || 0 >= m_cols){
+        DEBUG_PRINT("(NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols)\
+                                        															features::operator+=(const features &add_features)\n");
+        return false;
+    }
+
+    if (m_channels == add_features.m_channels&&m_rows == add_features.m_cols&&m_cols == add_features.m_cols){
+        for (int i = 0; i < m_channels; ++i){
+            mp_matrixes[i] += add_features.mp_matrixes[i];
+        }
+        return true;
+    }
+    else{
+        return false;
+    }
 }
