@@ -38,5 +38,6 @@
 #define RELU_OFF                    0
 #define RELU_ON                     1
 
+#define LAYER_INITIAL_LENGTH        0
 #define LAYERS_COUNTS               7
 #endif

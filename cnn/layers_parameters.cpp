@@ -8,14 +8,14 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		5,
 		6,
 		RELU_OFF,
-		-1
+        LAYER_INITIAL_LENGTH
 	},
     layer_parameters{//2
 		POOLING_LAYER,
-		-1,
-		-1,
-		-1,
-		-1,
+		LAYER_INITIAL_LENGTH,
+		LAYER_INITIAL_LENGTH,
+		LAYER_INITIAL_LENGTH,
+		LAYER_INITIAL_LENGTH,
 		RELU_OFF,
 		 2
 	},
@@ -26,14 +26,14 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		 5,
 		16,
 		RELU_OFF,
-		-1
+		LAYER_INITIAL_LENGTH
 	},
     layer_parameters{//4
 		POOLING_LAYER,
-		-1,
-		-1,
-		-1,
-		-1,
+		LAYER_INITIAL_LENGTH,
+		LAYER_INITIAL_LENGTH,
+		LAYER_INITIAL_LENGTH,
+		LAYER_INITIAL_LENGTH,
 		RELU_OFF,
 		 2
 	},
@@ -44,7 +44,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		 1,
 	   120,
 	   RELU_OFF,
-		-1
+		LAYER_INITIAL_LENGTH
 	},
     layer_parameters{//6
 		FULLCONNECTION_LAYER,
@@ -53,7 +53,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		1,
 	   84,
 	   RELU_OFF,
-	   -1
+	   LAYER_INITIAL_LENGTH
 	},
     layer_parameters{//7
 		FULLCONNECTION_LAYER,
@@ -62,6 +62,6 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		1,
 	   10,
 	   RELU_OFF,
-	   -1
+	   LAYER_INITIAL_LENGTH
 	}	
 };
