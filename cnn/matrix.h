@@ -18,17 +18,23 @@ public:
     ~matrix();
 	bool show(int show_image_mode = SHOW_IMAGE_INITAIL_VALUE);
 
-	friend matrix operator+(const DATA_TYPE val, const matrix &addition_matrix);
+	friend matrix operator+(const DATA_TYPE val, const matrix &add_matrix);
 	matrix operator+(DATA_TYPE addition_num);
-    matrix operator+(const matrix &addition_matrix);
+	bool operator+=(DATA_TYPE addition_num);
+    matrix operator+(const matrix &add_matrix);
+	bool operator+=(const matrix&add_matrix);
 
 	friend matrix operator-(const DATA_TYPE val, const matrix &reduction_matrix);
 	matrix operator-(DATA_TYPE reduction_num);
+	bool operator-=(DATA_TYPE reduction_num);
     matrix operator-(const matrix &reduction_matrix);
-	
+	bool operator-=(const matrix&add_matrix);
+
 	friend matrix operator*(const DATA_TYPE val, const matrix &multiplier_matrix);
 	matrix operator*(const matrix &multiplier_matrix);
+	//matrix operator*(const matrix &multiplier_matrix);/* 这个函数最好不要定义，因为改变了原始矩阵的大小 */
 	matrix operator*(const DATA_TYPE val);
+	bool operator*=(const DATA_TYPE val);
 	matrix hadamard_product(const matrix& matrix_);
 
 public:

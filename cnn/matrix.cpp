@@ -103,13 +103,13 @@ m_rows(rows),m_cols(cols)
     }
 }
 
-matrix matrix::operator+(const matrix & addition_matrix){
+matrix matrix::operator+(const matrix & add_matrix){
     if (m_rows <= 0 || m_cols <= 0){
         DEBUG_PRINT("m_rows <= 0 || m_cols <= 0  matrix::operator+\n");
     }
 
-    if (addition_matrix.m_rows <= 0 || addition_matrix.m_cols <= 0){
-        DEBUG_PRINT("addition_matrix.m_rows <= 0 || addition_matrix.m_cols <= 0  \
+    if (add_matrix.m_rows <= 0 || add_matrix.m_cols <= 0){
+        DEBUG_PRINT("add_matrix.m_rows <= 0 || add_matrix.m_cols <= 0  \
                     matrix::operator+\n");
     }
 
@@ -117,12 +117,12 @@ matrix matrix::operator+(const matrix & addition_matrix){
         DEBUG_PRINT("NULL == mp_data  matrix::operator+\n");
     }
 
-    if (NULL == addition_matrix.mp_data){
-        DEBUG_PRINT("NULL == addition_matrix.mp_data  matrix::operator+\n");
+    if (NULL == add_matrix.mp_data){
+        DEBUG_PRINT("NULL == add_matrix.mp_data  matrix::operator+\n");
     }
 
-    if (m_rows != addition_matrix.m_rows || m_cols != addition_matrix.m_cols){
-        DEBUG_PRINT("m_rows != addition_matrix.m_rows || m_cols != addition_matrix.m_cols \
+    if (m_rows != add_matrix.m_rows || m_cols != add_matrix.m_cols){
+        DEBUG_PRINT("m_rows != add_matrix.m_rows || m_cols != add_matrix.m_cols \
                     matrix::operator+\n");
     }
 
@@ -131,12 +131,42 @@ matrix matrix::operator+(const matrix & addition_matrix){
     int k = 0;
     for (int i = 0; i < m_rows; ++i){
         for (int j = 0; j < m_cols; ++j){
-            sum_matrix.mp_data[k] += addition_matrix.mp_data[k];
+            sum_matrix.mp_data[k] += add_matrix.mp_data[k];
             ++k;
         }
     }
 
     return sum_matrix;
+}
+
+bool matrix::operator+=(const matrix&add_matrix){
+	if (0 >= m_rows || 0 >= m_cols){
+		DEBUG_PRINT("(0 >= m_rows || 0 >= m_cols)  matrix::operator+= \n");
+		return false;
+	}
+
+	if (0 >= add_matrix.m_rows || 0 >= add_matrix.m_cols){
+		DEBUG_PRINT("(0 >= add_matrix.m_rows || 0 >= add_matrix.m_cols)  matrix::operator+= \n");
+		return false;
+	}
+
+	if (NULL == mp_data||NULL==add_matrix.mp_data){
+		DEBUG_PRINT("(NULL == mp_data||NULL==add_matrix.mp_data) matrix::operator+\n");
+		return false;
+	}
+	if (m_rows != add_matrix.m_rows || m_cols != add_matrix.m_cols){
+		DEBUG_PRINT("m_rows != add_matrix.m_rows || m_cols != add_matrix.m_cols \
+					 matrix::operator+= \n");
+		return false;
+	}
+
+	int n = m_rows*m_cols;
+	DATA_TYPE*pdata = add_matrix.mp_data;
+	for (int i = 0; i < n; ++i){
+		mp_data[i] += pdata[i];
+	}
+
+	return true;
 }
 
 matrix matrix::operator+(DATA_TYPE addition_num){
@@ -159,6 +189,25 @@ matrix matrix::operator+(DATA_TYPE addition_num){
 	}
 
 	return sum_matrix;
+}
+
+bool matrix::operator+=(DATA_TYPE add_num){
+	if (m_rows <= 0 || m_cols <= 0){
+		DEBUG_PRINT("m_rows <= 0 || m_cols <= 0  matrix::operator+=\n");
+		return false;
+	}
+
+	if (NULL == mp_data){
+		DEBUG_PRINT("NULL == mp_data  matrix::operator+=\n");
+		return false;
+	}
+
+	int n = m_rows*m_cols;
+	for (int i = 0; i < n; ++i){
+		mp_data[i] += add_num;
+	}
+
+	return true;
 }
 
 matrix matrix::operator-(const matrix &reduction_matrix){
@@ -198,6 +247,36 @@ matrix matrix::operator-(const matrix &reduction_matrix){
 	return minuend_matrix;
 }
 
+bool matrix::operator-=(const matrix& minus_matrix){
+	if (0 >= m_rows || 0 >= m_cols){
+		DEBUG_PRINT("(0 >= m_rows || 0 >= m_cols)  matrix::operator+= \n");
+		return false;
+	}
+
+	if (0 >= minus_matrix.m_rows || 0 >= minus_matrix.m_cols){
+		DEBUG_PRINT("(0 >= minus_matrix.m_rows || 0 >= minus_matrix.m_cols)  matrix::operator+= \n");
+		return false;
+	}
+
+	if (NULL == mp_data || NULL == minus_matrix.mp_data){
+		DEBUG_PRINT("(NULL == mp_data||NULL==add_matrix.mp_data) matrix::operator+\n");
+		return false;
+	}
+	if (m_rows != minus_matrix.m_rows || m_cols != minus_matrix.m_cols){
+		DEBUG_PRINT("m_rows != minus_matrix.m_rows || m_cols != minus_matrix.m_cols \
+					matrix::operator+= \n");
+		return false;
+	}
+
+	int n = m_rows*m_cols;
+	DATA_TYPE*pdata = minus_matrix.mp_data;
+	for (int i = 0; i < n; ++i){
+		mp_data[i] -= pdata[i];
+	}
+
+	return true;
+}
+
 matrix matrix::operator-(DATA_TYPE reduction_num){
 	if (m_rows <= 0 || m_cols <= 0){
 		DEBUG_PRINT("m_rows <= 0 || m_cols <= 0  matrix::operator+\n");
@@ -220,6 +299,25 @@ matrix matrix::operator-(DATA_TYPE reduction_num){
 	return reduction_matrix;
 }
 
+bool matrix::operator-=(DATA_TYPE add_num){
+	if (m_rows <= 0 || m_cols <= 0){
+		DEBUG_PRINT("m_rows <= 0 || m_cols <= 0  matrix::operator-=\n");
+		return false;
+	}
+
+	if (NULL == mp_data){
+		DEBUG_PRINT("NULL == mp_data  matrix::operator-=\n");
+		return false;
+	}
+
+	int n = m_rows*m_cols;
+	for (int i = 0; i < n; ++i){
+		mp_data[i] -= add_num;
+	}
+
+	return true;
+}
+
 matrix matrix::operator*(const DATA_TYPE val){
 	if (m_rows <= 0 || m_cols <= 0){
 		DEBUG_PRINT("m_rows <= 0 || m_cols <= 0  matrix::operator*\n");
@@ -237,6 +335,25 @@ matrix matrix::operator*(const DATA_TYPE val){
 	}
 
 	return multiplier_matrix;
+}
+
+bool matrix::operator*=(const DATA_TYPE val){
+	if (m_rows <= 0 || m_cols <= 0){
+		DEBUG_PRINT("m_rows <= 0 || m_cols <= 0  matrix::operator-=\n");
+		return false;
+	}
+
+	if (NULL == mp_data){
+		DEBUG_PRINT("NULL == mp_data  matrix::operator-=\n");
+		return false;
+	}
+
+	int n = m_rows*m_cols;
+	for (int i = 0; i < n; ++i){
+		mp_data[i] *= val;
+	}
+
+	return true;
 }
 
 matrix matrix::operator*(const matrix &multiplier_matrix){
