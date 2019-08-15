@@ -37,46 +37,55 @@ bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name
 
 int main(int argc, char* argv[]){
 
-    int layers_counts = sizeof(layers_parameters[0]);
-    for (int i = 0; i < LAYERS_COUNTS; ++i){
-        std::cout << layers_parameters[i].kernel_channels << std::endl;
-    }
-    std::cout << layers_counts << std::endl;
+    //int layers_counts = sizeof(layers_parameters[0]);
+    //for (int i = 0; i < LAYERS_COUNTS; ++i){
+    //    std::cout << layers_parameters[i].kernel_channels << std::endl;
+    //}
+    //std::cout << layers_counts << std::endl;
     int xxx = 0;
-	//{
-	//	matrix A(3, 3, 0, 1);
-	//	matrix B(3, 3, 0, 1);
-	//	A.show(SHOW_IMAGE_INITAIL_VALUE);
-	//	B.show(SHOW_IMAGE_INITAIL_VALUE);
-	//	//matrix C = A*B;
-	//	//C.show();
-	//	//A * 2;
-	//	/*2 * A;*/
-	//	//matrix C = 2*A;
-	//	//C = C;
-	//	//C = A * 5;
-	//	//C.show(SHOW_IMAGE_INITAIL_VALUE);
-	//	int xx = 0;
-	//	matrix C(3, 3);
-	//	for (int i = 0; i < 10000; i++){
-	//		matrix AA = C;
-	//		//if (NULL != AA.mp_data){
-	//		//	std::cout << i << std::endl;
-	//		//	std::cout << AA.mp_data << std::endl;
-	//		//}
-	//	}
+	{
+		matrix A(3, 3, 0, 1);
+		//matrix B(3, 3, 0, 1);
+		A.show(SHOW_IMAGE_INITAIL_VALUE);
+		//A += 2;
+		//A.show(SHOW_IMAGE_INITAIL_VALUE);
+		//A -= 2;
+		//A.show(SHOW_IMAGE_INITAIL_VALUE);
+		//A *= 2;
+		//A.show(SHOW_IMAGE_INITAIL_VALUE);
+		//B.show(SHOW_IMAGE_INITAIL_VALUE);
+		//matrix C = A*B;
+		//C.show();
+		A - 2;
+		2 - A;
+		A * 2;
+		///*2 * A;*/
+		//matrix C = 2*A;
+		//C = C;
+		//C = A * 5;
+		////C.show(SHOW_IMAGE_INITAIL_VALUE);
+		//int xx = 0;
+		//matrix C(3, 3);
+		//for (int i = 0; i < 10000; i++){
+		//	matrix AA = C;
+		//	//if (NULL != AA.mp_data){
+		//	//	std::cout << i << std::endl;
+		//	//	std::cout << AA.mp_data << std::endl;
+		//	//}
+		}
+	int xyz = 0;
 	//}
-	//{
-	//	features fs(3, 5, 4, 0, 5);
+	//{//todo
+	//	features fs(1, 2, 2, 0, 2);
 	//	fs.show(SHOW_IMAGE_INITAIL_VALUE);
-	//	features fs2(fs);
-	//	fs2.show(SHOW_IMAGE_INITAIL_VALUE);
-	//	fs2 = fs2;
-	//	fs2.show(SHOW_IMAGE_INITAIL_VALUE);
-	//	fs = fs2;
+	//	fs += 1;
 	//	fs.show(SHOW_IMAGE_INITAIL_VALUE);
+	//	//1 + fs;
+	//	fs + 1;
+	//	//fs = 1 + fs;
+	//	//fs.show(SHOW_IMAGE_INITAIL_VALUE);
 	//}
-
+	int xy = 0;
 	//int y = 0;
 	//{
 	//	kernels kers(2, 2, 3, 2, -2, 2);

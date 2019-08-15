@@ -18,6 +18,26 @@ public:
 	/*  图像features的数值必须归一化到 (-1.0, 1.0) 之间  */
 	features(const cv::Mat &image, DATA_TYPE translation = AVE_VALUE, DATA_TYPE scale = 1.0 / AVE_VALUE);
 
+	features operator+(DATA_TYPE add_num);//matrix operator+(DATA_TYPE addition_num);
+	bool operator+=(DATA_TYPE add_num);//bool operator+=(DATA_TYPE addition_num);
+	friend features operator+(const DATA_TYPE add_num, const features &add_features);//friend matrix operator+(const DATA_TYPE val, const matrix &add_matrix);
+	
+	//matrix operator+(const matrix &add_matrix);
+	//bool operator+=(const matrix&add_matrix);
+
+	//friend matrix operator-(const DATA_TYPE val, const matrix &reduction_matrix);
+	//matrix operator-(DATA_TYPE reduction_num);
+	//bool operator-=(DATA_TYPE reduction_num);
+	//matrix operator-(const matrix &reduction_matrix);
+	//bool operator-=(const matrix&add_matrix);
+
+	//friend matrix operator*(const DATA_TYPE val, const matrix &multiplier_matrix);
+	//matrix operator*(const matrix &multiplier_matrix);
+	////matrix operator*(const matrix &multiplier_matrix);/* 这个函数最好不要定义，因为改变了原始矩阵的大小 */
+	//matrix operator*(const DATA_TYPE val);
+	//bool operator*=(const DATA_TYPE val);
+	//matrix hadamard_product(const matrix& matrix_);
+
 	features(const features& fs_);
 	features& operator=(const features &fs_);
 	 ~features();

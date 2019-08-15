@@ -464,15 +464,15 @@ matrix& matrix::operator=(const matrix &A){
 }
 matrix::matrix(const matrix &A)
 {
-	static int i = 0;
-	i++;
-	if (NULL != mp_data){
-		std::cout << i << "  ";
-		std::cout << mp_data << std::endl;
-	}
-	if (this == &A){
-		return;
-	}
+	//static int i = 0;
+	//i++;
+	//if (NULL != mp_data){
+	//	std::cout << i << "  ";
+	//	std::cout << mp_data << std::endl;
+	//}
+	//if (this == &A){
+	//	return;
+	//}
 	//DEBUG_PRINT("matrix::matrix(const matrix &A) called\n");
 	if (A.m_rows <= 0 || A.m_cols <= 0){
 		mp_data = NULL;
@@ -488,15 +488,17 @@ matrix::matrix(const matrix &A)
 		return;
 	}
 
-	if (true||NULL != mp_data){
+	if (NULL != mp_data){
 		/* 不是所有的非空指针都能释放的,野指针指向的是未知内存 */
 		/* 在这里因为是复制构造函数，所以初始值不需要释放 */
-		/* todo to understand 以上的说法是对的吗 2*A 报错为什么 */
+		/* todo to understand 以上的说法是对的吗 2*A 报错为什么上面的说法是对的  */
 		//DEBUG_PRINT("mp_data=%x\n", mp_data);
 		//DEBUG_PRINT("mp_data=%x", *mp_data);
-		int x = 0;
+		//int x = 0;
+		//std::cout << "mp_data=" << mp_data << "  m_rows=" << m_rows << "m_cols= " << m_cols << std::endl;
 		//delete[] mp_data;//todo to understand
 		//mp_data = NULL;
+		;/* 千万不能随便释放野指针的内存 */
 	}
 	m_rows = A.m_rows;
 	m_cols = A.m_cols;
