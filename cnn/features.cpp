@@ -350,3 +350,16 @@ features operator+(const DATA_TYPE add_num, const features &add_features){
 
 	return fts_;
 }
+features features::operator+(const features &add_features){
+	if (NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols){
+		DEBUG_PRINT("(NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols)\
+					features::operator+(const features &add_features)\n");
+		return *this;
+	}
+
+	if (NULL == add_features.mp_matrixes || 0 >= add_features.m_channels || 0 >= m_rows || 0 >= m_cols){
+		DEBUG_PRINT("(NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols)\
+															features::operator+(const features &add_features)\n");
+		return *this;
+	}
+}
