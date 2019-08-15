@@ -35,5 +35,8 @@
 #define POOLING_LAYER               1
 #define FULLCONNECTION_LAYER        2
 
+#define RELU_OFF                    0
+#define RELU_ON                     1
+
 #define LAYERS_COUNTS               7
 #endif

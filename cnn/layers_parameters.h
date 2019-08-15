@@ -7,6 +7,7 @@ typedef struct layer_parameters{
 	int kernel_rows;
 	int kernel_cols;
 	int kernel_counts;
+	int relu;
 	int pooling_size;
 };//layer_parameters;
 

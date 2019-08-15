@@ -7,6 +7,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		5,
 		5,
 		6,
+		RELU_OFF,
 		-1
 	},
     layer_parameters{//2
@@ -15,6 +16,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		-1,
 		-1,
 		-1,
+		RELU_OFF,
 		 2
 	},
     layer_parameters{//3
@@ -23,6 +25,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		 5,
 		 5,
 		16,
+		RELU_OFF,
 		-1
 	},
     layer_parameters{//4
@@ -31,6 +34,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		-1,
 		-1,
 		-1,
+		RELU_OFF,
 		 2
 	},
     layer_parameters{//5
@@ -39,6 +43,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		 1,
 		 1,
 	   120,
+	   RELU_OFF,
 		-1
 	},
     layer_parameters{//6
@@ -47,6 +52,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		1,
 		1,
 	   84,
+	   RELU_OFF,
 	   -1
 	},
     layer_parameters{//7
@@ -54,7 +60,8 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 	   84,
 		1,
 		1,
-	   10
+	   10,
+	   RELU_OFF,
 	   -1
 	}	
 };
