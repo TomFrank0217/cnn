@@ -3,7 +3,7 @@
 
 #include "tensor.h"
 
-class featuresssss :public features{
+class featuresssss :public kernels{
 public:
 	featuresssss();
 	/* to understand 为什么特征不需要复制构造函数，因为没有指针变量吗？ */
@@ -18,7 +18,7 @@ public:
 	featuresssss& operator=(const featuresssss& fs_);
 	//bool reshape(int reshape_mode = FEATURES2MATRIX, int kernels_rows = KERNEL_ROWS, \
 		int kernels_cols = KERNEL_COLS, int stride = 1, int padding_mode = VALID_PADDING);
-	bool reshape(features& tsr, matrix& fts_matrix, int reshape_mode = FEATURES2MATRIX, int kernels_rows = KERNEL_ROWS, \
+	bool reshape(kernels& tsr, matrix& fts_matrix, int reshape_mode = FEATURES2MATRIX, int kernels_rows = KERNEL_ROWS, \
 		int kernels_cols = KERNEL_COLS, int stride = 1, int padding_mode = VALID_PADDING);
 public:
 	matrix m_features_matrix;
@@ -26,7 +26,7 @@ public:
 	int m_kernel_cols;/* 用于padding时候控制features的大小 todo */
 	int m_stride;
 	int m_padding_mode;
-	features m_tensor; /* 暂时看上去 m_tensor是没有用的 */
+	kernels m_tensor; /* 暂时看上去 m_tensor是没有用的 */
 };
 
 #endif

@@ -24,15 +24,12 @@ public:
 
 	kernels operator-(DATA_TYPE minus_num);
 	bool operator-=(DATA_TYPE minus_num);
-	friend kernels operator-(const DATA_TYPE add_num, const kernels &minus_features);
-	kernels operator-(const kernels &minus_features);
-	bool operator-=(const kernels& minus_features);
+	friend kernels operator-(const DATA_TYPE minus, const kernels &minus_kernels);
+	kernels operator-(const kernels &minus_kernels);
+	bool operator-=(const kernels& minus_kernels);
 
-	//friend matrix operator*(const DATA_TYPE val, const matrix &multiplier_matrix);
-	friend kernels operator*(const DATA_TYPE scale, const kernels &mutiplier_features);
-	//matrix operator*(const DATA_TYPE val);
+	friend kernels operator*(const DATA_TYPE scale, const kernels &mutiplier_kernels);
 	kernels operator*(const DATA_TYPE scale);
-	//bool operator*=(const DATA_TYPE val);
 	bool operator*=(const DATA_TYPE scale);
 	//matrix hadamard_product(const matrix& matrix_);/* 暂时不需要这个功能 */
 
