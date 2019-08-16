@@ -35,17 +35,18 @@ bool show(Mat &image, int show_image_mode = SHOW_IMAGE_SCALE_VALUE);
 bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name);
 
 int main(int argc, char* argv[]){
+	string img_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\0_0.bmp";
+	Mat image = imread(img_name, 0);
+	int input_channels = image.channels();
+	int input_rows = image.rows;
+	int input_cols = image.cols;
 
     //int layers_counts = sizeof(layers_parameters[0]);
     //for (int i = 0; i < LAYERS_COUNTS; ++i){
     //    std::cout << layers_parameters[i].kernel_channels << std::endl;
     //}
     //std::cout << layers_counts << std::endl;
-	string img_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\0_0.bmp";
-	Mat image = imread(img_name, 0);
-	int input_channels = image.channels();
-	int input_rows = image.rows;
-	int input_cols = image.cols;
+
 	string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
 	cout << file_name << endl;
 	vector<num_path> vec_path_label;
