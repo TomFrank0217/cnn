@@ -31,11 +31,12 @@ public:
     bool operator-=(const features& minus_features);
 
 	//friend matrix operator*(const DATA_TYPE val, const matrix &multiplier_matrix);
-	//matrix operator*(const matrix &multiplier_matrix);
-	////matrix operator*(const matrix &multiplier_matrix);/* 这个函数最好不要定义，因为改变了原始矩阵的大小 */
+	friend features operator*(const DATA_TYPE scale, const features &mutiplier_features);
 	//matrix operator*(const DATA_TYPE val);
+	features operator*(const DATA_TYPE scale);
 	//bool operator*=(const DATA_TYPE val);
-	//matrix hadamard_product(const matrix& matrix_);
+	bool operator*=(const DATA_TYPE scale);
+	//matrix hadamard_product(const matrix& matrix_);/* 暂时不需要这个功能 */
 
 	features(const features& fs_);
 	features& operator=(const features &fs_);

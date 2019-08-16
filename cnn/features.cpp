@@ -447,17 +447,16 @@ features operator-(const DATA_TYPE minus_num, const features &minus_features){
     return fts_;
 }
 
-
 features features::operator-(const features &minus_features){
     if (NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols){
         DEBUG_PRINT("(NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols)\
-                                        					features::operator-(const features &minus_features)\n");
+                       features::operator-(const features &minus_features)\n");
         return features();
     }
 
     if (NULL == minus_features.mp_matrixes || 0 >= minus_features.m_channels || 0 >= m_rows || 0 >= m_cols){
         DEBUG_PRINT("(NULL == mp_matrixes || 0 >= m_channels || 0 >= m_rows || 0 >= m_cols)\
-                                        															features::operator-(const features &minus_features)\n");
+                     features::operator-(const features &minus_features)\n");
         return features();
     }
 
@@ -466,8 +465,11 @@ features features::operator-(const features &minus_features){
         for (int i = 0; i < m_channels; ++i){
             result_features.mp_matrixes[i] += minus_features.mp_matrixes[i];
         }
+		return result_features;
     }
-    return result_features;
+	else{
+		return features();
+	}
 }
 
 bool features::operator-=(const features& minus_features){
@@ -492,4 +494,59 @@ bool features::operator-=(const features& minus_features){
     else{
         return false;
     }
+}
+
+features operator*(const DATA_TYPE val, const features &mutiplier_features){
+	if (mutiplier_features.m_rows <= 0 || mutiplier_features.m_cols <= 0||mutiplier_features.m_channels<=0){
+		DEBUG_PRINT("mutiplier_features.m_rows <= 0 || mutiplier_features.m_cols <= 0 \
+					||mutiplier_features.m_channels<=0 \n mutiplier_features::operator*\n");
+	}
+	if (NULL == mutiplier_features.mp_matrixes){
+		DEBUG_PRINT("NULL == mutiplier_features.mp_matrixes  mutiplier_features::operator*\n");
+	}
+	/* check -> matrix(const& mat)*/
+	features result_features(mutiplier_features);
+	for (int i = 0; i < result_features.m_channels; ++i){
+		result_features.mp_matrixes[i] *= val;
+	}
+
+	return result_features;
+}
+
+features features::operator*(const DATA_TYPE scale){
+	if (m_rows <= 0 || m_cols <= 0||m_channels<=0){
+		DEBUG_PRINT("m_rows <= 0 || m_cols <= 0\n \
+					m_channels<=0  features::operator*\n");
+		return features();
+	}
+	if (NULL == mp_matrixes){
+		DEBUG_PRINT("NULL == multiplier_matrix.mp_data  matrix::operator*\n");
+		*this = features();
+		return *this;
+	}
+	features result_features(*this);
+	for (int i = 0; i < result_features.m_channels; ++i){
+		/* 和result_features.mp_matrixes[i] = result_features.mp_matrixes[i]*scale相比;和这样可以节约内存*/
+		result_features.mp_matrixes[i] *= scale;
+	}
+
+	return result_features;
+}
+bool features::operator*=(const DATA_TYPE scale){
+	if (m_rows <= 0 || m_cols <= 0 || m_channels <= 0){
+		DEBUG_PRINT("m_rows <= 0 || m_cols <= 0\n \
+				 m_channels<=0  features::operator*\n");
+		m_channels = m_rows = m_cols = 0;
+		mp_matrixes = NULL;
+		return false;
+	}
+	if (NULL == mp_matrixes){
+		DEBUG_PRINT("NULL == multiplier_matrix.mp_data  matrix::operator*\n");
+		m_channels = m_rows = m_cols = 0;
+		return false;
+	}
+	for (int i = 0; i < m_channels; ++i){
+		mp_matrixes[i] *= scale;
+	}
+	return true;
 }

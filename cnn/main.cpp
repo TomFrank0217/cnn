@@ -70,20 +70,24 @@ int main(int argc, char* argv[]){
 	int xyz = 0;
 	//}
 	{//todo
-		features fs(1, 2, 2, 0, 2);
+		features fs(1, 3, 2, -1, 2);
 		fs.show(SHOW_IMAGE_INITAIL_VALUE);
 		
-        fs = fs - 1;
-        fs.show(SHOW_IMAGE_INITAIL_VALUE);
-        fs -= 1;
-        fs.show(SHOW_IMAGE_INITAIL_VALUE);
-		fs = 1 - fs;
-        fs.show(SHOW_IMAGE_INITAIL_VALUE);
-        features f2(fs);
-        f2 -= fs;
-        f2.show(SHOW_IMAGE_INITAIL_VALUE);
-        f2 = fs - f2;/* 此处指针视乎可以优化 */
-		f2.show(SHOW_IMAGE_INITAIL_VALUE);
+		(fs * 2).show();
+		(2 * fs).show();
+		fs *= 2;
+		fs.show();
+  //      fs = fs - 1;
+  //      fs.show(SHOW_IMAGE_INITAIL_VALUE);
+  //      fs -= 1;
+  //      fs.show(SHOW_IMAGE_INITAIL_VALUE);
+		//fs = 1 - fs;
+  //      fs.show(SHOW_IMAGE_INITAIL_VALUE);
+  //      features f2(fs);
+  //      f2 -= fs;
+  //      f2.show(SHOW_IMAGE_INITAIL_VALUE);
+  //      f2 = fs - f2;/* 此处指针视乎可以优化 */
+		//f2.show(SHOW_IMAGE_INITAIL_VALUE);
 	}
 	int xy = 0;
 	//int y = 0;
