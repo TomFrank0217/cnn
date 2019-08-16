@@ -27,9 +27,6 @@
     <ClCompile Include="layer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="featuresssss.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="features.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -54,9 +51,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="features.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="featuresssss.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="layers_parameters.h">

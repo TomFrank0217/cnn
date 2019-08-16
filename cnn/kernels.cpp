@@ -317,11 +317,10 @@ bool kernels::operator+=(const kernels& add_kernels){
 		return false;
 	}
 
-	kernels kers_(*this);
 	if (m_channels == add_kernels.m_channels&&m_rows == add_kernels.m_rows&&\
 		m_cols == add_kernels.m_cols&&m_kers_counts == add_kernels.m_kers_counts){
 		for (int i = 0; i < add_kernels.m_kers_counts; ++i){
-			kers_.mp_kers[i] += add_kernels.mp_kers[i];
+			mp_kers[i] += add_kernels.mp_kers[i];
 		}
 		return true;
 	}
@@ -397,11 +396,10 @@ bool kernels::operator-=(const kernels& minus_kernels){
 		return false;
 	}
 
-	kernels kers_(*this);
 	if (m_channels == minus_kernels.m_channels&&m_rows == minus_kernels.m_rows&&\
 		m_cols == minus_kernels.m_cols&&m_kers_counts == minus_kernels.m_kers_counts){
 		for (int i = 0; i < minus_kernels.m_kers_counts; ++i){
-			kers_.mp_kers[i] -= minus_kernels.mp_kers[i];
+			mp_kers[i] -= minus_kernels.mp_kers[i];
 		}
 		return true;
 	}

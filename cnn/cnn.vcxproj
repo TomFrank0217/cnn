@@ -146,7 +146,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="featuresssss.cpp" />
     <ClCompile Include="kernels.cpp" />
     <ClCompile Include="layer.cpp" />
     <ClCompile Include="layers_parameters.cpp" />
@@ -157,7 +156,6 @@
   <ItemGroup>
     <ClInclude Include="const_values.h" />
     <ClInclude Include="debug_print.h" />
-    <ClInclude Include="featuresssss.h" />
     <ClInclude Include="kernels.h" />
     <ClInclude Include="layer.h" />
     <ClInclude Include="layers_parameters.h" />

@@ -16,7 +16,6 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 #include "matrix.h"
-//#include "tensor.h"
 #include "kernels.h"
 #include "features.h"
 #include "layer.h"
@@ -70,13 +69,13 @@ int main(int argc, char* argv[]){
 	int xyz = 0;
 	//}
 	{//todo
-		features fs(1, 3, 2, -1, 2);
-		fs.show(SHOW_IMAGE_INITAIL_VALUE);
-		
-		(fs * 2).show();
-		(2 * fs).show();
-		fs *= 2;
-		fs.show();
+		//features fs(1, 3, 2, -1, 2);
+		//fs.show(SHOW_IMAGE_INITAIL_VALUE);
+		//
+		//(fs * 2).show();
+		//(2 * fs).show();
+		//fs *= 2;
+		//fs.show();
   //      fs = fs - 1;
   //      fs.show(SHOW_IMAGE_INITAIL_VALUE);
   //      fs -= 1;
@@ -90,26 +89,34 @@ int main(int argc, char* argv[]){
 		//f2.show(SHOW_IMAGE_INITAIL_VALUE);
 	}
 	int xy = 0;
-	//int y = 0;
-	//{
-	//	kernels kers(2, 2, 3, 2, -2, 2);
-	//	//kers.reshape();
-	//	kers.show(SHOW_IMAGE_INITAIL_VALUE);
-	//	kers.show(SHOW_IMAGE_INITAIL_VALUE);
-	//	kernels k2 = kers;
-	//	k2 = kers;
-	//	k2.show(SHOW_IMAGE_INITAIL_VALUE);
-	//	cout << endl;
-	//	cout << kers.m_channels << "  " << kers.m_rows << "  "\
-	//		<< kers.m_cols << "  " << kers.m_kers_counts << endl;
-	//	for (int i = 0; i < kers.m_kers_counts; ++i){
-	//		cout << "kernel " << i << endl;
-	//		cout << kers.mp_kers[i].m_channels << "  " \
-	//			<< kers.mp_kers[i].m_rows << "  " << kers.mp_kers[i].m_cols;
-	//		(kers.mp_kers[i]).show(SHOW_IMAGE_INITAIL_VALUE);
-	//	}
-	//	int x = 0;
-	//}
+	int y = 0;
+	{
+		kernels kers(2, 2, 2, 2, -2, 2);
+		//kers.reshape();
+		kers.show(SHOW_IMAGE_INITAIL_VALUE);
+		//kers.show(SHOW_IMAGE_INITAIL_VALUE);
+		kernels k2 = kers + kers;
+		k2.show(SHOW_IMAGE_INITAIL_VALUE);
+		k2 += k2;
+		k2.show();
+		cout << endl;
+		//kernels operator+(DATA_TYPE add_num);//matrix operator+(DATA_TYPE addition_num);
+		//bool operator+=(DATA_TYPE add_num);//bool operator+=(DATA_TYPE addition_num);
+		//friend kernels operator+(const DATA_TYPE add_num, const kernels &add_kernels);//friend matrix operator+(const DATA_TYPE val, const matrix &add_matrix);
+		//kernels operator+(const kernels &add_features);//matrix operator+(const matrix &add_matrix);
+		//bool operator+=(const kernels& add_features);//bool operator+=(const matrix&add_matrix);
+
+		//kernels operator-(DATA_TYPE minus_num);
+		//bool operator-=(DATA_TYPE minus_num);
+		//friend kernels operator-(const DATA_TYPE minus, const kernels &minus_kernels);
+		//kernels operator-(const kernels &minus_kernels);
+		//bool operator-=(const kernels& minus_kernels);
+
+		//friend kernels operator*(const DATA_TYPE scale, const kernels &mutiplier_kernels);
+		//kernels operator*(const DATA_TYPE scale);
+		//bool operator*=(const DATA_TYPE scale);
+		int x = 0;
+	}
 	{
 		//layer(kers_channels,kers_rows,kers_cols,kers_count,fts_channels/*kers_channels*/,fts_rows, fts_cols);
 		//      ly.m_kers.show();
