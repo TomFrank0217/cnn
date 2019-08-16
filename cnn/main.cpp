@@ -36,13 +36,25 @@ bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name
 
 int main(int argc, char* argv[]){
 	string img_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\0_0.bmp";
-	Mat image = imread(img_name, 0);
+	Mat image = imread(img_name, 0);  
 	int input_channels = image.channels();
 	int input_rows = image.rows;
 	int input_cols = image.cols;
 
-    //int layers_counts = sizeof(layers_parameters[0]);
-    //for (int i = 0; i < LAYERS_COUNTS; ++i){
+    int layers_counts = sizeof(layers_parameters[0]);
+    /* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑*/
+    layer* players = new layer[LAYERS_COUNTS];
+    //layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
+        int fts_channels/*kers_channels*/, int fts_rows, int fts_cols);
+    players[0] = layer(layers_parameters[0].kernel_channels, \
+        layers_parameters[0].kernel_rows, layers_parameters[0].kernel_cols, \
+        layers_parameters[0].kernel_counts, \
+        input_channels, input_rows, input_cols);
+
+    /* todo 此处初始化必须重新写一个函数，否则每一个图像初始化都需要申请内存 这个不行 */
+    players[0].m_fts = features(image);
+    /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会奔溃 */
+    //for (int i = 1; i < LAYERS_COUNTS; ++i){
     //    std::cout << layers_parameters[i].kernel_channels << std::endl;
     //}
     //std::cout << layers_counts << std::endl;
