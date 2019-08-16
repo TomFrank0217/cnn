@@ -43,9 +43,9 @@ int main(int argc, char* argv[]){
     //std::cout << layers_counts << std::endl;
     int xxx = 0;
 	{
-		matrix A(3, 3, 0, 1);
+		//matrix A(3, 3, 0, 1);
 		//matrix B(3, 3, 0, 1);
-		A.show(SHOW_IMAGE_INITAIL_VALUE);
+		//A.show(SHOW_IMAGE_INITAIL_VALUE);
 		//A += 2;
 		//A.show(SHOW_IMAGE_INITAIL_VALUE);
 		//A -= 2;
@@ -95,9 +95,9 @@ int main(int argc, char* argv[]){
 		//kers.reshape();
 		kers.show(SHOW_IMAGE_INITAIL_VALUE);
 		//kers.show(SHOW_IMAGE_INITAIL_VALUE);
-		kernels k2 = kers + kers;
+		kernels k2 = 2*kers - kers;
 		k2.show(SHOW_IMAGE_INITAIL_VALUE);
-		k2 += k2;
+		k2 -= k2;
 		k2.show();
 		cout << endl;
 		//kernels operator+(DATA_TYPE add_num);//matrix operator+(DATA_TYPE addition_num);
