@@ -169,6 +169,40 @@ bool features::show(int show_image_mode){
 	return true;
 }
 
+bool features::operator=(const cv::Mat& image){
+	/* 这个函数接口非常重要，禁止复制一切空间 */
+	if (NULL == mp_matrixes || m_channels != image.channels() || m_rows != image.rows || m_cols != image.cols){
+		std::cout << "ERROR! features::operator=(const cv::Mat& image)\n";
+		return false;
+	}
+
+	int k = 0;
+	DATA_TYPE scale = 1.0 / DATA_TYPE(AVE_VALUE);
+	switch (m_channels)
+	{
+	case 1:
+		
+		for (int i = 0; i < m_rows; ++i){
+			for (int j = 0; j < m_cols; ++j){
+				mp_matrixes[0].mp_data[k] = \
+					DATA_TYPE((int)image.at<uchar>(i, j)) - AVE_VALUE;
+				mp_matrixes[0].mp_data[k] *= scale;
+				++k;
+			}
+		}
+		break;
+	case 2:
+		break;
+	case 3:
+		break;
+	case 4:
+		break;
+	default:
+		break;
+	}
+	return true;
+}
+
 features::features(const cv::Mat &image, DATA_TYPE translation, DATA_TYPE scale){
 	//int img_channels = image.channels();
 	this->m_channels = image.channels();

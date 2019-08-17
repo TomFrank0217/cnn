@@ -462,6 +462,7 @@ matrix& matrix::operator=(const matrix &A){
 
     return *this;
 }
+
 matrix::matrix(const matrix &A)
 {
 

@@ -58,9 +58,9 @@ int main(int argc, char* argv[]){
 	for (int i = 0; i < vec_path_label.size(); ++i){
 		std::cout << vec_path_label[i].path << endl;
 		Mat image = imread(vec_path_label[i].path, 0);
-		show(image, SHOW_IMAGE_SHAPE);
-		features fea(image);
-		fea.show(SHOW_IMAGE_SHAPE);
+		//show(image, SHOW_IMAGE_SHAPE);
+		lys.mp_layers[0].m_fts = image;
+		lys.mp_layers[0].m_fts.show(SHOW_IMAGE_SHAPE);
 		features fts(image);
 		fts.show(SHOW_IMAGE_SHAPE);
 		std::cout << str << endl << str << endl << str << endl;
