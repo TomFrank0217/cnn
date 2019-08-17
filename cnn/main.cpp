@@ -32,7 +32,8 @@ struct num_path{
 bool get_files(string file_name, vector<string> &files);
 bool show(Mat &image, int show_image_mode = SHOW_IMAGE_SCALE_VALUE);
 bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name);
-
+bool show_layers_parameters(layer_parameters* players, int layers_count);
+bool show_layer_parameters(layer_parameters* player);
 int main(int argc, char* argv[]){
 	string img_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\0_0.bmp";
 	Mat image = imread(img_name, 0);  
@@ -219,4 +220,51 @@ bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name
     return true;
 }
 
+bool show_layers_parameters(layer_parameters* players, int layers_count){
+    if (NULL == players || 0 >= layers_count){
+        return false;
+    }
+    for (int i = 0; i < layers_count; i++){
+        std::cout << "µÚ " << i << " ²ã²ÎÊý " << std::endl;
+        show_layer_parameters(players + i);
+        std::cout << std::endl;
+    }
+}
 
+bool show_layer_parameters(layer_parameters* player){
+    if (NULL == player){
+        return false;
+    }
+    switch (player->layer_mode)
+    {
+    case POOLING_LAYER:
+        std::cout << "POOLING LAYER\n";
+    case CONVOLUTION_LAYER:
+        std::cout << "CONVOLUTION_LAYER\n";
+    case FULLCONNECTION_LAYER:
+        std::cout << "FULLCONNECTION_LAYER\n";
+    default:
+        break;
+    }
+    std::cout << "kernels parameters" << endl;
+    std::cout << "channels:" << player->kernel_channels << "  ";
+    std::cout << "kernel_rows:" << player->kernel_rows << "  ";
+    std::cout << "kernel_cols:" << player->kernel_cols << "  ";
+    std::cout << "kernel_counts:" << player->kernel_counts << "  " << std::endl;
+    std::cout << "features parameters" << endl;
+    std::cout << "channels:" << player->feature_channels << "  ";
+    std::cout << "channels:" << player->feature_rows << "  ";
+    std::cout << "channels:" << player->features_cols << "  " << std::endl;
+    switch (player->relu)
+    {
+    case RELU_OFF:
+        std::cout << "RELU_OFF" << std::endl;
+    case RELU_ON:
+        std::cout << "RELU_ON" << std::endl;
+    default: 
+        break;
+    }
+
+    std::cout << "POLLING SIZE:" << player->pooling_size << std::endl;
+    return true;
+}
