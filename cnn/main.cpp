@@ -15,11 +15,13 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "matrix.h"
-#include "kernels.h"
-#include "features.h"
-#include "layer.h"
 #include "layers_parameters.h"
+
+#include "matrix.h"
+#include "features.h"
+#include "kernels.h"
+#include "layer.h"
+#include "layers.h"
 
 using namespace cv;
 using namespace std;
@@ -41,65 +43,13 @@ int main(int argc, char* argv[]){
 	int rows = image.rows;
 	int cols = image.cols;
 
-    int layers_counts = sizeof(layers_parameters[0]);
+	layers lys(channels, rows, cols, layers_parameters, LAYERS_COUNTS);
+	lys.show_shapes();
+
     /* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑*/
-	layer* players = new layer[LAYERS_COUNTS], *t = NULL;
-
- //   /* todo 此处初始化必须重新写一个函数，否则每一个图像初始化都需要申请内存 这个不行 */
-
-	players[0] = layer(channels, rows, cols, layers_parameters);
-	std::cout << "第 " << "1" << "层:" << std::endl;
-	show_layer_parameters(players);
+ // /* todo 此处初始化必须重新写一个函数，否则每一个图像初始化都需要申请内存 这个不行 */
     /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
-	
 
-    for (int i = 1; i < LAYERS_COUNTS; ++i){
-        //std::cout << layers_parameters[i].kernel_channels << std::endl;
-		players[i].m_stride = layers_parameters[i].stride;
-		int channels = 0;
-		int rows = 0;
-		int cols = 0;
-		int P = 0;/* valid padding */
-		switch (layers_parameters[i-1].layer_mode){
-		case POOLING_LAYER:
-			t = players + i - 1;
-			players[i] = layer(t->m_fts.m_channels, t->m_fts.m_rows / POOLING_SIZE, \
-				t->m_fts.m_cols / POOLING_SIZE, layers_parameters + i);
-
-			break;
-		case CONVOLUTION_LAYER:
-			t = players + i - 1;
-			channels = t->m_conv_mat.m_cols;
-			rows = t->m_fts.m_rows - t->m_kers.m_rows;
-			cols = t->m_fts.m_cols - t->m_kers.m_cols;
-			
-			if (SAME_PADDING == t->m_padding_mode){
-				P = (t->m_kers.m_rows - 1) / 2;
-			}
-			rows = (rows + 2 * P) / t->m_stride + 1;
-			cols = (cols + 2 * P) / t->m_stride + 1;
-			players[i] = layer(channels, rows, cols, layers_parameters + i);
-			break;
-		case FULLCONNECTION_LAYER:
-			t = players + i - 1;
-			channels = t->m_conv_mat.m_cols;
-			rows = t->m_fts.m_rows - t->m_kers.m_rows;
-			cols = t->m_fts.m_cols - t->m_kers.m_cols;
-
-			rows = rows / t->m_stride + 1;
-			cols = cols / t->m_stride + 1;
-			players[i] = layer(channels, rows, cols, layers_parameters + i);
-			break;
-		default:;
-			break;
-		}
-		std::cout << std::endl;
-		std::cout << "第 " << i + 1 << "层:" << std::endl;
-		show_layer_parameters(players + i);
-		int xxx = 0;
-    }
-    //std::cout << layers_counts << std::endl;
-	show_layers_parameters(players, LAYERS_COUNTS);
 	string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
 	std::cout << file_name << endl;
 	vector<num_path> vec_path_label;
@@ -230,59 +180,5 @@ bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name
     //    }
     //}
 
-    return true;
-}
-
-bool show_layers_parameters(layer* players, int layers_count){
-    if (NULL == players || 0 >= layers_count){
-        return false;
-    }
-    for (int i = 0; i < layers_count; i++){
-        std::cout << "第 " << i << " 层参数 " << std::endl;
-        show_layer_parameters(players + i);
-        std::cout << std::endl;
-    }
-}
-
-bool show_layer_parameters(layer* player){
-    if (NULL == player){
-        return false;
-    }
-    switch (player->m_layer_mode)
-    {
-    case POOLING_LAYER:
-        std::cout << "POOLING LAYER\n";
-		break;
-    case CONVOLUTION_LAYER:
-        std::cout << "CONVOLUTION_LAYER\n";
-		break;
-    case FULLCONNECTION_LAYER:
-        std::cout << "FULLCONNECTION_LAYER\n";
-		break;
-    default:
-        break;
-    }
-	std::cout << "features parameters" << endl;
-	std::cout << "channels:" << (player->m_fts).m_channels << "  ";
-	std::cout << "rows:" << (player->m_fts).m_rows << "  ";
-	std::cout << "cols:" << (player->m_fts).m_cols << "  " << std::endl;
-    std::cout << "kernels parameters" << endl;
-    std::cout << "channels:" << (player->m_kers).m_channels << "  ";
-	std::cout << "kernel_rows:" << (player->m_kers).m_rows << "  ";
-	std::cout << "kernel_cols:" << (player->m_kers).m_cols << "  ";
-	std::cout << "kernel_counts:" << (player->m_kers).m_kers_counts << "  " << std::endl;
-    switch (player->m_relu)
-    {
-    case RELU_OFF:
-        std::cout << "RELU_OFF" << std::endl;
-		break;
-    case RELU_ON:
-        std::cout << "RELU_ON" << std::endl;
-		break;
-    default: 
-        break;
-    }
-
-    std::cout << "POOLING SIZE:" << player->m_pooling_size << std::endl;
     return true;
 }

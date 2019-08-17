@@ -464,16 +464,7 @@ matrix& matrix::operator=(const matrix &A){
 }
 matrix::matrix(const matrix &A)
 {
-	//static int i = 0;
-	//i++;
-	//if (NULL != mp_data){
-	//	std::cout << i << "  ";
-	//	std::cout << mp_data << std::endl;
-	//}
-	//if (this == &A){
-	//	return;
-	//}
-	//DEBUG_PRINT("matrix::matrix(const matrix &A) called\n");
+
 	if (A.m_rows <= 0 || A.m_cols <= 0){
 		mp_data = NULL;
 		m_rows = m_cols = 0;

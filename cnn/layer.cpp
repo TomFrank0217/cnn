@@ -567,3 +567,43 @@ bool layer::reshape_(features& src_conv_mat2fts_diff, matrix& dst_conv_mat_diff)
 	}
 	return true;
 }
+
+bool layer::show_shapes(){
+	switch (m_layer_mode)
+	{
+	case POOLING_LAYER:
+		std::cout << "POOLING LAYER\n";
+		break;
+	case CONVOLUTION_LAYER:
+		std::cout << "CONVOLUTION_LAYER\n";
+		break;
+	case FULLCONNECTION_LAYER:
+		std::cout << "FULLCONNECTION_LAYER\n";
+		break;
+	default:
+		break;
+	}
+	std::cout << "features parameters" << std::endl;
+	std::cout << "channels:" << (m_fts).m_channels << "  ";
+	std::cout << "rows:" << (m_fts).m_rows << "  ";
+	std::cout << "cols:" << (m_fts).m_cols << "  " << std::endl;
+	std::cout << "kernels parameters" << std::endl;
+	std::cout << "channels:" << (m_kers).m_channels << "  ";
+	std::cout << "kernel_rows:" << (m_kers).m_rows << "  ";
+	std::cout << "kernel_cols:" << (m_kers).m_cols << "  ";
+	std::cout << "kernel_counts:" << (m_kers).m_kers_counts << "  " << std::endl;
+	switch (m_relu)
+	{
+	case RELU_OFF:
+		std::cout << "RELU_OFF" << std::endl;
+		break;
+	case RELU_ON:
+		std::cout << "RELU_ON" << std::endl;
+		break;
+	default:
+		break;
+	}
+
+	std::cout << "POOLING SIZE:" << m_pooling_size << std::endl;
+	return true;
+}

@@ -22,6 +22,8 @@ public:
     //layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
         int fts_channels/*kers_channels*/, int fts_rows, int fts_cols,cv::Mat image)
 	
+
+	bool show_shapes();
 	matrix conv();
 	/* reshape是前向 reshape_是后向 */
 	bool reshape(features& src_fts, matrix& dst_fts_mat);

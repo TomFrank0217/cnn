@@ -519,7 +519,7 @@ features operator*(const DATA_TYPE val, const features &mutiplier_features){
 	if (NULL == mutiplier_features.mp_matrixes){
 		DEBUG_PRINT("NULL == mutiplier_features.mp_matrixes  mutiplier_features::operator*\n");
 	}
-	/* check -> matrix(const& mat)*/
+	/* check -> matrix(const& mat) */
 	features result_features(mutiplier_features);
 	for (int i = 0; i < result_features.m_channels; ++i){
 		result_features.mp_matrixes[i] *= val;
