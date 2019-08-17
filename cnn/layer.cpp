@@ -19,11 +19,16 @@ layer::layer(){
 	m_kers_mat_diffs = matrix();
 
 	m_conv_mat = matrix();
-	conv_mat_diff = matrix();
-	conv_mat_diffs = matrix();
-	m_conv_mat2fts = features();
-	conv_mat2fts_diff = features();
-	conv_mat2fts_diffs = features();
+	m_conv_mat_diff = matrix();
+	m_conv_mat_diffs = matrix();
+    m_relu_mask = matrix();
+    m_pooling_mask = features();
+    m_pooling_features = features();
+    m_conv_relu_mat_diffs = matrix();
+    m_conv_relu_mat_diffs = matrix();
+	m_conv_relu_mat2fts = features();
+	conv_relu_mat2fts_diff = features();
+	conv_relu_mat2fts_diffs = features();
 }
 
 layer::layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
@@ -44,7 +49,7 @@ layer::layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
 	int c = kers_rows*kers_cols*kers_channels;
 	m_fts_mat = matrix(r, c, 0.0);
 	m_fts_mat_diff = matrix(r, c, INITIAL_NUMBER);
-	m_fts_mat_diffs = matrix(r, c, INITIAL_NUMBER);
+    m_fts_mat_diffs = matrix(r, c, INITIAL_NUMBER);/* to delete */
 
 	/* todo kers初始化需要很小的初始值 */
 	m_kers = kernels(kers_channels, kers_rows, kers_cols, kers_count, -INITIAL_NUMBER, INITIAL_NUMBER);
@@ -54,19 +59,26 @@ layer::layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
 	int kers_mat_cols = m_kers.m_kers_counts;
 	m_kers_mat = matrix(kers_mat_rows, kers_mat_cols, INITIAL_NUMBER);
 	m_kers_mat_diff = matrix(kers_mat_rows, kers_mat_cols, INITIAL_NUMBER);
-	m_kers_mat_diffs = matrix(kers_mat_rows, kers_mat_cols, INITIAL_NUMBER);
+    m_kers_mat_diffs = matrix(kers_mat_rows, kers_mat_cols, INITIAL_NUMBER);/* to delete */
 
 	int rows = m_fts_mat.m_rows;
 	int cols = m_kers_mat.m_cols;
 	m_conv_mat = matrix(rows, cols, INITIAL_NUMBER);
-	conv_mat_diff = matrix(rows, cols, INITIAL_NUMBER);
-	conv_mat_diffs = matrix(rows, cols, INITIAL_NUMBER);
-	/* todo not VALID_PADDING*/
+    m_conv_mat_diff = matrix(rows, cols, INITIAL_NUMBER);/* todo  to delete */
+    m_conv_mat_diffs = matrix(rows, cols, INITIAL_NUMBER);/* todo to delete */
+    m_relu_mask = matrix(rows, cols, 0);
+    m_conv_relu_mat = matrix(rows, cols, 0);
+    m_conv_relu_mat_diffs = matrix(rows, cols, 0);
+    m_pooling_mask = matrix(rows, cols, 0);
+    m_pooling_features = matrix(rows, cols, 0);
+    m_conv_relu_mat_diffs = matrix(rows, cols, 0);
+
+	/* todo not VALID_PADDING */
 	int m = (m_fts.m_rows - m_kers.m_rows) / stride + 1;
 	int n = (m_fts.m_cols - m_kers.m_cols) / stride + 1;
-	m_conv_mat2fts = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
-	conv_mat2fts_diff = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
-	conv_mat2fts_diffs = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
+	m_conv_relu_mat2fts = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
+	conv_relu_mat2fts_diff = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
+	conv_relu_mat2fts_diffs = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
 }
 
 layer::~layer(){

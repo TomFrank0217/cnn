@@ -20,7 +20,6 @@
 #include "features.h"
 #include "layer.h"
 #include "layers_parameters.h"
-//#include "layers_parameters.cpp"
 
 using namespace cv;
 using namespace std;
@@ -53,10 +52,38 @@ int main(int argc, char* argv[]){
 
     /* todo 此处初始化必须重新写一个函数，否则每一个图像初始化都需要申请内存 这个不行 */
     players[0].m_fts = features(image);
-    /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会奔溃 */
-    //for (int i = 1; i < LAYERS_COUNTS; ++i){
-    //    std::cout << layers_parameters[i].kernel_channels << std::endl;
-    //}
+    /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
+    for (int i = 1; i < LAYERS_COUNTS; ++i){
+        std::cout << layers_parameters[i].kernel_channels << std::endl;
+        switch (layers_parameters[0].layer_mode){
+        case POOLING_LAYER:
+            /* todo 此处只实现了max_pooling average pooling未实现 */
+            /* 此处假设是最大值pooling */
+            players[i] = layer(0, 0, 0, 0, players[i - 1].m_conv_relu_mat2fts.m_channels, \
+                players[i - 1].m_conv_relu_mat2fts.m_rows, \
+                players[i - 1].m_conv_relu_mat2fts.m_cols);
+            /* todo layeri中features的初始化 image i-1 out features 需要重新写*/
+            break;
+        case CONVOLUTION_LAYER:
+            players[i] = layer(players[i - 1].m_conv_relu_mat2fts.m_channels, \
+                players[i - 1].m_conv_relu_mat2fts.m_rows, \
+                players[i - 1].m_conv_relu_mat2fts.m_cols, \
+                layers_parameters[i].kernel_channels, \
+                layers_parameters[i].kernel_rows, \
+                layers_parameters[i].kernel_cols, layers_parameters[i].kernel_counts);
+            break;
+        case FULLCONNECTION_LAYER:
+            players[i] = layer(players[i - 1].m_conv_relu_mat2fts.m_channels, \
+                players[i - 1].m_conv_relu_mat2fts.m_rows, \
+                players[i - 1].m_conv_relu_mat2fts.m_cols, \
+                layers_parameters[i].kernel_channels, \
+                layers_parameters[i].kernel_rows, \
+                layers_parameters[i].kernel_cols, layers_parameters[i].kernel_counts);
+            break;
+        default:   ;
+            break;
+        }
+    }
     //std::cout << layers_counts << std::endl;
 
 	string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";

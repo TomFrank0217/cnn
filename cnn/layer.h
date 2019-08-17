@@ -12,6 +12,8 @@ public:
 	/* todo layer层的初始化 即卷积核与特征的初始化 */
     layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
         int fts_channels/*kers_channels*/, int fts_rows, int fts_cols);
+    //layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
+        int fts_channels/*kers_channels*/, int fts_rows, int fts_cols,cv::Mat image)
 	matrix conv();
 	/* reshape是前向 reshape_是后向 */
 	bool reshape(features& src_fts, matrix& dst_fts_mat);
@@ -22,7 +24,7 @@ public:
 
 	bool reshape(matrix& src_conv_mat, features& dst_conv_mat2fts);
 	bool reshape_(features& src_conv_mat2fts_diff, matrix& dst_conv_mat_diff);
-
+    /* 以上六个reshape 是核心代码 */
     ~layer();
 public:
 	int padding_mode;
@@ -43,12 +45,19 @@ public:
 	matrix m_kers_mat_diff;
 	matrix m_kers_mat_diffs;
 
-	matrix m_conv_mat;  matrix m_relu_mask; /* 0,1矩阵 表示正负 */  matrix m_conv_relu_mat;
-	matrix conv_mat_diff;  matrix m_conv_relu_mat_diff;
-	matrix conv_mat_diffs;/* conv_mat_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
-    features m_conv_mat2fts;
-	features conv_mat2fts_diff;
-	features conv_mat2fts_diffs;/* conv_mat2fts_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
+    matrix m_conv_mat;  
+    matrix m_relu_mask;  /* 0,1矩阵 表示正负 */ 
+    matrix m_conv_relu_mat; 
+    matrix m_conv_mat_diff;  
+	matrix m_conv_mat_diffs;/* conv_mat_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
+    matrix m_conv_relu_mat_diff; 
+    matrix m_conv_relu_mat_diffs;
+
+    features m_conv_relu_mat2fts;
+	features conv_relu_mat2fts_diff;
+	features conv_relu_mat2fts_diffs;/* conv_mat2fts_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
+    features m_pooling_mask; 
+    features m_pooling_features;
 };
 
 #endif
