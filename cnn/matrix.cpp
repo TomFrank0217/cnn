@@ -560,16 +560,6 @@ bool matrix::show(int show_image_mode){
 	case SHOW_IMAGE_INITAIL_VALUE:
 		for (int i = SHOW_IMAGE_CROP_LENGTH; i < m_rows - SHOW_IMAGE_CROP_LENGTH; ++i){
 			for (int j = SHOW_IMAGE_CROP_LENGTH; j < m_cols - SHOW_IMAGE_CROP_LENGTH; ++j){
-				//	if ( ABS(mp_data[i*m_cols + j]) < DELTA){
-				//		for (int k = 0; k < SHOW_WIDTH; ++k){
-				//			std::cout << " ";
-				//		}
-				//	}
-				//	else{
-				//		std::cout << std::setw(SHOW_WIDTH) << std::setprecision(SHOW_WIDTH / 2 - 1) << mp_data[i*m_cols + j];
-				//	}
-				//}
- 
 				std::cout << std::setw(SHOW_WIDTH) << std::setprecision(SHOW_WIDTH / 2 - 1) << mp_data[i*m_cols + j];
 				//std::cout << mp_data[i*m_cols + j];
 			}

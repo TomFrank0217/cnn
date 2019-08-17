@@ -44,19 +44,9 @@ int main(int argc, char* argv[]){
     int layers_counts = sizeof(layers_parameters[0]);
     /* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑*/
 	layer* players = new layer[LAYERS_COUNTS], *t = NULL;
-    //layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
-        int fts_channels/*kers_channels*/, int fts_rows, int fts_cols);
- //   players[0] = layer(layers_parameters[0].kernel_channels, \
- //       layers_parameters[0].kernel_rows, layers_parameters[0].kernel_cols, \
- //       layers_parameters[0].kernel_counts, \
- //       input_channels, input_rows, input_cols);
 
  //   /* todo 此处初始化必须重新写一个函数，否则每一个图像初始化都需要申请内存 这个不行 */
- //   players[0].m_fts = features(image);
-	//players[0].layer_mode = layers_parameters[0].layer_mode;
-	//players[0].pooling_size = layers_parameters[0].pooling_size;
-	//players[0].relu = layers_parameters[0].relu;
-	//players[0].stride = 1;
+
 	players[0] = layer(channels, rows, cols, layers_parameters);
 	std::cout << "第 " << "1" << "层:" << std::endl;
 	show_layer_parameters(players);
@@ -76,16 +66,6 @@ int main(int argc, char* argv[]){
 			players[i] = layer(t->m_fts.m_channels, t->m_fts.m_rows / POOLING_SIZE, \
 				t->m_fts.m_cols / POOLING_SIZE, layers_parameters + i);
 
-			/* todo 此处只实现了max_pooling average pooling未实现 */
-			/* 此处假设是最大值pooling */
-			//players[i] = layer(0, 0, 0, 0, players[i - 1].m_conv_relu_mat2fts.m_channels, \
-			//	players[i - 1].m_conv_relu_mat2fts.m_rows, \
-			//	players[i - 1].m_conv_relu_mat2fts.m_cols);
-			//players[i].layer_mode = layers_parameters[i].layer_mode;
-			//players[i].pooling_size = layers_parameters[i].pooling_size;
-			//players[i].relu = layers_parameters[i].relu;
-			//players[i].stride = 1;
-			/* todo layeri中features的初始化 image i-1 out features 需要重新写*/
 			break;
 		case CONVOLUTION_LAYER:
 			t = players + i - 1;
