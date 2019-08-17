@@ -6,11 +6,11 @@ typedef struct layer_parameters{
 	int kernel_channels;
 	int kernel_rows;
 	int kernel_cols;
-	int kernel_counts;
-	int feature_channels;
-	int feature_rows;
-	int features_cols;
+	int kernels_counts;
+	int stride;
+	int padding_mode;/* valid padding_size=0,same padding_size=(kernel_rows-1)/2 ...... */
 	int relu;
+	int pooling_mode;
 	int pooling_size;
 };//layer_parameters;
 

@@ -4,7 +4,11 @@
 #define DATA_TYPE                   double
 
 #define RANDOM_INITIAL_VAL          0.01
-#define INITIAL_NUMBER              1
+
+#define KERS_MIN_VAL                -2
+#define KERS_MAX_VAL                 2
+
+#define INITIAL_NUMBER              0.0
 
 #define SHOW_IMAGE_SCALE_VALUE      0
 #define SHOW_IMAGE_INITAIL_VALUE    1 
@@ -17,8 +21,13 @@
 
 #define STRIDE                      1
 
+#define MAX_POOLING                 0
+#define AVE_POOLING                 1
+#define POOLING_SIZE                2
+
 #define  AVE_VALUE                  127.5
 
+#define MINUS                       -1
 #define KERNEL_ROWS                 2
 #define KERNEL_COLS                 3
 

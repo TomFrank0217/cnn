@@ -32,75 +32,108 @@ struct num_path{
 bool get_files(string file_name, vector<string> &files);
 bool show(Mat &image, int show_image_mode = SHOW_IMAGE_SCALE_VALUE);
 bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name);
-bool show_layers_parameters(layer_parameters* players, int layers_count);
-bool show_layer_parameters(layer_parameters* player);
+bool show_layers_parameters(layer* players, int layers_count);
+bool show_layer_parameters(layer* player);
 int main(int argc, char* argv[]){
 	string img_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\0_0.bmp";
 	Mat image = imread(img_name, 0);  
-	int input_channels = image.channels();
-	int input_rows = image.rows;
-	int input_cols = image.cols;
+	int channels = image.channels();
+	int rows = image.rows;
+	int cols = image.cols;
 
     int layers_counts = sizeof(layers_parameters[0]);
     /* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑*/
-    layer* players = new layer[LAYERS_COUNTS];
+	layer* players = new layer[LAYERS_COUNTS], *t = NULL;
     //layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
         int fts_channels/*kers_channels*/, int fts_rows, int fts_cols);
-    players[0] = layer(layers_parameters[0].kernel_channels, \
-        layers_parameters[0].kernel_rows, layers_parameters[0].kernel_cols, \
-        layers_parameters[0].kernel_counts, \
-        input_channels, input_rows, input_cols);
+ //   players[0] = layer(layers_parameters[0].kernel_channels, \
+ //       layers_parameters[0].kernel_rows, layers_parameters[0].kernel_cols, \
+ //       layers_parameters[0].kernel_counts, \
+ //       input_channels, input_rows, input_cols);
 
-    /* todo 此处初始化必须重新写一个函数，否则每一个图像初始化都需要申请内存 这个不行 */
-    players[0].m_fts = features(image);
+ //   /* todo 此处初始化必须重新写一个函数，否则每一个图像初始化都需要申请内存 这个不行 */
+ //   players[0].m_fts = features(image);
+	//players[0].layer_mode = layers_parameters[0].layer_mode;
+	//players[0].pooling_size = layers_parameters[0].pooling_size;
+	//players[0].relu = layers_parameters[0].relu;
+	//players[0].stride = 1;
+	players[0] = layer(channels, rows, cols, layers_parameters);
+	std::cout << "第 " << "1" << "层:" << std::endl;
+	show_layer_parameters(players);
     /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
+	
+
     for (int i = 1; i < LAYERS_COUNTS; ++i){
-        std::cout << layers_parameters[i].kernel_channels << std::endl;
-        switch (layers_parameters[0].layer_mode){
-        case POOLING_LAYER:
-            /* todo 此处只实现了max_pooling average pooling未实现 */
-            /* 此处假设是最大值pooling */
-            players[i] = layer(0, 0, 0, 0, players[i - 1].m_conv_relu_mat2fts.m_channels, \
-                players[i - 1].m_conv_relu_mat2fts.m_rows, \
-                players[i - 1].m_conv_relu_mat2fts.m_cols);
-            /* todo layeri中features的初始化 image i-1 out features 需要重新写*/
-            break;
-        case CONVOLUTION_LAYER:
-            players[i] = layer(players[i - 1].m_conv_relu_mat2fts.m_channels, \
-                players[i - 1].m_conv_relu_mat2fts.m_rows, \
-                players[i - 1].m_conv_relu_mat2fts.m_cols, \
-                layers_parameters[i].kernel_channels, \
-                layers_parameters[i].kernel_rows, \
-                layers_parameters[i].kernel_cols, layers_parameters[i].kernel_counts);
-            break;
-        case FULLCONNECTION_LAYER:
-            players[i] = layer(players[i - 1].m_conv_relu_mat2fts.m_channels, \
-                players[i - 1].m_conv_relu_mat2fts.m_rows, \
-                players[i - 1].m_conv_relu_mat2fts.m_cols, \
-                layers_parameters[i].kernel_channels, \
-                layers_parameters[i].kernel_rows, \
-                layers_parameters[i].kernel_cols, layers_parameters[i].kernel_counts);
-            break;
-        default:   ;
-            break;
-        }
+        //std::cout << layers_parameters[i].kernel_channels << std::endl;
+		players[i].m_stride = layers_parameters[i].stride;
+		int channels = 0;
+		int rows = 0;
+		int cols = 0;
+		int P = 0;/* valid padding */
+		switch (layers_parameters[i-1].layer_mode){
+		case POOLING_LAYER:
+			t = players + i - 1;
+			players[i] = layer(t->m_fts.m_channels, t->m_fts.m_rows / POOLING_SIZE, \
+				t->m_fts.m_cols / POOLING_SIZE, layers_parameters + i);
+
+			/* todo 此处只实现了max_pooling average pooling未实现 */
+			/* 此处假设是最大值pooling */
+			//players[i] = layer(0, 0, 0, 0, players[i - 1].m_conv_relu_mat2fts.m_channels, \
+			//	players[i - 1].m_conv_relu_mat2fts.m_rows, \
+			//	players[i - 1].m_conv_relu_mat2fts.m_cols);
+			//players[i].layer_mode = layers_parameters[i].layer_mode;
+			//players[i].pooling_size = layers_parameters[i].pooling_size;
+			//players[i].relu = layers_parameters[i].relu;
+			//players[i].stride = 1;
+			/* todo layeri中features的初始化 image i-1 out features 需要重新写*/
+			break;
+		case CONVOLUTION_LAYER:
+			t = players + i - 1;
+			channels = t->m_conv_mat.m_cols;
+			rows = t->m_fts.m_rows - t->m_kers.m_rows;
+			cols = t->m_fts.m_cols - t->m_kers.m_cols;
+			
+			if (SAME_PADDING == t->m_padding_mode){
+				P = (t->m_kers.m_rows - 1) / 2;
+			}
+			rows = (rows + 2 * P) / t->m_stride + 1;
+			cols = (cols + 2 * P) / t->m_stride + 1;
+			players[i] = layer(channels, rows, cols, layers_parameters + i);
+			break;
+		case FULLCONNECTION_LAYER:
+			t = players + i - 1;
+			channels = t->m_conv_mat.m_cols;
+			rows = t->m_fts.m_rows - t->m_kers.m_rows;
+			cols = t->m_fts.m_cols - t->m_kers.m_cols;
+
+			rows = rows / t->m_stride + 1;
+			cols = cols / t->m_stride + 1;
+			players[i] = layer(channels, rows, cols, layers_parameters + i);
+			break;
+		default:;
+			break;
+		}
+		std::cout << std::endl;
+		std::cout << "第 " << i + 1 << "层:" << std::endl;
+		show_layer_parameters(players + i);
+		int xxx = 0;
     }
     //std::cout << layers_counts << std::endl;
-
+	show_layers_parameters(players, LAYERS_COUNTS);
 	string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
-	cout << file_name << endl;
+	std::cout << file_name << endl;
 	vector<num_path> vec_path_label;
 	get_image_path_and_label(vec_path_label, file_name);
 	string str = "**************************************************************";
 	for (int i = 0; i < vec_path_label.size(); ++i){
-		cout << vec_path_label[i].path << endl;
+		std::cout << vec_path_label[i].path << endl;
 		Mat image = imread(vec_path_label[i].path, 0);
 		show(image, SHOW_IMAGE_SHAPE);
 		features fea(image);
 		fea.show(SHOW_IMAGE_SHAPE);
 		features fts(image);
 		fts.show(SHOW_IMAGE_SHAPE);
-		cout << str << endl << str << endl << str << endl;
+		std::cout << str << endl << str << endl << str << endl;
 	}
 
     return 0;
@@ -146,11 +179,11 @@ bool show(Mat &image, int show_image_mode){
         for (int i = SHOW_IMAGE_CROP_LENGTH; i < image.rows - SHOW_IMAGE_CROP_LENGTH; ++i){
             for (int j = SHOW_IMAGE_CROP_LENGTH; j < image.cols - SHOW_IMAGE_CROP_LENGTH; ++j){
                 if (0 == int(image.at<uchar>(i, j)))
-                    cout << "  ";
+					std::cout << "  ";
                 else
-                    cout << "**";
+					std::cout << "**";
             }
-            cout << endl;
+			std::cout << endl;
         }
         break;
 
@@ -162,13 +195,13 @@ bool show(Mat &image, int show_image_mode){
         for (int i = SHOW_IMAGE_CROP_LENGTH; i < image.rows - SHOW_IMAGE_CROP_LENGTH; ++i){
             for (int j = SHOW_IMAGE_CROP_LENGTH; j < image.cols - SHOW_IMAGE_CROP_LENGTH; ++j){
                 if (0 == (int)image.at<uchar>(i, j)){
-                    cout << str;
+					std::cout << str;
                 }
                 else{
                     std::cout << setw(SHOW_WIDTH) << (int)image.at<uchar>(i, j);
                 }
             }
-            cout << endl;
+			std::cout << endl;
         }
         break;
     default:    
@@ -187,7 +220,7 @@ bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name
     //for (int i = 0; i < 10; ++i){    /* todo */
     for (int i = 0; i < 10; ++i){    /* todo */
         file_name[34] = '0' + i;
-		cout << file_name << endl;
+		std::cout << file_name << endl;
         file_names.push_back(file_name);
         get_files(file_name, num_file);
         num_files.push_back(num_file);
@@ -220,7 +253,7 @@ bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name
     return true;
 }
 
-bool show_layers_parameters(layer_parameters* players, int layers_count){
+bool show_layers_parameters(layer* players, int layers_count){
     if (NULL == players || 0 >= layers_count){
         return false;
     }
@@ -231,40 +264,45 @@ bool show_layers_parameters(layer_parameters* players, int layers_count){
     }
 }
 
-bool show_layer_parameters(layer_parameters* player){
+bool show_layer_parameters(layer* player){
     if (NULL == player){
         return false;
     }
-    switch (player->layer_mode)
+    switch (player->m_layer_mode)
     {
     case POOLING_LAYER:
         std::cout << "POOLING LAYER\n";
+		break;
     case CONVOLUTION_LAYER:
         std::cout << "CONVOLUTION_LAYER\n";
+		break;
     case FULLCONNECTION_LAYER:
         std::cout << "FULLCONNECTION_LAYER\n";
+		break;
     default:
         break;
     }
+	std::cout << "features parameters" << endl;
+	std::cout << "channels:" << (player->m_fts).m_channels << "  ";
+	std::cout << "rows:" << (player->m_fts).m_rows << "  ";
+	std::cout << "cols:" << (player->m_fts).m_cols << "  " << std::endl;
     std::cout << "kernels parameters" << endl;
-    std::cout << "channels:" << player->kernel_channels << "  ";
-    std::cout << "kernel_rows:" << player->kernel_rows << "  ";
-    std::cout << "kernel_cols:" << player->kernel_cols << "  ";
-    std::cout << "kernel_counts:" << player->kernel_counts << "  " << std::endl;
-    std::cout << "features parameters" << endl;
-    std::cout << "channels:" << player->feature_channels << "  ";
-    std::cout << "channels:" << player->feature_rows << "  ";
-    std::cout << "channels:" << player->features_cols << "  " << std::endl;
-    switch (player->relu)
+    std::cout << "channels:" << (player->m_kers).m_channels << "  ";
+	std::cout << "kernel_rows:" << (player->m_kers).m_rows << "  ";
+	std::cout << "kernel_cols:" << (player->m_kers).m_cols << "  ";
+	std::cout << "kernel_counts:" << (player->m_kers).m_kers_counts << "  " << std::endl;
+    switch (player->m_relu)
     {
     case RELU_OFF:
         std::cout << "RELU_OFF" << std::endl;
+		break;
     case RELU_ON:
         std::cout << "RELU_ON" << std::endl;
+		break;
     default: 
         break;
     }
 
-    std::cout << "POLLING SIZE:" << player->pooling_size << std::endl;
+    std::cout << "POOLING SIZE:" << player->m_pooling_size << std::endl;
     return true;
 }

@@ -260,7 +260,7 @@ features& features::operator=(const features &fs_){
 	}
 	
 	if (NULL == fs_.mp_matrixes){
-		std::cout << "(NULL == ts_.mp_matrixes)  tensor::operator=\n";
+		//std::cout << "(NULL == ts_.mp_matrixes)  tensor::operator=\n";
 		if (NULL == mp_matrixes){
 			m_channels = m_rows = m_cols = 0;
 			return *this;

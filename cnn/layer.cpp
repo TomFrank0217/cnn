@@ -1,8 +1,8 @@
 #include "layer.h"
 
 layer::layer(){
-	padding_mode = VALID_PADDING;
-	stride = STRIDE;
+	m_padding_mode = VALID_PADDING;
+	m_stride = STRIDE;
 
 	m_fts = features();
 	m_fts_diff = features();
@@ -27,58 +27,227 @@ layer::layer(){
     m_conv_relu_mat_diffs = matrix();
     m_conv_relu_mat_diffs = matrix();
 	m_conv_relu_mat2fts = features();
-	conv_relu_mat2fts_diff = features();
-	conv_relu_mat2fts_diffs = features();
+	m_conv_relu_mat2fts_diff = features();
+	m_conv_relu_mat2fts_diffs = features();
 }
 
-layer::layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
-    int fts_channels/*kers_channels*/, int fts_rows, int fts_cols){
-	if (kers_channels != fts_channels){
-		DEBUG_PRINT("(kers_channels != fts_channels)\n");
-		return;
+layer::layer(int channels, int rows, int cols, layer_parameters* layer_params_){
+
+	m_layer_mode = layer_params_->layer_mode;
+	m_stride = layer_params_->stride;
+	m_padding_mode = layer_params_->padding_mode;
+	m_relu = layer_params_->relu;
+	m_pooling_mode = layer_params_->pooling_mode;
+	m_pooling_size = layer_params_->pooling_size;
+	
+	m_fts = features(channels, rows, cols, 0.0);
+	m_fts_diff = features(channels, rows, cols, 0.0);
+	/* diffs=diff(1)+diff(2)+diff(3)+...+diff(batch_size-1)+diff(batch_size) */
+	m_fts_diffs = features(channels, rows, cols, 0.0);
+	
+	if (CONVOLUTION_LAYER == layer_params_->layer_mode||\
+		FULLCONNECTION_LAYER == layer_params_->layer_mode){
+		/* kernels initial  */
+		/* varibales for forward propagation */
+		int ker_channels = layer_params_->kernel_channels;
+		int ker_rows = layer_params_->kernel_rows;
+		int ker_cols = layer_params_->kernel_cols;
+		int kers_counts = layer_params_->kernels_counts;
+		/* varibales for back propagation */
+		m_kers = kernels(ker_channels, ker_rows, ker_cols, kers_counts, KERS_MIN_VAL, KERS_MAX_VAL);
+		//m_kers_diff = kernels(ker_channels, ker_rows, ker_cols, kers_counts, 0);/* 这个变量似乎不需要用 */
+		m_kers_diffs = kernels(ker_channels, ker_rows, ker_cols, kers_counts, 0.0);
+		/* variables for forward propagation */
+		int kers_mat_rows = ker_channels*ker_rows*ker_cols;
+		int kers_mat_cols = kers_counts;
+		m_kers_mat = matrix(kers_mat_rows, kers_mat_cols, 0.0);
+		/* variables for back propagation*/
+		m_kers_mat_diff = matrix(kers_mat_rows, kers_mat_cols, 0.0);
+		m_kers_mat_diffs = matrix(kers_mat_rows, kers_mat_cols, 0.0);
+		/* end initial kernels */
+		int padding_size = 0; /* valid 默认的padding 方式 */
+		if (SAME_PADDING == layer_params_->padding_mode){
+			padding_size = (layer_params_->kernel_rows - 1) / 2;
+		}
+		int fts_rows_ = (m_fts.m_rows - m_kers.m_rows + 2 * padding_size) / m_stride + 1;
+		fts_rows_ *= ((m_fts.m_rows - m_kers.m_rows + 2 * padding_size) / m_stride + 1);
+		int fts_cols_ = m_kers.m_rows*m_kers.m_cols*m_kers.m_channels;
+		m_fts_mat = matrix(fts_rows_, fts_cols_, 0.0);
+		m_fts_mat_diff = matrix(fts_rows_, fts_cols_, 0.0);
+		//matrix m_fts_mat_diffs;/* m_fts_mat_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
+
+		m_conv_mat = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0.0);
+		m_relu_mask = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0); /* 0,1矩阵 表示正负 */
+		matrix m_conv_relu_mat;
+		matrix m_conv_mat_diff;
+		matrix m_conv_mat_diffs;/* conv_mat_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
+		matrix m_conv_relu_mat_diff;
+		matrix m_conv_relu_mat_diffs;
+
+
 	}
-	padding_mode = VALID_PADDING;
-	stride = STRIDE;
-	/* todo 初始化为double 型 */
-	m_fts = features(fts_channels, fts_rows, fts_cols, -INITIAL_NUMBER, INITIAL_NUMBER);
-	m_fts_diff = features(fts_channels, fts_rows, fts_cols, -INITIAL_NUMBER, INITIAL_NUMBER);
-	m_fts_diffs = features(fts_channels, fts_rows, fts_cols, -INITIAL_NUMBER, INITIAL_NUMBER);
+	else if (POOLING_LAYER == layer_params_->layer_mode){
+		m_pooling_mask = features(channels, rows, cols, 0);
+	}
+	else if (FULLCONNECTION_LAYER==layer_params_->layer_mode){
+		;
+	}
+	//int m = 0;
+	//int n = 0;
+	///* todo 要解决九种情况  头大！！！ */
+	//if (NULL == pre_layer_params_){
+	//	/* 这是第一层的情况 */
+	//	m_fts = features(image);
+	//}
+	//else{
+	//	if (CONVOLUTION_LAYER == pre_layer_params_->layer_mode){
+	//		if (CONVOLUTION_LAYER == layer_params_->layer_mode){
+	//			;
+	//		}
+	//		else if (POOLING_LAYER == layer_params_->layer_mode){
+	//			;
+	//		}
+	//		else if (FULLCONNECTION_LAYER == layer_params_->layer_mode){
+	//			;
+	//		}
+	//	}
+	//	else if (POOLING_LAYER == pre_layer_params_->layer_mode){
+	//		if (CONVOLUTION_LAYER == layer_params_->layer_mode){
+	//			;
+	//		}
+	//		else if (POOLING_LAYER == layer_params_->layer_mode){
+	//			;
+	//		}
+	//		else if (FULLCONNECTION_LAYER == layer_params_->layer_mode){
+	//			;
+	//		}
+	//	}
+	//	else if (FULLCONNECTION_LAYER == pre_layer_params_->layer_mode){
+	//		if (CONVOLUTION_LAYER == layer_params_->layer_mode){
+	//			;
+	//		}
+	//		else if (POOLING_LAYER == layer_params_->layer_mode){
+	//			;
+	//		}
+	//		else if (FULLCONNECTION_LAYER == layer_params_->layer_mode){
+	//			;
+	//		}
+	//	}
+	//}
+}
 
-	int r = (fts_rows - kers_rows) / stride + 1;
-	r *= ((fts_cols- kers_cols) / stride + 1);
-	int c = kers_rows*kers_cols*kers_channels;
-	m_fts_mat = matrix(r, c, 0.0);
-	m_fts_mat_diff = matrix(r, c, INITIAL_NUMBER);
-    m_fts_mat_diffs = matrix(r, c, INITIAL_NUMBER);/* to delete */
+/* 实际上这儿有一个逻辑上的缺陷，第一层一定是卷积层吗？*/
+//layer::layer(layer_parameters layer_params_, cv::Mat image){
+//	/* kernels initial  */
+//	/* varibales for forward propagation */
+//	int ker_channels = layer_params_.kernel_channels;
+//	int ker_rows = layer_params_.kernel_rows;
+//	int ker_cols = layer_params_.kernel_cols;
+//	int kers_counts = layer_params_.kernels_counts;
+//	/* varibales for back propagation */
+//	m_kers = kernels(ker_channels, ker_rows, ker_cols, kers_counts, KERS_MIN_VAL, KERS_MAX_VAL);
+//	//m_kers_diff = kernels(ker_channels, ker_rows, ker_cols, kers_counts, 0);/* 这个变量似乎不需要用 */
+//	m_kers_diffs = kernels(ker_channels, ker_rows, ker_cols, kers_counts, 0.0);
+//	/* variables for forward propagation */
+//	int kers_mat_rows = ker_channels*ker_rows*ker_cols;
+//	int kers_mat_cols = kers_counts;
+//	m_kers_mat = matrix(kers_mat_rows, kers_mat_cols, 0.0);
+//	/* variables for back propagation*/
+//	m_kers_mat_diff = matrix(kers_mat_rows, kers_mat_cols, 0.0);
+//	m_kers_mat_diffs = matrix(kers_mat_rows, kers_mat_cols, 0.0);
+//	/* end initial kernels */
+//
+//	m_stride = layer_params_.stride;
+//
+//	/* features initial from image */
+//	/* todo check image */
+//	m_fts = features(image);
+//	m_fts_diff = features(image.channels(), image.rows, image.cols, 0.0);
+//	/* diffs=diff(1)+diff(2)+diff(3)+...+diff(batch_size-1)+diff(batch_size) */
+//	m_fts_diffs = features(image.channels(), image.rows, image.cols, 0.0);
+//	int padding_size = 0; /* valid 默认的padding 方式 */
+//	if (SAME_PADDING == layer_params_.padding_mode){
+//		padding_size = (layer_params_.kernel_rows - 1) / 2;
+//	}
+//	int fts_rows_ = (m_fts.m_rows-m_kers.m_rows+2*padding_size)/m_stride + 1;
+//	fts_rows_ *= ((m_fts.m_rows - m_kers.m_rows + 2 * padding_size) / m_stride + 1);
+//	int fts_cols_ = m_kers.m_rows*m_kers.m_cols*m_kers.m_channels;
+//	//m_fts_mat = matrix(fts_rows_, fts_cols_, 0.0);
+//	//m_fts_mat_diff = matrix(fts_rows_, fts_cols_, 0.0);
+//	//matrix m_fts_mat_diffs;/* m_fts_mat_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
+//
+//	/* conv relu */
+//	int rows = m_fts_mat.m_rows;
+//	int cols = m_kers_mat.m_cols;
+//	m_conv_mat = matrix(rows, cols, INITIAL_NUMBER);
+//	m_conv_mat_diff = matrix(rows, cols, INITIAL_NUMBER);/* todo  to delete */
+//	//m_conv_mat_diffs = matrix(rows, cols, INITIAL_NUMBER);/* todo to delete */
+//	m_relu_mask = matrix(rows, cols, 0);
+//	m_conv_relu_mat = matrix(rows, cols, 0);
+//	m_conv_relu_mat_diff = matrix(rows, cols, 0);
+//	//m_pooling_mask = matrix(rows, cols, 0);
+//	//m_pooling_features = matrix(rows, cols, 0);
+//	m_conv_relu_mat_diffs = matrix(rows, cols, 0);
+//	/* todo not valid_padding */
+//
+//	int m = (m_fts.m_rows - m_kers.m_rows + 2 * padding_size) / stride + 1;
+//	int n = (m_fts.m_cols - m_kers.m_cols + 2 * padding_size) / stride + 1;
+//	m_conv_relu_mat2fts = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
+//	m_conv_relu_mat2fts_diff = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
+//	m_conv_relu_mat2fts_diffs = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
+//}
 
-	/* todo kers初始化需要很小的初始值 */
-	m_kers = kernels(kers_channels, kers_rows, kers_cols, kers_count, -INITIAL_NUMBER, INITIAL_NUMBER);
-	m_kers_diff = kernels(kers_channels, kers_rows, kers_cols, kers_count, -INITIAL_NUMBER, INITIAL_NUMBER);
-	m_kers_diffs = kernels(kers_channels, kers_rows, kers_cols, kers_count, -INITIAL_NUMBER, INITIAL_NUMBER);
-	int kers_mat_rows = m_kers.m_channels *m_kers.m_rows*m_kers.m_cols;
-	int kers_mat_cols = m_kers.m_kers_counts;
-	m_kers_mat = matrix(kers_mat_rows, kers_mat_cols, INITIAL_NUMBER);
-	m_kers_mat_diff = matrix(kers_mat_rows, kers_mat_cols, INITIAL_NUMBER);
-    m_kers_mat_diffs = matrix(kers_mat_rows, kers_mat_cols, INITIAL_NUMBER);/* to delete */
+//layer::layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
+//    int fts_channels/*kers_channels*/, int fts_rows, int fts_cols){
+//	if (kers_channels != fts_channels){
+//		DEBUG_PRINT("(kers_channels != fts_channels)\n");
+//		return;
+//	}
+//	m_padding_mode = VALID_PADDING;
+//	stride = STRIDE;
+//	/* todo 初始化为double 型 */
+//	m_fts = features(fts_channels, fts_rows, fts_cols, -INITIAL_NUMBER, INITIAL_NUMBER);
+//	m_fts_diff = features(fts_channels, fts_rows, fts_cols, -INITIAL_NUMBER, INITIAL_NUMBER);
+//	m_fts_diffs = features(fts_channels, fts_rows, fts_cols, -INITIAL_NUMBER, INITIAL_NUMBER);
+//
+//	int r = (fts_rows - kers_rows) / stride + 1;
+//	r *= ((fts_cols- kers_cols) / stride + 1);
+//	int c = kers_rows*kers_cols*kers_channels;
+//	m_fts_mat = matrix(r, c, 0.0);
+//	m_fts_mat_diff = matrix(r, c, INITIAL_NUMBER);
+//    m_fts_mat_diffs = matrix(r, c, INITIAL_NUMBER);/* to delete */
+//
+//	/* todo kers初始化需要很小的初始值 */
+//	m_kers = kernels(kers_channels, kers_rows, kers_cols, kers_count, -INITIAL_NUMBER, INITIAL_NUMBER);
+//	m_kers_diff = kernels(kers_channels, kers_rows, kers_cols, kers_count, -INITIAL_NUMBER, INITIAL_NUMBER);
+//	m_kers_diffs = kernels(kers_channels, kers_rows, kers_cols, kers_count, -INITIAL_NUMBER, INITIAL_NUMBER);
+//	int kers_mat_rows = m_kers.m_channels *m_kers.m_rows*m_kers.m_cols;
+//	int kers_mat_cols = m_kers.m_kers_counts;
+//	m_kers_mat = matrix(kers_mat_rows, kers_mat_cols, INITIAL_NUMBER);
+//	m_kers_mat_diff = matrix(kers_mat_rows, kers_mat_cols, INITIAL_NUMBER);
+//    m_kers_mat_diffs = matrix(kers_mat_rows, kers_mat_cols, INITIAL_NUMBER);/* to delete */
+//
+//	int rows = m_fts_mat.m_rows;
+//	int cols = m_kers_mat.m_cols;
+//	m_conv_mat = matrix(rows, cols, INITIAL_NUMBER);
+//    m_conv_mat_diff = matrix(rows, cols, INITIAL_NUMBER);/* todo  to delete */
+//    m_conv_mat_diffs = matrix(rows, cols, INITIAL_NUMBER);/* todo to delete */
+//    m_relu_mask = matrix(rows, cols, 0);
+//    m_conv_relu_mat = matrix(rows, cols, 0);
+//    m_conv_relu_mat_diffs = matrix(rows, cols, 0);
+//    //m_pooling_mask = matrix(rows, cols, 0);
+//    //m_pooling_features = matrix(rows, cols, 0);
+//    m_conv_relu_mat_diffs = matrix(rows, cols, 0);
+//	/* todo not VALID_PADDING */
+//	int m = (m_fts.m_rows - m_kers.m_rows) / stride + 1;
+//	int n = (m_fts.m_cols - m_kers.m_cols) / stride + 1;
+//	m_conv_relu_mat2fts = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
+//	m_conv_relu_mat2fts_diff = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
+//	m_conv_relu_mat2fts_diffs = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
+//}
 
-	int rows = m_fts_mat.m_rows;
-	int cols = m_kers_mat.m_cols;
-	m_conv_mat = matrix(rows, cols, INITIAL_NUMBER);
-    m_conv_mat_diff = matrix(rows, cols, INITIAL_NUMBER);/* todo  to delete */
-    m_conv_mat_diffs = matrix(rows, cols, INITIAL_NUMBER);/* todo to delete */
-    m_relu_mask = matrix(rows, cols, 0);
-    m_conv_relu_mat = matrix(rows, cols, 0);
-    m_conv_relu_mat_diffs = matrix(rows, cols, 0);
-    m_pooling_mask = matrix(rows, cols, 0);
-    m_pooling_features = matrix(rows, cols, 0);
-    m_conv_relu_mat_diffs = matrix(rows, cols, 0);
+layer::layer(layer_parameters ly_params){
 
-	/* todo not VALID_PADDING */
-	int m = (m_fts.m_rows - m_kers.m_rows) / stride + 1;
-	int n = (m_fts.m_cols - m_kers.m_cols) / stride + 1;
-	m_conv_relu_mat2fts = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
-	conv_relu_mat2fts_diff = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
-	conv_relu_mat2fts_diffs = features(m_kers.m_channels, m, n, INITIAL_NUMBER);
 }
 
 layer::~layer(){
@@ -173,9 +342,9 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 	}
 
 	if (NULL == dst_fts_mat.mp_data){
-		if (VALID_PADDING == padding_mode){
-			int rows = (src_fts.m_rows - m_kers.m_rows) / stride + 1;
-			rows *= ((src_fts.m_cols - m_kers.m_cols) / stride + 1);
+		if (VALID_PADDING == m_padding_mode){
+			int rows = (src_fts.m_rows - m_kers.m_rows) / m_stride + 1;
+			rows *= ((src_fts.m_cols - m_kers.m_cols) / m_stride + 1);
 			int cols = m_kers.m_rows*m_kers.m_cols*m_kers.m_channels;
 			dst_fts_mat = matrix(rows, cols);
 		}
@@ -212,7 +381,7 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 	/* 仿照牛顿力学中的相对位置，即坐标转换，\
 	   能够确定features_matrix元素对应的在原始features中的绝对位置 */
 	/* 简而言之，就是 A相对于C的位移 = A相对于B的位移 + B相对于C的位移 */
-	switch (padding_mode){
+	switch (m_padding_mode){
 		/* features 2 matrix */
 	case VALID_PADDING: /* (N+2P-K)/S +1 */
 		/* 下面是核心代码 features2matrix */
@@ -225,8 +394,8 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 				index_in_kernel = j - channel*(m_kers.m_rows*m_kers.m_cols);
 				rpk = index_in_kernel / m_kers.m_cols;
 				cpk = index_in_kernel - rpk*m_kers.m_cols;
-				rkf = i / ((src_fts.m_cols - m_kers.m_cols) / stride + 1);
-				ckf = i - rkf*((src_fts.m_cols - m_kers.m_cols) / stride + 1);
+				rkf = i / ((src_fts.m_cols - m_kers.m_cols) / m_stride + 1);
+				ckf = i - rkf*((src_fts.m_cols - m_kers.m_cols) / m_stride + 1);
 
 				/* (channel,rpk,cpk,rkf,ckf) -> (channel,rpf,cpf)*/
 				//channel=channel;
@@ -283,7 +452,7 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 			<< "layer::reshape_" << std::endl;
 		dst_fts_diff = features(m_fts.m_channels, m_fts.m_rows, m_fts.m_cols);
 	}
-	switch (padding_mode)
+	switch (m_padding_mode)
 	{
 	case VALID_PADDING:
 		/* (i,j) (g)-> (channel,rpk,cpk,rkf,ckf) (h)-> (channel,rpf,cpf) */
@@ -308,8 +477,8 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 					rkf = i / ( (src_fts_mat_diff.m_cols - m_kers.m_cols)/stride + 1 );
 					ckf = i - rkf*((src_fts_mat_diff.m_cols - m_kers.m_cols)/stride + 1);
 					 about two hours 8th Aug 2019 19:35 solved  successful */
-					rkf = i / ( (dst_fts_diff.m_cols - m_kers.m_cols)/stride + 1 );
-					ckf = i - rkf*((dst_fts_diff.m_cols - m_kers.m_cols)/stride + 1);
+					rkf = i / ( (dst_fts_diff.m_cols - m_kers.m_cols)/m_stride + 1 );
+					ckf = i - rkf*((dst_fts_diff.m_cols - m_kers.m_cols) / m_stride + 1);
 					/* h: (channel,rpk,cpk,rkf,ckf) -> (channel,rpf,cpf) */
 					//channel = channel;
 					rpf = rpk + rkf;
@@ -335,9 +504,9 @@ bool layer::reshape(matrix& src_conv_mat, features& dst_conv_mat2fts){
 	}
 	if (NULL == dst_conv_mat2fts.mp_matrixes){
 		int channels = m_kers.m_kers_counts;
-		if (VALID_PADDING == padding_mode){
-			int rows = (m_fts.m_rows - m_kers.m_rows) / stride + 1;
-			int cols = (m_fts.m_cols - m_kers.m_cols) / stride + 1;
+		if (VALID_PADDING == m_padding_mode){
+			int rows = (m_fts.m_rows - m_kers.m_rows) / m_stride + 1;
+			int cols = (m_fts.m_cols - m_kers.m_cols) / m_stride + 1;
 			dst_conv_mat2fts = features(channels, rows, cols);
 		}
 		else{
