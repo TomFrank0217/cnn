@@ -1,45 +1,6 @@
 #include "layers_parameters.h"
 #include "const_values.h"
 
-//layer_parameters layers_parameters[LAYERS_COUNTS] = {
-//	layer_parameters{//1
-//		CONVOLUTION_LAYER,
-//		1,
-//		2,
-//		2,
-//		2,
-//		STRIDE,
-//		VALID_PADDING,
-//		RELU_ON,
-//		MINUS,
-//		MINUS
-//	},
-//	{
-//	POOLING_LAYER,
-//	0,
-//	0,
-//	0,
-//	0,
-//	STRIDE,
-//	VALID_PADDING,
-//	RELU_ON,
-//	MAX_POOLING,
-//	POOLING_SIZE
-//    },
-//	{
-//		FULLCONNECTION_LAYER,
-//		2,
-//		2,
-//		2,
-//		3,
-//		STRIDE,
-//		VALID_PADDING,
-//		RELU_ON,
-//		MINUS,
-//		MINUS
-//	}
-//};
-
 layer_parameters layers_parameters[LAYERS_COUNTS] = {
     layer_parameters{//1
 		CONVOLUTION_LAYER,
@@ -126,3 +87,41 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 	   MINUS
 	}	
 };
+//layer_parameters layers_parameters[LAYERS_COUNTS] = {
+//	layer_parameters{//1
+//		CONVOLUTION_LAYER,
+//		1,
+//		2,
+//		2,
+//		2,
+//		STRIDE,
+//		VALID_PADDING,
+//		RELU_ON,
+//		MINUS,
+//		MINUS
+//	},
+//	{
+//	POOLING_LAYER,
+//	0,
+//	0,
+//	0,
+//	0,
+//	STRIDE,
+//	VALID_PADDING,
+//	RELU_ON,
+//	MAX_POOLING,
+//	POOLING_SIZE
+//    },
+//	{
+//		FULLCONNECTION_LAYER,
+//		2,
+//		2,
+//		2,
+//		3,
+//		STRIDE,
+//		VALID_PADDING,
+//		RELU_ON,
+//		MINUS,
+//		MINUS
+//	}
+//};

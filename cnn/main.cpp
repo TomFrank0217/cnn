@@ -37,6 +37,7 @@ bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name
 bool show_layers_parameters(layer* players, int layers_count);
 bool show_layer_parameters(layer* player);
 int main(int argc, char* argv[]){
+    /* todo random初始化不是很好 */
 	string img_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\0_0.bmp";
 	Mat image = imread(img_name, 0);
 	Mat img2;
@@ -44,7 +45,7 @@ int main(int argc, char* argv[]){
 	int channels = img2.channels();
 	int rows = img2.rows;
 	int cols = img2.cols;
-
+    int test_10[10] = { 1, 0, 0 };
 	layers lys(channels, rows, cols, layers_parameters, LAYERS_COUNTS);
 	lys.mp_layers[0].m_fts = image;
 	//lys.mp_layers[0].m_fts = features(channels, rows, cols, -1, 1);
@@ -54,9 +55,10 @@ int main(int argc, char* argv[]){
 	//lys.mp_layers[2].m_kers = kernels(2, 2, 2, 3, 0, 1);
 	//lys.show_shapes();
 	lys.forward_propagation();
+    //lys.back_propagation();
 	lys.y.show();
 	lys.q.show();
-	
+    lys.back_propagation(test_10);
 	int xxx = 0;
 	//lys.mp_layers[0].m_fts.show();
 	//lys.mp_layers[0].m_kers.show();

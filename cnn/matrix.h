@@ -37,7 +37,7 @@ public:
 	bool operator*=(const DATA_TYPE val);
 
 	matrix hadamard_product(const matrix& matrix_);
-	bool transposition(const matrix& dst);
+    //bool transposition(const matrix& dst);
 	bool reset(DATA_TYPE val);
 public:
     int m_rows;

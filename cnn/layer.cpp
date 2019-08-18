@@ -61,6 +61,7 @@ layer::layer(int channels, int rows, int cols, layer_parameters* layer_params_){
 		int kers_mat_rows = ker_channels*ker_rows*ker_cols;
 		int kers_mat_cols = kers_counts;
 		m_kers_mat = matrix(kers_mat_rows, kers_mat_cols, 0.0);
+        m_kers_mat_T = matrix(kers_mat_cols, kers_mat_rows, 0.0);
 		/* variables for back propagation*/
 		m_kers_mat_diff = matrix(kers_mat_rows, kers_mat_cols, 0.0);
 		m_kers_mat_diffs = matrix(kers_mat_rows, kers_mat_cols, 0.0);
@@ -73,6 +74,7 @@ layer::layer(int channels, int rows, int cols, layer_parameters* layer_params_){
 		fts_rows_ *= ((m_fts.m_rows - m_kers.m_rows + 2 * padding_size) / m_stride + 1);
 		int fts_cols_ = m_kers.m_rows*m_kers.m_cols*m_kers.m_channels;
 		m_fts_mat = matrix(fts_rows_, fts_cols_, 0.0);
+        m_fts_mat_T = matrix(fts_cols_, fts_rows_, 0.0);
 		m_fts_mat_diff = matrix(fts_rows_, fts_cols_, 0.0);
 		//matrix m_fts_mat_diffs;/* m_fts_mat_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
 
@@ -657,4 +659,47 @@ bool layer::show_shapes(){
 
 	std::cout << "POOLING SIZE:" << m_pooling_size << std::endl;
 	return true;
+}
+
+bool layer::transposition(const matrix& src,matrix& dst){
+    if (NULL == src.mp_data || src.m_rows <= 0 || src.m_cols <= 0){
+        DEBUG_PRINT("ERROR\n");
+        return false;
+    }
+    if (NULL == dst.mp_data || 0 >= dst.mp_data || 0 >= dst.mp_data){
+        return false;
+    }
+
+    if (src.m_rows == dst.m_cols&&src.m_cols == dst.m_rows){
+        for (int i = 0; i < src.m_rows; ++i){
+            for (int j = 0; j < src.m_cols; ++j){
+                dst.mp_data[j*dst.m_cols + i] = src.mp_data[i*src.m_cols + j];
+            }
+        }
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+bool layer::hadamard_product(const matrix& src,const matrix& mask,matrix& dst){
+    if (NULL != src.mp_data || NULL != mask.mp_data || NULL != dst.mp_data){
+        DEBUG_PRINT("(NULL != src.mp_data || NULL != mask.mp_data || NULL != dst.mp_data)\
+                                         layer::hadamard_product\n");
+        return false;
+    }
+    if (src.m_rows == mask.m_rows&&src.m_rows == dst.m_rows&&\
+        src.m_cols == mask.m_cols&&src.m_cols == dst.m_cols){
+
+        /* todo check 行列 */
+        int k = 0;
+        for (int i = 0; i < src.m_rows; ++i){
+            for (int j = 0; j < src.m_cols; ++j){
+                dst.mp_data[k] = src.mp_data[k] * mask.mp_data[k];
+            }
+        }
+        return true;
+    }
+    return false;
 }

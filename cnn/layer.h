@@ -40,6 +40,8 @@ public:
     /* 以上六个reshape 是卷积层的核心代码 */
 
 	bool reshape(features& pooling_mask, features& dst_fts);
+    bool transposition(const matrix &src, matrix& dst);
+    bool hadamard_product(const matrix& src, const matrix& mask, matrix& dst);
     ~layer();
 public:
 	int m_layer_mode;//
@@ -54,6 +56,7 @@ public:
 	/* diffs=diff(1)+diff(2)+diff(3)+...+diff(batch_size-1)+diff(batch_size) */
 	features m_fts_diffs;/* m_fts_diff不需要累计，只是用于传播,这个变量是不是可以去掉 */
 	matrix m_fts_mat;
+    matrix m_fts_mat_T;
 	matrix m_fts_mat_diff;
 	matrix m_fts_mat_diffs;/* m_fts_mat_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
 
@@ -61,6 +64,7 @@ public:
 	kernels m_kers_diff;
 	kernels m_kers_diffs;
 	matrix m_kers_mat;
+    matrix m_kers_mat_T;
 	matrix m_kers_mat_diff;
 	matrix m_kers_mat_diffs;
 
