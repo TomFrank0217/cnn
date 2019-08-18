@@ -26,12 +26,16 @@ public:
 	bool show_shapes();
 	matrix conv();
 	/* reshape是前向 reshape_是后向 */
+	/* (channel, row ,col) -> (i,j) 是单射(f)，(i,j) -> (channel, row ,col)是多射
+	   因此f不是可逆映射  特征reshape正向传播直接赋值，梯度反向传播需要累加赋值 */
 	bool reshape(features& src_fts, matrix& dst_fts_mat);
 	bool reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff);
 
+	/* 此处是一一映射关系，所以正向反向传播都是直接赋值，不需要做features中的累加工作 */
 	bool reshape(kernels& src_kers, matrix& dst_kers_mat);
 	bool reshape_(matrix& src_kers_mat_diff, kernels& dst_kers_mat_diff);
 
+	/* 此处是一一映射关系，所以正向反向传播都是直接赋值，不需要做features中的累加工作 */
 	bool reshape(matrix& src_conv_mat, features& dst_conv_mat2fts);
 	bool reshape_(features& src_conv_mat2fts_diff, matrix& dst_conv_mat_diff);
     /* 以上六个reshape conv 是核心代码 */
