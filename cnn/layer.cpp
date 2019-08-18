@@ -601,7 +601,9 @@ bool layer::reshape(features& pooling_mask, features& dst_fts){
 								}
 							}/* end t */
 						}/* end s */
-
+						pooling_mask.mp_matrixes[channel].\
+							mp_data[max_row*pooling_mask.m_cols + max_col] = 1;
+						dst_fts.mp_matrixes[channel].mp_data[i*dst_fts.m_cols + j] = max;
 					}
 				}
 			}

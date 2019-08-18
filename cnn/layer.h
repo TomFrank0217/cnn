@@ -39,7 +39,7 @@ public:
 	bool reshape_(features& src_conv_mat2fts_diff, matrix& dst_conv_mat_diff);
     /* 以上六个reshape 是卷积层的核心代码 */
 
-	bool reshape(features& pooling_mask, features dst_fts);
+	bool reshape(features& pooling_mask, features& dst_fts);
     ~layer();
 public:
 	int m_layer_mode;//
