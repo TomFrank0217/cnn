@@ -44,17 +44,16 @@ int main(int argc, char* argv[]){
 	int cols = image.cols;
 
 	layers lys(channels, rows, cols, layers_parameters, LAYERS_COUNTS);
-	lys.show_shapes();
-	lys.mp_layers[3].m_fts = features(1, 6, 10, -5, 5);
-	lys.mp_layers[3].m_fts.show();
-	lys.mp_layers[3].m_pooling_mask = features(1, 6, 10);
-	lys.mp_layers[4].m_fts = features(1, 3, 5);
-	lys.mp_layers[3].reshape(lys.mp_layers[3].m_pooling_mask, lys.mp_layers[4].m_fts);
-	lys.mp_layers[3].m_pooling_mask.show();
-	lys.mp_layers[4].m_fts.show();
-	//
-	//
-	//
+	//lys.show_shapes();
+	lys.mp_layers[0].m_fts = image;
+	lys.forward_propagation();
+	//lys.mp_layers[3].m_fts = features(1, 6, 10, -5, 5);
+	//lys.mp_layers[3].m_fts.show();
+	//lys.mp_layers[3].m_pooling_mask = features(1, 6, 10);
+	//lys.mp_layers[4].m_fts = features(1, 3, 5);
+	//lys.mp_layers[3].reshape(lys.mp_layers[3].m_pooling_mask, lys.mp_layers[4].m_fts);
+	//lys.mp_layers[3].m_pooling_mask.show();
+	//lys.mp_layers[4].m_fts.show();
     /* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑*/
  // /* todo 此处初始化必须重新写一个函数，否则每一个图像初始化都需要申请内存 这个不行 */
     /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */

@@ -122,9 +122,9 @@ bool layers::forward_propagation(){
 				}
 			}
 				break;
-		case POOLING_LAYER:
+		case POOLING_LAYER:/* todo 实际上我们认为pooling 不是最后一层 */
 			if (MAX_POOLING == mp_layers[i].m_pooling_mode){
-
+				mp_layers[i].reshape(mp_layers[i].m_pooling_mask, mp_layers[i + 1].m_fts);
 			}
 			else if (AVE_POOLING == mp_layers[i].m_padding_mode){
 				;/* todo */

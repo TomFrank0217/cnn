@@ -79,12 +79,12 @@ layer::layer(int channels, int rows, int cols, layer_parameters* layer_params_){
 		m_conv_mat = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0.0);
 		/* 尽管有时候卷积层的relu开关没有打开，此时是不需要relu_mask的，但是为了防止重复申请，在初始化的时候主动申请 */
 		m_relu_mask = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0); /* 0,1矩阵 表示正负 */
-		matrix m_conv_relu_mat;
-		matrix m_conv_mat_diff;
-		matrix m_conv_mat_diffs;/* conv_mat_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
-		matrix m_conv_relu_mat_diff;
-		matrix m_conv_relu_mat_diffs;
-
+		m_conv_relu_mat = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0.0);
+		/* conv_mat_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
+		m_conv_mat_diff = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0.0);
+		m_conv_mat_diffs = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0.0);
+		m_conv_relu_mat_diff = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0.0);
+		m_conv_relu_mat_diffs = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0.0);
 	}
 	else if (POOLING_LAYER == layer_params_->layer_mode){
 		m_pooling_mask = features(channels, rows, cols, 0);
