@@ -8,7 +8,7 @@ typedef struct layer_parameters{
 	int kernel_cols;
 	int kernels_counts;
 	int stride;
-	int padding_mode;/* valid padding_size=0,same padding_size=(kernel_rows-1)/2 ...... */
+	int padding_mode; /* valid padding_size=0,same padding_size=(kernel_rows-1)/2 ...... */
 	int relu;
 	int pooling_mode;
 	int pooling_size;

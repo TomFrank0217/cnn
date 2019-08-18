@@ -52,9 +52,9 @@ layers::layers(int channels, int rows, int cols, layer_parameters* mp_layers_par
 		}
 
 		if (LAYERS_COUNTS - 1 == i){/* 最后一层确定输出的大小 */
-			y = features(mp_layers[i].m_kers.m_kers_counts, 1, 1);
-			t = features(mp_layers[i].m_kers.m_kers_counts, 1, 1);
-			p_ = features(mp_layers[i].m_kers.m_kers_counts, 1, 1);
+			y = features(mp_layers[i].m_kers.m_kers_counts, 1, 1, 0.0);
+			t = features(mp_layers[i].m_kers.m_kers_counts, 1, 1, 0.0);
+			p_ = features(mp_layers[i].m_kers.m_kers_counts, 1, 1, 0.0);
 		}
 	}
 }
@@ -82,6 +82,7 @@ bool layers::show_shapes(){
 bool layers::forward_propagation(){
 	;/* todo */
 	for (int i = 0; i < m_layers_counts; ++i){
+		
 		switch (mp_layers[i].m_layer_mode)
 		{
 		case FULLCONNECTION_LAYER:/* 全连接层当作卷积层的特殊情况 */
@@ -138,6 +139,10 @@ bool layers::forward_propagation(){
 		default:;
 			break;
 		}
+
+		mp_layers[i].m_fts.show();
+		std::cout << "******************************************i=" << i << std::endl;
+		int xxx = 0;
 	}
 
 	return true;

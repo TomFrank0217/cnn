@@ -78,7 +78,7 @@ layer::layer(int channels, int rows, int cols, layer_parameters* layer_params_){
 
 		m_conv_mat = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0.0);
 		/* 尽管有时候卷积层的relu开关没有打开，此时是不需要relu_mask的，但是为了防止重复申请，在初始化的时候主动申请 */
-		m_relu_mask = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0); /* 0,1矩阵 表示正负 */
+		m_relu_mask = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0.0); /* 0,1矩阵 表示正负 */
 		m_conv_relu_mat = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0.0);
 		/* conv_mat_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
 		m_conv_mat_diff = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0.0);
@@ -87,7 +87,7 @@ layer::layer(int channels, int rows, int cols, layer_parameters* layer_params_){
 		m_conv_relu_mat_diffs = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0.0);
 	}
 	else if (POOLING_LAYER == layer_params_->layer_mode){
-		m_pooling_mask = features(channels, rows, cols, 0);
+		m_pooling_mask = features(channels, rows, cols, 0.0);
 	}
 	else if (FULLCONNECTION_LAYER==layer_params_->layer_mode){
 		;
@@ -347,7 +347,7 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 			int rows = (src_fts.m_rows - m_kers.m_rows) / m_stride + 1;
 			rows *= ((src_fts.m_cols - m_kers.m_cols) / m_stride + 1);
 			int cols = m_kers.m_rows*m_kers.m_cols*m_kers.m_channels;
-			dst_fts_mat = matrix(rows, cols);
+			dst_fts_mat = matrix(rows, cols, 0.0);
 		}
 		else{
 			DEBUG_PRINT("todo (VALID_PADDING == padding_mode)\n");
@@ -450,7 +450,7 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 	if (NULL == dst_fts_diff.mp_matrixes){
 		std::cout << "(NULL == dst_fts_diff.mp_matrixes)" 
 			<< "layer::reshape_" << std::endl;
-		dst_fts_diff = features(m_fts.m_channels, m_fts.m_rows, m_fts.m_cols);
+		dst_fts_diff = features(m_fts.m_channels, m_fts.m_rows, m_fts.m_cols, 0.0);
 	}
 	dst_fts_diff.reset(0.0);
 	switch (m_padding_mode)
@@ -510,7 +510,7 @@ bool layer::reshape(matrix& src_conv_mat, features& dst_conv_mat2fts){
 		if (VALID_PADDING == m_padding_mode){
 			int rows = (m_fts.m_rows - m_kers.m_rows) / m_stride + 1;
 			int cols = (m_fts.m_cols - m_kers.m_cols) / m_stride + 1;
-			dst_conv_mat2fts = features(channels, rows, cols);
+			dst_conv_mat2fts = features(channels, rows, cols, 0.0);
 		}
 		else{
 			/* todo */
@@ -548,7 +548,7 @@ bool layer::reshape_(features& src_conv_mat2fts_diff, matrix& dst_conv_mat_diff)
 	if (NULL == dst_conv_mat_diff.mp_data){
 		int rows = src_conv_mat2fts_diff.m_rows*src_conv_mat2fts_diff.m_cols;
 		int cols = src_conv_mat2fts_diff.m_channels;
-		dst_conv_mat_diff = matrix(rows, cols);
+		dst_conv_mat_diff = matrix(rows, cols, 0.0);
 	}
 
 	/* diff_features -> diff_matrix */
@@ -583,7 +583,7 @@ bool layer::reshape(features& pooling_mask, features& dst_fts){
 			int cols = m_fts.m_cols / m_pooling_size;
 			int max_row = 0;
 			int max_col = 0;
-			int max = 0;
+			DATA_TYPE max = 0;
 			/* todo 此处可以优化 */
 			for (int channel = 0; channel < m_fts.m_channels; ++channel){
 				for (int i = 0; i < rows; ++i){
@@ -606,7 +606,9 @@ bool layer::reshape(features& pooling_mask, features& dst_fts){
 						dst_fts.mp_matrixes[channel].mp_data[i*dst_fts.m_cols + j] = max;
 					}
 				}
-			}
+			}//end channel
+			dst_fts.show();
+			int xxx = 0;
 		}
 	}
 	else if (AVE_POOLING == m_pooling_mode){

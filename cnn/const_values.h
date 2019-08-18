@@ -3,10 +3,10 @@
 
 #define DATA_TYPE                   double
 
-#define RANDOM_INITIAL_VAL          0.01
+#define RANDOM_INITIAL_VAL          0.1
 
-#define KERS_MIN_VAL                -2
-#define KERS_MAX_VAL                 2
+#define KERS_MIN_VAL                -RANDOM_INITIAL_VAL
+#define KERS_MAX_VAL                RANDOM_INITIAL_VAL
 
 #define INITIAL_NUMBER              0.0
 
@@ -14,7 +14,7 @@
 #define SHOW_IMAGE_INITAIL_VALUE    1 
 #define SHOW_IMAGE_SHAPE            2
 #define SHOW_IMAGE_CROP_LENGTH      0
-#define SHOW_WIDTH                  9
+#define SHOW_WIDTH                  12
 
 #define VALID_PADDING               0
 #define SAME_PADDING                1
@@ -48,5 +48,5 @@
 #define RELU_ON                     1
 
 #define LAYER_INITIAL_LENGTH        0
-#define LAYERS_COUNTS               3
+#define LAYERS_COUNTS               7
 #endif

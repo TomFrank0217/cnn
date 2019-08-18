@@ -40,19 +40,23 @@ int main(int argc, char* argv[]){
 	string img_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\0_0.bmp";
 	Mat image = imread(img_name, 0);
 	Mat img2;
-	resize(image, img2, Size(5, 5), 0, 0, CV_INTER_LINEAR);
+	resize(image, img2, Size(32, 32), 0, 0, CV_INTER_LINEAR);
 	int channels = img2.channels();
 	int rows = img2.rows;
 	int cols = img2.cols;
 
 	layers lys(channels, rows, cols, layers_parameters, LAYERS_COUNTS);
-	lys.mp_layers[0].m_fts = features(channels, rows, cols, -1, 1);
+	lys.mp_layers[0].m_fts = image;
+	//lys.mp_layers[0].m_fts = features(channels, rows, cols, -1, 1);
 	//lys.mp_layers[0].m_fts.show();
-	lys.mp_layers[0].m_kers = kernels(channels, 2, 2, 2, 0, 1);
+	//lys.mp_layers[0].m_kers = kernels(channels, 2, 2, 2, 0, 1);
 	//lys.mp_layers[0].m_kers.show();
-	lys.mp_layers[2].m_kers = kernels(2, 2, 2, 3, 0, 1);
+	//lys.mp_layers[2].m_kers = kernels(2, 2, 2, 3, 0, 1);
 	//lys.show_shapes();
 	lys.forward_propagation();
+	lys.y.show();
+	
+	int xxx = 0;
 	//lys.mp_layers[0].m_fts.show();
 	//lys.mp_layers[0].m_kers.show();
 	//lys.mp_layers[0].m_conv_mat.show();
@@ -60,12 +64,11 @@ int main(int argc, char* argv[]){
 	//lys.mp_layers[0].m_conv_relu_mat2fts.show();
 	//lys.mp_layers[0].reshape(lys.mp_layers[0].m_relu_mask, lys.mp_layers[0].m_conv_relu_mat2fts);
 	//lys.mp_layers[0].m_conv_relu_mat2fts.show();
-	lys.mp_layers[1].m_fts.show();
-	lys.mp_layers[1].m_pooling_mask.show();
-	lys.mp_layers[2].m_fts.show();
-	lys.mp_layers[2].m_kers.show();
-	lys.y.show();
-
+	//lys.mp_layers[1].m_fts.show();
+	//lys.mp_layers[1].m_pooling_mask.show();
+	//lys.mp_layers[2].m_fts.show();
+	//lys.mp_layers[2].m_kers.show();
+	//lys.y.show();
 	//lys.mp_layers[3].m_fts = features(1, 6, 10, -5, 5);
 	//lys.mp_layers[3].m_fts.show();
 	//lys.mp_layers[3].m_pooling_mask = features(1, 6, 10);
