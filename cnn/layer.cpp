@@ -334,6 +334,7 @@ bool layer::reshape_(matrix& src_kers_mat_diff, kernels& dst_kers_diff){
 	return true;
 }
 
+/* forward propagation 详情见图1 */
 bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 	if (NULL == src_fts.mp_matrixes){
 		DEBUG_PRINT("(NULL == src_fts.mp_matrixes)\
@@ -418,7 +419,7 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 	return true;
 }
 
-/* 这个函数是反向传播时候所用,需要修改 */
+/* back popagation 这个函数是反向传播时候所用,需要修改 */
 bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 {
 	//src_fts_mat_diff.show();
@@ -451,6 +452,7 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 			<< "layer::reshape_" << std::endl;
 		dst_fts_diff = features(m_fts.m_channels, m_fts.m_rows, m_fts.m_cols);
 	}
+	dst_fts_diff.reset(0.0);
 	switch (m_padding_mode)
 	{
 	case VALID_PADDING:
@@ -465,6 +467,8 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 
 		/* mat -> features */
 		/* 以下代码虽然正确，但是features中很多元素被重复被计算了K*K次严重浪费计算资源 */
+		/* 很多元素被重复计算K*K次是必须的，因为反向传播的时候梯度features中元素映射到
+		   features_matrix中多次，因此features中元素的梯度梯度需要累计 */
 		for (int i = 0; i < src_fts_mat_diff.m_rows; ++i){
 			for (int j = 0; j < src_fts_mat_diff.m_cols; ++j){
 					/* g: (i,j) -> (channel,rpk,cpk,rkf,ckf) */
@@ -483,7 +487,7 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 					rpf = rpk + rkf;
 					cpf = cpk + ckf;
 					dst_fts_diff.mp_matrixes[channel].mp_data[rpf*dst_fts_diff.m_cols + cpf]\
-									= src_fts_mat_diff.mp_data[i*src_fts_mat_diff.m_cols + j];
+									+= src_fts_mat_diff.mp_data[i*src_fts_mat_diff.m_cols + j];
 				}
 		}
 		break;

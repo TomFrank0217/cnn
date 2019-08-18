@@ -72,3 +72,11 @@ bool layers::show_shapes(){
 		std::cout << std::endl;
 	}
 }
+
+bool layers::forward_propagation(){
+	;/* todo */
+}
+
+bool layers::back_propagation(){
+	/* todo */
+}

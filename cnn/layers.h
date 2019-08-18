@@ -9,6 +9,8 @@ public:
 	layers();
 	layers(int channels, int rows, int cols, layer_parameters* players_params, int layers_counts);
 	~layers();
+	bool forward_propagation();
+	bool back_propagation();
 	bool show_shapes();
 public:
 	layer *mp_layers;

@@ -36,7 +36,7 @@ public:
 	matrix operator*(const DATA_TYPE val);
 	bool operator*=(const DATA_TYPE val);
 	matrix hadamard_product(const matrix& matrix_);
-
+	bool reset(DATA_TYPE val);
 public:
     int m_rows;
     int m_cols;

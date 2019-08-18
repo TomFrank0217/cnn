@@ -470,9 +470,9 @@ bool kernels::operator*=(const DATA_TYPE scale){
 }
 
 bool kernels::reset(DATA_TYPE val){
-	if (0 >= m_channels || 0 >= m_rows || 0 >= m_cols ||0>=m_kers_counts|| NULL == mp_matrixes){
-		m_channels = m_rows = m_cols = = m_kers_counts = 0;
-		mp_matrixes = NULL;
+	if (0 >= m_channels || 0 >= m_rows || 0 >= m_cols || 0 >= m_kers_counts || NULL == mp_kers){
+		m_channels = m_rows = m_cols = m_kers_counts = 0;
+		mp_kers = NULL;
 		return false;
 	}
 
