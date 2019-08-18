@@ -29,13 +29,15 @@ public:
 	bool operator-=(DATA_TYPE reduction_num);
     matrix operator-(const matrix &reduction_matrix);
 	bool operator-=(const matrix&add_matrix);
-
+	
 	friend matrix operator*(const DATA_TYPE val, const matrix &multiplier_matrix);
 	matrix operator*(const matrix &multiplier_matrix);
 	//matrix operator*(const matrix &multiplier_matrix);/* 这个函数最好不要定义，因为改变了原始矩阵的大小 */
 	matrix operator*(const DATA_TYPE val);
 	bool operator*=(const DATA_TYPE val);
+
 	matrix hadamard_product(const matrix& matrix_);
+	bool transposition(const matrix& dst);
 	bool reset(DATA_TYPE val);
 public:
     int m_rows;

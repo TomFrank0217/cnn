@@ -1,4 +1,6 @@
 #include "layers.h"
+#include <math.h>/* for exp */
+
 layers::layers(){
 	mp_layers = NULL;
 	m_layers_counts = 0;
@@ -54,7 +56,7 @@ layers::layers(int channels, int rows, int cols, layer_parameters* mp_layers_par
 		if (LAYERS_COUNTS - 1 == i){/* 最后一层确定输出的大小 */
 			y = features(mp_layers[i].m_kers.m_kers_counts, 1, 1, 0.0);
 			t = features(mp_layers[i].m_kers.m_kers_counts, 1, 1, 0.0);
-			p_ = features(mp_layers[i].m_kers.m_kers_counts, 1, 1, 0.0);
+			q = features(mp_layers[i].m_kers.m_kers_counts, 1, 1, 0.0);
 		}
 	}
 }
@@ -140,15 +142,72 @@ bool layers::forward_propagation(){
 			break;
 		}
 
-		mp_layers[i].m_fts.show();
-		std::cout << "******************************************i=" << i << std::endl;
-		int xxx = 0;
+		//mp_layers[i].m_fts.show();
+		//std::cout << "******************************************i=" << i << std::endl;
+		//int xxx = 0;
+	}
+	probability();
+	return true;
+}
+
+bool layers::back_propagation(int gt_label[]){
+	/* todo */
+	//p_.reset(0.0);
+	int i = 0;
+	for (int j = 0; j < q.m_channels; ++j){
+		if (0 != gt_label[j]){
+			i = j;
+			break;
+		}
+	}
+
+	double loss = -log(q.mp_matrixes[i].mp_data[0]);
+	for (int j = 0; j < q.m_channels; ++j){
+		if (0 == i - j){
+			q_diff.mp_matrixes[i].mp_data[0] = -1.0 / q.mp_matrixes[i].mp_data[0];
+		}
+		else{
+			q_diff.mp_matrixes[j].mp_data[0] = 0.0;
+		}
+	}
+
+	double sum_t = 0.0;
+	for (int j = 0; j < t.m_channels; ++j){
+		sum_t += t.mp_matrixes[j].mp_data[0];
+	}
+
+	for (int j = 0; j < t.m_channels; ++j){
+		if (0 == i - j){
+			t_diff.mp_matrixes[i].mp_data[0] = q_diff.mp_matrixes[i].mp_data[0] * \
+				(sum_t - t.mp_matrixes[i].mp_data[0]) / (sum_t*sum_t);
+		}
+		else{
+			t_diff.mp_matrixes[j].mp_data[0] = q_diff.mp_matrixes[i].mp_data[0] * \
+				(-t.mp_matrixes[i].mp_data[0]) / (sum_t*sum_t);
+		}
+	}
+
+	for (int j = 0; j < y.m_channels; ++j){
+		y_diff.mp_matrixes[i].mp_data[0] = \
+			t_diff.mp_matrixes[j].mp_data[0] * t.mp_matrixes[j].mp_data[0];
+	}
+
+	for (int i = LAYERS_COUNTS - 1; i >= 0; --i){
+
 	}
 
 	return true;
 }
 
-bool layers::back_propagation(){
-	/* todo */
+bool layers::probability(){
+	DATA_TYPE sum = 0;
+	for (int i = 0; i < y.m_channels; ++i){
+		t.mp_matrixes[i].mp_data[0] = exp(y.mp_matrixes[i].mp_data[0]);
+		sum += t.mp_matrixes[i].mp_data[0];
+	}
+	
+	for (int i = 0; i < y.m_channels; ++i){
+		q.mp_matrixes[i].mp_data[0] = t.mp_matrixes[i].mp_data[0] / sum;
+	}
 	return true;
 }

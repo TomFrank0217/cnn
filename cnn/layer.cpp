@@ -607,8 +607,8 @@ bool layer::reshape(features& pooling_mask, features& dst_fts){
 					}
 				}
 			}//end channel
-			dst_fts.show();
-			int xxx = 0;
+			//dst_fts.show();
+			//int xxx = 0;
 		}
 	}
 	else if (AVE_POOLING == m_pooling_mode){

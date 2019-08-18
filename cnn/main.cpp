@@ -55,6 +55,7 @@ int main(int argc, char* argv[]){
 	//lys.show_shapes();
 	lys.forward_propagation();
 	lys.y.show();
+	lys.q.show();
 	
 	int xxx = 0;
 	//lys.mp_layers[0].m_fts.show();

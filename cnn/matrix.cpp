@@ -639,6 +639,28 @@ matrix matrix::hadamard_product(const matrix& matrix_){
 	return hada_product;
 }
 
+bool matrix::transposition(const matrix& dst){
+	if (NULL == mp_data || m_rows <= 0 || m_cols <= 0){
+		DEBUG_PRINT("ERROR\n");
+		return false;
+	}
+	if (NULL == dst.mp_data || 0 >= dst.mp_data || 0 >= dst.mp_data){
+		return false;
+	}
+
+	if (m_rows == dst.m_cols&&m_cols == dst.m_rows){
+		for (int i = 0; i < m_rows; ++i){
+			for (int j = 0; j < m_cols; ++j){
+				dst.mp_data[j*dst.m_cols + i] = mp_data[i*m_cols + j];
+			}
+		}
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
 bool matrix::reset(DATA_TYPE val){
 	if (0 >= m_rows || 0 >= m_cols || NULL == mp_data){
 		m_rows = m_cols = 0;

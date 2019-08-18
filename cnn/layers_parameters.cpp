@@ -10,7 +10,7 @@
 //		2,
 //		STRIDE,
 //		VALID_PADDING,
-//		RELU_OFF,
+//		RELU_ON,
 //		MINUS,
 //		MINUS
 //	},
@@ -22,7 +22,7 @@
 //	0,
 //	STRIDE,
 //	VALID_PADDING,
-//	RELU_OFF,
+//	RELU_ON,
 //	MAX_POOLING,
 //	POOLING_SIZE
 //    },
@@ -34,7 +34,7 @@
 //		3,
 //		STRIDE,
 //		VALID_PADDING,
-//		RELU_OFF,
+//		RELU_ON,
 //		MINUS,
 //		MINUS
 //	}
@@ -49,7 +49,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		6,
 		STRIDE,
 		VALID_PADDING,
-		RELU_OFF,
+		RELU_ON,
 		MINUS,
 		MINUS
 	},
@@ -61,7 +61,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		MINUS,
 		MINUS,
 		MINUS,
-		RELU_OFF,
+		RELU_ON,
 		MAX_POOLING,
 		 POOLING_SIZE
 	},
@@ -73,7 +73,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		16,
 		STRIDE,
 		VALID_PADDING,
-		RELU_OFF,
+		RELU_ON,
 		MINUS,
 		MINUS
 	},
@@ -85,7 +85,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 			MINUS,
 			MINUS,
 			MINUS,
-			RELU_OFF,
+			RELU_ON,
 			MAX_POOLING,
 			POOLING_SIZE
 	},
@@ -97,7 +97,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 	   120,
 	   STRIDE,
 	   VALID_PADDING,
-	   RELU_OFF,
+	   RELU_ON,
 	   MINUS,
 	   MINUS
 	},
@@ -109,7 +109,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 	   84,
 	   STRIDE,
 	   VALID_PADDING,
-	   RELU_OFF,
+	   RELU_ON,
 	   MINUS,
 	   MINUS
 	},
