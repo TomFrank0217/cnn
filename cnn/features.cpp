@@ -612,3 +612,9 @@ bool features::reset(DATA_TYPE val){
 	}
 	return true;
 }
+
+bool features::show_shape(){
+    std::cout << "features channels rows cols " << std::endl;
+    std::cout << m_channels << "  " << m_rows << "  " << m_cols << std::endl;
+    return true;
+}

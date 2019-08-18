@@ -481,3 +481,9 @@ bool kernels::reset(DATA_TYPE val){
 	}
 	return true;
 }
+
+bool kernels::show_shape(){
+    std::cout << "features channels rows cols kers_counts" << std::endl;
+    std::cout << m_channels << "  " << m_rows << "  " << m_cols << "  " << m_kers_counts << std::endl;
+    return true;
+}

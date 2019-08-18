@@ -17,7 +17,7 @@ public:
 	// matrix operator=(const matrix &A); /* to understand & */
     ~matrix();
 	bool show(int show_image_mode = SHOW_IMAGE_INITAIL_VALUE);
-
+    bool show_shape();
 	friend matrix operator+(const DATA_TYPE val, const matrix &add_matrix);
 	matrix operator+(DATA_TYPE addition_num);
 	bool operator+=(DATA_TYPE addition_num);

@@ -508,6 +508,12 @@ matrix::matrix(const matrix &A)
 	}
 }
 
+bool matrix::show_shape(){
+    std::cout << "matrix rows cols" << std::endl;
+    std::cout << m_rows << "  " << m_cols << std::endl;
+    return true;
+}
+
 bool matrix::show(int show_image_mode){
 	if (m_rows <= 0 || m_cols <= 0 || NULL == mp_data){
 		DEBUG_PRINT("(m_rows <= 0 || m_cols <= 0 || NULL == mp_data)    \

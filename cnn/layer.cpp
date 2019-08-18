@@ -55,7 +55,7 @@ layer::layer(int channels, int rows, int cols, layer_parameters* layer_params_){
 		int kers_counts = layer_params_->kernels_counts;
 		/* varibales for back propagation */
 		m_kers = kernels(ker_channels, ker_rows, ker_cols, kers_counts, KERS_MIN_VAL, KERS_MAX_VAL);
-		//m_kers_diff = kernels(ker_channels, ker_rows, ker_cols, kers_counts, 0);/* 这个变量似乎不需要用 */
+		m_kers_diff = kernels(ker_channels, ker_rows, ker_cols, kers_counts, 0);/* 这个变量似乎不需要用 */
 		m_kers_diffs = kernels(ker_channels, ker_rows, ker_cols, kers_counts, 0.0);
 		/* variables for forward propagation */
 		int kers_mat_rows = ker_channels*ker_rows*ker_cols;
@@ -310,6 +310,8 @@ bool layer::reshape_(matrix& src_kers_mat_diff, kernels& dst_kers_diff){
 	int col = 0;
 	int index = 0;
 
+    src_kers_mat_diff.show_shape();
+    dst_kers_diff.show_shape();
 	if (NULL == src_kers_mat_diff.mp_data){
 		DEBUG_PRINT("(NULL == src_kers_mat_diff.mp_data)\
 					layer::reshape_(matrix& src_kers_mat_diff, kernels& dst_kers_diff)");

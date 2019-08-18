@@ -36,6 +36,7 @@ public:
 	~kernels();
 	kernels& operator=(const kernels& ker_);
 	bool show(int image_show_mode = SHOW_IMAGE_INITAIL_VALUE);
+    bool show_shape();
 	bool reset(DATA_TYPE val);
 public:
 	kernel* mp_kers;
