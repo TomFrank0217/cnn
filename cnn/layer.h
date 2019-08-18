@@ -22,7 +22,6 @@ public:
     //layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
         int fts_channels/*kers_channels*/, int fts_rows, int fts_cols,cv::Mat image)
 	
-
 	bool show_shapes();
 	matrix conv();
 	/* reshape是前向 reshape_是后向 */
@@ -38,7 +37,9 @@ public:
 	/* 此处是一一映射关系，所以正向反向传播都是直接赋值，不需要做features中的累加工作 */
 	bool reshape(matrix& src_conv_mat, features& dst_conv_mat2fts);
 	bool reshape_(features& src_conv_mat2fts_diff, matrix& dst_conv_mat_diff);
-    /* 以上六个reshape conv 是核心代码 */
+    /* 以上六个reshape 是卷积层的核心代码 */
+
+	bool reshape(features& pooling_mask, features dst_fts);
     ~layer();
 public:
 	int m_layer_mode;//

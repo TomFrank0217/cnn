@@ -15,5 +15,8 @@ public:
 public:
 	layer *mp_layers;
 	int m_layers_counts;
+	features y;/* y0,y1,y2,...,y9 */
+	features t;/* ti=e^yi */
+	features p_;/* p_i=ti/(t0+t1+...+t9) */
 };
 #endif

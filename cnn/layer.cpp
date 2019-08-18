@@ -77,13 +77,13 @@ layer::layer(int channels, int rows, int cols, layer_parameters* layer_params_){
 		//matrix m_fts_mat_diffs;/* m_fts_mat_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
 
 		m_conv_mat = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0.0);
+		/* 尽管有时候卷积层的relu开关没有打开，此时是不需要relu_mask的，但是为了防止重复申请，在初始化的时候主动申请 */
 		m_relu_mask = matrix(m_fts_mat.m_rows, m_kers_mat.m_cols, 0); /* 0,1矩阵 表示正负 */
 		matrix m_conv_relu_mat;
 		matrix m_conv_mat_diff;
 		matrix m_conv_mat_diffs;/* conv_mat_diff 不需要累计，只是用于传播,这个变量是不是可以去掉 */
 		matrix m_conv_relu_mat_diff;
 		matrix m_conv_relu_mat_diffs;
-
 
 	}
 	else if (POOLING_LAYER == layer_params_->layer_mode){
@@ -569,6 +569,50 @@ bool layer::reshape_(features& src_conv_mat2fts_diff, matrix& dst_conv_mat_diff)
 		}
 	}
 	return true;
+}
+
+/* reshape for pooling layer */
+bool layer::reshape(features& pooling_mask, features& dst_fts){
+	if (MAX_POOLING == m_pooling_mode){
+		if (0 != m_fts.m_rows%m_pooling_size || 0 != m_fts.m_cols%m_pooling_size){
+			return false;
+		}
+		else{
+			pooling_mask.reset(0);
+			int rows = m_fts.m_rows / m_pooling_size;
+			int cols = m_fts.m_cols / m_pooling_size;
+			int max_row = 0;
+			int max_col = 0;
+			int max = 0;
+			/* todo 此处可以优化 */
+			for (int channel = 0; channel < m_fts.m_channels; ++channel){
+				for (int i = 0; i < rows; ++i){
+					for (int j = 0; j < cols; ++j){
+						max = m_fts.mp_matrixes[channel].mp_data\
+							[i*m_pooling_size*m_fts.m_cols + j*m_pooling_size];
+						max_row = i*m_pooling_size;
+						max_col = j*m_pooling_size;
+						for (int s = m_pooling_size*i; s < m_pooling_size*(i + 1); ++s){
+							for (int t = m_pooling_size*j; t < m_pooling_size*(j + 1); ++t){
+								if (max < m_fts.mp_matrixes[channel].mp_data[s*m_fts.m_cols + t]){
+									max = m_fts.mp_matrixes[channel].mp_data[s*m_fts.m_cols + t];
+									max_row = s;
+									max_col = t;
+								}
+							}/* end t */
+						}/* end s */
+
+					}
+				}
+			}
+		}
+	}
+	else if (AVE_POOLING == m_pooling_mode){
+		;/* todo */
+	}
+	else{
+		;/* error*/
+	}
 }
 
 bool layer::show_shapes(){
