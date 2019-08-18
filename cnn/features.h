@@ -45,6 +45,7 @@ public:
 	 //bool reshape(features& tsr, matrix& fts_matrix, int reshape_mode = FEATURES2MATRIX, int kernels_rows = KERNEL_ROWS, \
 	 //	 		int kernels_cols = KERNEL_COLS, int stride = 1, int padding_mode = VALID_PADDING);
 	 bool show(int image_show_mode = SHOW_IMAGE_INITAIL_VALUE);
+	 bool reset(DATA_TYPE val);
 
 public:
 	matrix *mp_matrixes;

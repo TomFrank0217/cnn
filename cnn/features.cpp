@@ -599,3 +599,16 @@ bool features::operator*=(const DATA_TYPE scale){
 	}
 	return true;
 }
+
+bool features::reset(DATA_TYPE val){
+	if (0 >= m_channels || 0 >= m_rows || 0 >= m_cols || NULL == mp_matrixes){
+		m_channels = m_rows = m_cols = 0;
+		mp_matrixes = NULL;
+		return false;
+	}
+
+	for (int i = 0; i < m_channels; ++i){
+		mp_matrixes[i].reset(val);
+	}
+	return true;
+}

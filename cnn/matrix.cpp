@@ -638,3 +638,17 @@ matrix matrix::hadamard_product(const matrix& matrix_){
 	}
 	return hada_product;
 }
+
+bool matrix::reset(DATA_TYPE val){
+	if (0 >= m_rows || 0 >= m_cols || NULL == mp_data){
+		m_rows = m_cols = 0;
+		mp_data = NULL;
+		return false;
+	}
+
+	int n = m_rows*m_cols;
+	for (int i = 0; i < n; ++i){
+		mp_data[i] = val;
+	}
+	return true;
+}

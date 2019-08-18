@@ -387,7 +387,6 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 		/* 下面是核心代码 features2matrix */
 		/* todo 此处计算可以优化 */
 		for (int i = 0; i < dst_fts_mat.m_rows; ++i){
-			int sss = 0;
 			for (int j = 0; j < dst_fts_mat.m_cols; ++j){
 				/* (i,j) -> (channel,rpk,cpk,rkf,ckf) */
 				channel = j / (m_kers.m_rows*m_kers.m_cols);
@@ -419,7 +418,7 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 	return true;
 }
 
-
+/* 这个函数是反向传播时候所用,需要修改 */
 bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 {
 	//src_fts_mat_diff.show();
