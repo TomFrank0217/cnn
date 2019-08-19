@@ -139,7 +139,7 @@ matrix matrix::operator+(const matrix & add_matrix){
     return sum_matrix;
 }
 
-bool matrix::operator+=(const matrix&add_matrix){
+bool matrix::operator+=(const matrix& add_matrix){
 	if (0 >= m_rows || 0 >= m_cols){
 		DEBUG_PRINT("(0 >= m_rows || 0 >= m_cols)  matrix::operator+= \n");
 		return false;
@@ -558,7 +558,7 @@ bool matrix::show(int show_image_mode){
 	case SHOW_IMAGE_INITAIL_VALUE:
 		for (int i = SHOW_IMAGE_CROP_LENGTH; i < m_rows - SHOW_IMAGE_CROP_LENGTH; ++i){
 			for (int j = SHOW_IMAGE_CROP_LENGTH; j < m_cols - SHOW_IMAGE_CROP_LENGTH; ++j){
-				std::cout << std::setw(SHOW_WIDTH) << std::setprecision(SHOW_WIDTH / 2 - 1) << mp_data[i*m_cols + j];
+				std::cout << std::setw(SHOW_WIDTH) << std::setprecision(SHOW_WIDTH / 2 + 1) << mp_data[i*m_cols + j];
 				//std::cout << mp_data[i*m_cols + j];
 			}
 			std::cout << std::endl;

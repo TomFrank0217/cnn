@@ -310,8 +310,8 @@ bool layer::reshape_(matrix& src_kers_mat_diff, kernels& dst_kers_diff){
 	int col = 0;
 	int index = 0;
 
-    src_kers_mat_diff.show_shape();
-    dst_kers_diff.show_shape();
+    //src_kers_mat_diff.show_shape();
+    //dst_kers_diff.show_shape();
 	if (NULL == src_kers_mat_diff.mp_data){
 		DEBUG_PRINT("(NULL == src_kers_mat_diff.mp_data)\
 					layer::reshape_(matrix& src_kers_mat_diff, kernels& dst_kers_diff)");
@@ -685,23 +685,28 @@ bool layer::transposition(const matrix& src,matrix& dst){
     }
 }
 
-bool layer::hadamard_product(const matrix& src,const matrix& mask,matrix& dst){
-    if (NULL != src.mp_data || NULL != mask.mp_data || NULL != dst.mp_data){
-        DEBUG_PRINT("(NULL != src.mp_data || NULL != mask.mp_data || NULL != dst.mp_data)\
-                                         layer::hadamard_product\n");
-        return false;
-    }
-    if (src.m_rows == mask.m_rows&&src.m_rows == dst.m_rows&&\
-        src.m_cols == mask.m_cols&&src.m_cols == dst.m_cols){
+bool layer::hadamard_product(matrix& src, matrix& mask, matrix& dst){
+	if (NULL == src.mp_data || NULL == mask.mp_data || NULL == dst.mp_data){
+		DEBUG_PRINT("(NULL == src.mp_data || NULL == mask.mp_data || NULL == dst.mp_data)\
+					                                         layer::hadamard_product\n");
+		return false;
+	}
+	if (src.m_rows == mask.m_rows&&src.m_rows == dst.m_rows&&\
+		src.m_cols == mask.m_cols&&src.m_cols == dst.m_cols){
 
-        /* todo check 行列 */
-        int k = 0;
-        for (int i = 0; i < src.m_rows; ++i){
-            for (int j = 0; j < src.m_cols; ++j){
-                dst.mp_data[k] = src.mp_data[k] * mask.mp_data[k];
-            }
-        }
-        return true;
-    }
-    return false;
+		/* todo check 行列 */
+		int k = 0;
+		for (int i = 0; i < src.m_rows; ++i){
+			for (int j = 0; j < src.m_cols; ++j){
+				dst.mp_data[k] = src.mp_data[k] * mask.mp_data[k];
+				++k;
+			}
+		}
+		return true;
+	}
+	//int xxx = 0;
+	//src.show();
+	//mask.show();
+	//dst.show();
+	return false;
 }

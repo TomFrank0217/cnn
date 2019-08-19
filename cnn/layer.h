@@ -41,7 +41,7 @@ public:
 
 	bool reshape(features& pooling_mask, features& dst_fts);
     bool transposition(const matrix &src, matrix& dst);
-    bool hadamard_product(const matrix& src, const matrix& mask, matrix& dst);
+    bool hadamard_product(matrix& src, matrix& mask, matrix& dst);
     ~layer();
 public:
 	int m_layer_mode;//

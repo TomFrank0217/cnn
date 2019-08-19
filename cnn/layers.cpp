@@ -150,6 +150,9 @@ bool layers::forward_propagation(){
 		//int xxx = 0;
 	}
 	probability();
+	for (int i = 0; i < LAYERS_COUNTS; ++i){
+		;
+	}
 	return true;
 }
 
@@ -202,10 +205,12 @@ bool layers::back_propagation(int gt_label[]){
     mp_layers[LAYERS_COUNTS - 1].transposition(mp_layers[LAYERS_COUNTS - 1].m_fts_mat, mp_layers[LAYERS_COUNTS - 1].m_fts_mat_T);
     mp_layers[LAYERS_COUNTS - 1].m_kers_mat_diff = mp_layers[LAYERS_COUNTS - 1].m_fts_mat_T*mp_layers[LAYERS_COUNTS - 1].m_conv_mat_diff;/* 此处的乘法会有内存的申请释放 todo */
     mp_layers[LAYERS_COUNTS - 1].m_fts_mat_diff = mp_layers[LAYERS_COUNTS - 1].m_conv_mat_diff*mp_layers[LAYERS_COUNTS - 1].m_kers_mat_T;
-    mp_layers[LAYERS_COUNTS - 1].reshape_(mp_layers[LAYERS_COUNTS - 1].m_kers_mat_diff, \
+    mp_layers[LAYERS_COUNTS - 1].reshape_ (mp_layers[LAYERS_COUNTS - 1].m_kers_mat_diff, \
         mp_layers[LAYERS_COUNTS - 1].m_kers_diff);
     mp_layers[LAYERS_COUNTS - 1].reshape_(mp_layers[LAYERS_COUNTS - 1].m_fts_mat_diff, \
         mp_layers[LAYERS_COUNTS - 1].m_fts_diff);
+	//std::cout << "LAYERS_COUNTS-1" << std::endl;
+	//mp_layers[LAYERS_COUNTS - 1].m_fts_diff.show();
 	for (int i = LAYERS_COUNTS - 2; i >= 0; --i){
         switch (mp_layers[i].m_layer_mode)
         {
@@ -221,24 +226,37 @@ bool layers::back_propagation(int gt_label[]){
                     mp_layers[i].m_kers_diff);
                 mp_layers[i].reshape_(mp_layers[i].m_fts_mat_diff, \
                     mp_layers[i].m_fts_diff);
+
             }
             else if (RELU_ON == mp_layers[i].m_relu){
                 mp_layers[i].reshape_(mp_layers[i + 1].m_fts_diff, mp_layers[i].m_conv_relu_mat_diff);
+				//mp_layers[i].m_conv_relu_mat_diff.show();
+				//mp_layers[i].m_relu_mask.show();
                 mp_layers[i].hadamard_product(mp_layers[i].m_conv_relu_mat_diff, mp_layers[i].m_relu_mask, mp_layers[i].m_conv_mat_diff);
+				//mp_layers[i].m_conv_mat_diff.show();
                 mp_layers[i].transposition(mp_layers[i].m_kers_mat, mp_layers[i].m_kers_mat_T);
+				//mp_layers[i].m_kers_mat_T.show();
                 mp_layers[i].transposition(mp_layers[i].m_fts_mat, mp_layers[i].m_fts_mat_T);
+				//mp_layers[i].m_fts_mat_T.show();
                 mp_layers[i].m_kers_mat_diff = mp_layers[i].m_fts_mat_T*mp_layers[i].m_conv_mat_diff;/* 此处的乘法会有内存的申请释放 todo */
+				//mp_layers[i].m_kers_mat_diff.show();
                 mp_layers[i].m_fts_mat_diff = mp_layers[i].m_conv_mat_diff*mp_layers[i].m_kers_mat_T;
+				//mp_layers[i].m_kers_mat_diff.show();
                 mp_layers[i].reshape_(mp_layers[i].m_kers_mat_diff, \
                     mp_layers[i].m_kers_diff);
+				//mp_layers[i].m_kers_diff.show();
                 mp_layers[i].reshape_(mp_layers[i].m_fts_mat_diff, \
                     mp_layers[i].m_fts_diff);
+				//mp_layers[i].m_fts_diff.show();
             }
             else{
                 ;/* todo */
                 DEBUG_PRINT("back propagation error\n");
                 return false;
             }
+			//std::cout << i << std::endl;
+			//mp_layers[i].m_kers_diff.show();
+			//mp_layers[i].m_fts_diff.show();
             break;
         case POOLING_LAYER:
             switch (mp_layers[i].m_pooling_mode){
@@ -251,12 +269,15 @@ bool layers::back_propagation(int gt_label[]){
                                 mp_layers[i].m_fts_diff.mp_matrixes[channel].mp_data[k*mp_layers[i].m_fts_diff.m_cols + j] = mp_layers[i + 1].m_fts_diff.mp_matrixes[channel].mp_data[(k / mp_layers[i].m_pooling_size)*mp_layers[i + 1].m_fts_diff.m_cols + (j / mp_layers[i].m_pooling_size)];
                             }
                         }
-                    }\
+                    }
                 }
                 break;
             case AVE_POOLING:
                 /* todo */
                 break;
+				//std::cout << i << std::endl;
+				//mp_layers[i].m_kers_diff.show();
+				//mp_layers[i].m_fts_diff.show();
             }
         }
 	}
