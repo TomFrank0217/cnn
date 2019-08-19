@@ -24,6 +24,7 @@ public:
 	
 	bool show_shapes();
 	matrix conv();
+	bool show();
 	/* reshape是前向 reshape_是后向 */
 	/* (channel, row ,col) -> (i,j) 是单射(f)，(i,j) -> (channel, row ,col)是多射
 	   因此f不是可逆映射  特征reshape正向传播直接赋值，梯度反向传播需要累加赋值 */

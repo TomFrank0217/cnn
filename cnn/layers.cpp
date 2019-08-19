@@ -84,6 +84,13 @@ bool layers::show_shapes(){
 	}
 }
 
+bool layers::show(){
+	for (int i = 0; i < LAYERS_COUNTS; ++i){
+		mp_layers[i].show();
+	}
+	return true;
+}
+
 bool layers::forward_propagation(){
 	;/* todo */
 	for (int i = 0; i < m_layers_counts; ++i){
@@ -288,7 +295,8 @@ bool layers::back_propagation(int gt_label[]){
 bool layers::probability(){
 	DATA_TYPE sum = 0;
 	for (int i = 0; i < y.m_channels; ++i){
-		t.mp_matrixes[i].mp_data[0] = exp(y.mp_matrixes[i].mp_data[0]);
+		//t.mp_matrixes[i].mp_data[0] = exp(y.mp_matrixes[i].mp_data[0]);
+		t.mp_matrixes[i].mp_data[0] = pow(1.05, y.mp_matrixes[i].mp_data[0]);
 		sum += t.mp_matrixes[i].mp_data[0];
 	}
 	

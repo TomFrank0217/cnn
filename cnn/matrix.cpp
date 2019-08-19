@@ -548,7 +548,7 @@ bool matrix::show(int show_image_mode){
 					}
 				}
 				else{
-					std::cout << std::setw(SHOW_WIDTH) << std::setprecision(SHOW_WIDTH - 3) << mp_data[i*m_cols + j];
+					std::cout << std::setw(SHOW_WIDTH) << std::setprecision(SHOW_WIDTH - 3) << ABS(AVE_VALUE*(mp_data[i*m_cols + j] + 1.0));
 				}
 			}
 			std::cout << std::endl;

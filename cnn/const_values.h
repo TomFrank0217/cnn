@@ -14,7 +14,7 @@
 #define SHOW_IMAGE_INITAIL_VALUE    1 
 #define SHOW_IMAGE_SHAPE            2
 #define SHOW_IMAGE_CROP_LENGTH      0
-#define SHOW_WIDTH                  10
+#define SHOW_WIDTH                  5
 
 #define VALID_PADDING               0
 #define SAME_PADDING                1

@@ -10,7 +10,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		2,
 		STRIDE,
 		VALID_PADDING,
-		RELU_ON,
+		RELU_OFF,
 		MINUS,
 		MINUS
 	},
@@ -22,7 +22,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		MINUS,
 		MINUS,
 		MINUS,
-		RELU_ON,
+		RELU_OFF,
 		MAX_POOLING,
 		 POOLING_SIZE
 	},
@@ -46,7 +46,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 			MINUS,
 			MINUS,
 			MINUS,
-			RELU_ON,
+			RELU_OFF,
 			MAX_POOLING,
 			POOLING_SIZE
 	},
@@ -58,7 +58,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 	   120,
 	   STRIDE,
 	   VALID_PADDING,
-	   RELU_ON,
+	   RELU_OFF,
 	   MINUS,
 	   MINUS
 	},

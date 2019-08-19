@@ -663,6 +663,20 @@ bool layer::show_shapes(){
 	return true;
 }
 
+bool layer::show(){
+	show_shapes();
+	switch (m_layer_mode)
+	{
+	case FULLCONNECTION_LAYER:
+	case CONVOLUTION_LAYER:
+		m_kers.show();
+		break;
+	default:
+		break;
+	}
+	return true;
+}
+
 bool layer::transposition(const matrix& src,matrix& dst){
     if (NULL == src.mp_data || src.m_rows <= 0 || src.m_cols <= 0){
         DEBUG_PRINT("ERROR\n");

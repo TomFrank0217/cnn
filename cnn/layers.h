@@ -11,6 +11,7 @@ public:
 	~layers();
 	bool forward_propagation();
 	bool back_propagation(int gt_label[]);
+	bool show();
 	bool show_shapes();
 	bool probability();
 public:

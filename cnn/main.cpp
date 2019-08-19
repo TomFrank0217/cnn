@@ -32,7 +32,7 @@ struct num_path{
 };
 
 bool get_files(string file_name, vector<string> &files);
-bool show(Mat &image, int show_image_mode = SHOW_IMAGE_SCALE_VALUE);
+bool show(Mat &image, int show_image_mode = SHOW_IMAGE_SHAPE);
 bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name);
 bool show_layers_parameters(layer* players, int layers_count);
 bool show_layer_parameters(layer* player);
@@ -65,14 +65,15 @@ int main(int argc, char* argv[]){
 	//	lys.mp_layers[0].m_fts = image;
 	//}
 
-	DATA_TYPE base_rate = 0.1;
+	DATA_TYPE base_rate = 0.002;
 	int rate_num = 500;
 	DATA_TYPE rate = 0;
-	int mini_batches = 5;
+	int mini_batches = 10;
 	for (int i = 0; i < 6000; ++i){
 		rate = pow(base_rate, 1 + i / rate_num);
 		for (int k = 0; k < LAYERS_COUNTS; ++k){
-			lys.mp_layers[0].m_fts = image;
+			//image = imread(img_name, 0);
+			//lys.mp_layers[0].m_fts = image;
 			switch (lys.mp_layers[k].m_layer_mode)
 			{
 			case FULLCONNECTION_LAYER:
@@ -92,7 +93,11 @@ int main(int argc, char* argv[]){
 			}
 		}
 		for (int j = 0; j < mini_batches; ++j){
-			//image = imread(vec_path_label[i*mini_batches + j].path, 0);
+			
+			image = imread(vec_path_label[i*mini_batches + j].path, 0);
+			//show(image);
+			lys.mp_layers[0].m_fts = image;
+			//lys.mp_layers[0].m_fts.show(SHOW_IMAGE_SHAPE);
 			for (int s = 0; s < 10; ++s){
 				if (s == vec_path_label[i*mini_batches + j].num){
 					test_10[s] = 1;
@@ -114,6 +119,14 @@ int main(int argc, char* argv[]){
 			std::cout << std::endl;
 			for (int sss = 0; sss < 10; ++sss){
 				std::cout << setw(10) << test_10[sss];
+			}
+			std::cout << std::endl;
+			for (int sss = 0; sss < 10; ++sss){
+				std::cout << setw(10) << lys.y.mp_matrixes[sss].mp_data[0];
+			}
+			std::cout << std::endl;
+			for (int sss = 0; sss < 10; ++sss){
+				std::cout << setw(10) << lys.t.mp_matrixes[sss].mp_data[0];
 			}
 			std::cout << std::endl;
 			for (int sss = 0; sss < 10; ++sss){
