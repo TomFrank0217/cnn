@@ -34,7 +34,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		16,
 		STRIDE,
 		VALID_PADDING,
-		RELU_ON,
+		RELU_OFF,
 		MINUS,
 		MINUS
 	},
@@ -58,7 +58,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 	   120,
 	   STRIDE,
 	   VALID_PADDING,
-	   RELU_OFF,
+	   RELU_ON,
 	   MINUS,
 	   MINUS
 	},
