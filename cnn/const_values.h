@@ -3,7 +3,7 @@
 
 #define DATA_TYPE                   double
 
-#define RANDOM_INITIAL_VAL          0.1
+#define RANDOM_INITIAL_VAL          0.03
 
 #define KERS_MIN_VAL                -RANDOM_INITIAL_VAL
 #define KERS_MAX_VAL                RANDOM_INITIAL_VAL

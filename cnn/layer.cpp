@@ -464,6 +464,7 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 		/* (i,j) (f)-> (channel,rpf,cpf)  是一个不可逆过程 */
 		/* 所以  (channel,rpf,cpf) (f-1)-> (i,j)  的f-1实际上是一个多射过程 */
 		/* 具体的怎么把这一段代码写出来还需要思考 */
+		/* 其实反向传播的时候不需要真的求解出 f-1,因为(i,j)的偏导需要累加回features中的(channel,rpf,cpf)元 */
 		/* todo */
 		//for (channel = 0; channel < m_tensor.m_channels; ++channel){
 		//	for (rpf = 0; rpf < m_tensor.m_rows; ++rpf){

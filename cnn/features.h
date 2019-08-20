@@ -17,7 +17,6 @@ public:
 	features(int channels, int rows, int cols, DATA_TYPE min, DATA_TYPE max);
 	/*  图像features的数值归一化到 (-1.0, 1.0) 之间  */
 	features(const cv::Mat &image, DATA_TYPE translation = AVE_VALUE, DATA_TYPE scale = 1.0 / AVE_VALUE);
-	bool operator=(const cv::Mat& image);
 
 	features operator+(DATA_TYPE add_num);//matrix operator+(DATA_TYPE addition_num);
 	bool operator+=(DATA_TYPE add_num);//bool operator+=(DATA_TYPE addition_num);
@@ -41,6 +40,7 @@ public:
 
 	features(const features& fs_);
 	features& operator=(const features &fs_);
+	bool operator=(const cv::Mat& image);
 	 ~features();
 	 //bool reshape(features& tsr, matrix& fts_matrix, int reshape_mode = FEATURES2MATRIX, int kernels_rows = KERNEL_ROWS, \
 	 //	 		int kernels_cols = KERNEL_COLS, int stride = 1, int padding_mode = VALID_PADDING);

@@ -44,7 +44,7 @@ int main(int argc, char* argv[]){
 	int rows = image.rows;
 	int cols = image.cols;
     int test_10[10] = { 1, 0, 0 };
-	layers lys(channels, rows, cols, layers_parameters, LAYERS_COUNTS);
+	layers lys(1, 32, 32, layers_parameters, LAYERS_COUNTS);
 	lys.mp_layers[0].m_fts = image;
 	//lys.mp_layers[0].m_fts = features(channels, rows, cols, -1, 1);
 	//lys.mp_layers[0].m_fts.show();
@@ -64,13 +64,16 @@ int main(int argc, char* argv[]){
 	//	//show(image, SHOW_IMAGE_SHAPE);
 	//	lys.mp_layers[0].m_fts = image;
 	//}
-
-	DATA_TYPE base_rate = 0.002;
+	std::cout << vec_path_label.size() << std::endl;
+	for (int i = 0; i < vec_path_label.size(); ++i){
+		std::cout << vec_path_label[i].path << "  " << vec_path_label[i].num << std::endl;
+	}
+	DATA_TYPE base_rate = RANDOM_INITIAL_VAL * 15;
 	int rate_num = 500;
 	DATA_TYPE rate = 0;
-	int mini_batches = 10;
-	for (int i = 0; i < 6000; ++i){
-		rate = pow(base_rate, 1 + i / rate_num);
+	int mini_batches = 1;
+	for (int i = 0; i < 1000000; ++i){
+		
 		for (int k = 0; k < LAYERS_COUNTS; ++k){
 			//image = imread(img_name, 0);
 			//lys.mp_layers[0].m_fts = image;
@@ -92,14 +95,16 @@ int main(int argc, char* argv[]){
 				break;
 			}
 		}
+
+		rate = base_rate*pow(0.2, i / rate_num);
 		for (int j = 0; j < mini_batches; ++j){
-			
-			image = imread(vec_path_label[i*mini_batches + j].path, 0);
+			std::cout << "\n\niterations  " << i*mini_batches + j << std::endl;
+			image = imread(vec_path_label[(i*mini_batches + j) % vec_path_label.size()].path, 0);
 			//show(image);
 			lys.mp_layers[0].m_fts = image;
 			//lys.mp_layers[0].m_fts.show(SHOW_IMAGE_SHAPE);
 			for (int s = 0; s < 10; ++s){
-				if (s == vec_path_label[i*mini_batches + j].num){
+				if (s == vec_path_label[(i*mini_batches + j) % vec_path_label.size()].num){
 					test_10[s] = 1;
 				}
 				else{
@@ -107,8 +112,8 @@ int main(int argc, char* argv[]){
 				}
 			}
 			std::cout << "mini bacth " << j << std::endl;
-			std::cout << vec_path_label[i*mini_batches + j].path << "    " \
-				<< vec_path_label[i*mini_batches + j].num << std::endl;
+			std::cout << vec_path_label[(i*mini_batches + j) % vec_path_label.size()].path << "    " \
+				<< vec_path_label[(i*mini_batches + j) % vec_path_label.size()].num << std::endl;
 			cout << endl;
 			lys.mp_layers[0].m_fts = image;
 			lys.forward_propagation();
@@ -130,7 +135,7 @@ int main(int argc, char* argv[]){
 			}
 			std::cout << std::endl;
 			for (int sss = 0; sss < 10; ++sss){
-				std::cout << setw(10) << lys.q.mp_matrixes[sss].mp_data[0];
+				std::cout << setw(10) /*<< setprecision(6)*/ << lys.q.mp_matrixes[sss].mp_data[0] * 100.0;
 			}
 			std::cout << std::endl;
 			lys.back_propagation(test_10);
@@ -163,7 +168,7 @@ int main(int argc, char* argv[]){
 					//lys.mp_layers[k].m_fts_mat += rate*lys.mp_layers[k].m_fts_mat_diffs;
 					//rate*lys.mp_layers[k].m_kers_diffs.show();
 					//lys.mp_layers[k].m_kers.show();
-					lys.mp_layers[k].m_kers += rate*lys.mp_layers[k].m_kers_diffs;
+					lys.mp_layers[k].m_kers += (rate/mini_batches)*lys.mp_layers[k].m_kers_diffs;
 					//lys.mp_layers[k].m_kers.show();
 					//lys.mp_layers[k].m_conv_mat += rate*lys.mp_layers[k].m_conv_mat_diffs;
 					//lys.mp_layers[k].m_conv_relu_mat += rate*lys.mp_layers[k].m_conv_relu_mat_diffs;
