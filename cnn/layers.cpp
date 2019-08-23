@@ -296,8 +296,8 @@ bool layers::back_propagation(int gt_label[]){
 bool layers::probability(){
 	DATA_TYPE sum = 0;
 	for (int i = 0; i < y.m_channels; ++i){
-		//t.mp_matrixes[i].mp_data[0] = exp(y.mp_matrixes[i].mp_data[0]);
-		t.mp_matrixes[i].mp_data[0] = pow(1.02, y.mp_matrixes[i].mp_data[0]);
+		t.mp_matrixes[i].mp_data[0] = exp(y.mp_matrixes[i].mp_data[0]);
+		//t.mp_matrixes[i].mp_data[0] = pow(1.02, y.mp_matrixes[i].mp_data[0]);
 		sum += t.mp_matrixes[i].mp_data[0];
 	}
 	

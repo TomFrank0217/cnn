@@ -79,10 +79,12 @@ int main(int argc, char* argv[]){
             break;
         }
     }
-    lys.mp_layers[0].m_fts.show();
+    //lys.mp_layers[0].m_fts.show();
     lys.forward_propagation();
     lys.y.show();
-    lys.show();
+    //lys.show();
+    lys.t.show();
+    lys.q.show();
 	//lys.mp_layers[0].m_fts = features(channels, rows, cols, -1, 1);
 	//lys.mp_layers[0].m_fts.show();
 	//lys.mp_layers[0].m_kers = kernels(channels, 2, 2, 2, 0, 1);
