@@ -87,6 +87,7 @@ bool layers::show_shapes(){
 bool layers::show(){
 	for (int i = 0; i < LAYERS_COUNTS; ++i){
 		mp_layers[i].show();
+        std::cout << "*****************************************\n";
 	}
 	return true;
 }

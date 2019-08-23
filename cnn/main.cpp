@@ -40,12 +40,49 @@ int main(int argc, char* argv[]){
     /* todo random初始化不是很好 */
 	string img_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\0_0.bmp";
 	Mat image = imread(img_name, 0);
-	int channels = image.channels();
-	int rows = image.rows;
-	int cols = image.cols;
+	//int channels = image.channels();
+	//int rows = image.rows;
+	//int cols = image.cols;
+    int channels = 1;
+    int rows = 5;
+    int cols = 5;
     int test_10[10] = { 1, 0, 0 };
 	layers lys(channels, rows, cols, layers_parameters, LAYERS_COUNTS);
-	lys.mp_layers[0].m_fts = image;
+    //lys.show();
+    lys.mp_layers[0].m_fts = features(channels, rows, cols, -1, 1);
+    for (int k = 0; k < LAYERS_COUNTS; ++k){
+        //image = imread(img_name, 0);
+        //lys.mp_layers[0].m_fts = image;
+        if (CONVOLUTION_LAYER == lys.mp_layers[k].m_layer_mode\
+            || FULLCONNECTION_LAYER == lys.mp_layers[k].m_layer_mode){
+            int c = lys.mp_layers[k].m_kers.m_channels;
+            int r = lys.mp_layers[k].m_kers.m_rows;
+            int cc = lys.mp_layers[k].m_kers.m_cols;
+            int ccc = lys.mp_layers[k].m_kers.m_kers_counts;
+            lys.mp_layers[k].m_kers = kernels(c, r, cc, ccc, -1, 1);
+        }
+        switch (lys.mp_layers[k].m_layer_mode)
+        {
+        case FULLCONNECTION_LAYER:
+        case CONVOLUTION_LAYER:
+            lys.mp_layers[k].m_fts_diffs.reset(0.0);
+            lys.mp_layers[k].m_fts_mat_diffs.reset(0.0);
+            lys.mp_layers[k].m_kers_diffs.reset(0.0);
+            lys.mp_layers[k].m_conv_mat_diffs.reset(0.0);
+            lys.mp_layers[k].m_conv_relu_mat_diffs.reset(0.0);
+            lys.mp_layers[k].m_conv_relu_mat2fts_diffs.reset(0.0);
+            break;
+        case POOLING_LAYER:
+            lys.mp_layers[k].m_fts_diffs.reset(0.0);
+            break;
+        default:
+            break;
+        }
+    }
+    lys.mp_layers[0].m_fts.show();
+    lys.forward_propagation();
+    lys.y.show();
+    lys.show();
 	//lys.mp_layers[0].m_fts = features(channels, rows, cols, -1, 1);
 	//lys.mp_layers[0].m_fts.show();
 	//lys.mp_layers[0].m_kers = kernels(channels, 2, 2, 2, 0, 1);
@@ -179,30 +216,10 @@ int main(int argc, char* argv[]){
 		}//end mini_batches
 		//std::cout << vec_path_label[i*mini_batches + mini_batches - 1].path << "    " \
 			<< vec_path_label[i*mini_batches + mini_batches - 1].num << std::endl;
-
 		//lys.q.show();
 		int xxx = 0;
 	}
-	int xxx = 0;
-	//lys.mp_layers[0].m_fts.show();
-	//lys.mp_layers[0].m_kers.show();
-	//lys.mp_layers[0].m_conv_mat.show();
-	//lys.mp_layers[0].reshape(lys.mp_layers[0].m_conv_mat, lys.mp_layers[0].m_conv_relu_mat2fts);
-	//lys.mp_layers[0].m_conv_relu_mat2fts.show();
-	//lys.mp_layers[0].reshape(lys.mp_layers[0].m_relu_mask, lys.mp_layers[0].m_conv_relu_mat2fts);
-	//lys.mp_layers[0].m_conv_relu_mat2fts.show();
-	//lys.mp_layers[1].m_fts.show();
-	//lys.mp_layers[1].m_pooling_mask.show();
-	//lys.mp_layers[2].m_fts.show();
-	//lys.mp_layers[2].m_kers.show();
-	//lys.y.show();
-	//lys.mp_layers[3].m_fts = features(1, 6, 10, -5, 5);
-	//lys.mp_layers[3].m_fts.show();
-	//lys.mp_layers[3].m_pooling_mask = features(1, 6, 10);
-	//lys.mp_layers[4].m_fts = features(1, 3, 5);
-	//lys.mp_layers[3].reshape(lys.mp_layers[3].m_pooling_mask, lys.mp_layers[4].m_fts);
-	//lys.mp_layers[3].m_pooling_mask.show();
-	//lys.mp_layers[4].m_fts.show();
+
     /* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑*/
  // /* todo 此处初始化必须重新写一个函数，否则每一个图像初始化都需要申请内存 这个不行 */
     /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
