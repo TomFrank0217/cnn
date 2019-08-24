@@ -87,6 +87,7 @@ bool layers::show_shapes(){
 bool layers::show(){
 	for (int i = 0; i < LAYERS_COUNTS; ++i){
 		mp_layers[i].show();
+        std::cout << "*****************************************\n";
 	}
 	return true;
 }
@@ -196,12 +197,12 @@ bool layers::back_propagation(int gt_label[]){
 		}
 		else{
 			t_diff.mp_matrixes[j].mp_data[0] = q_diff.mp_matrixes[i].mp_data[0] * \
-				(-t.mp_matrixes[i].mp_data[0]) / (sum_t*sum_t);
+				(-t.mp_matrixes[j].mp_data[0]) / (sum_t*sum_t);
 		}
 	}
 
 	for (int j = 0; j < y.m_channels; ++j){
-		y_diff.mp_matrixes[i].mp_data[0] = \
+		y_diff.mp_matrixes[j].mp_data[0] = \
 			t_diff.mp_matrixes[j].mp_data[0] * t.mp_matrixes[j].mp_data[0];
 	}
 
