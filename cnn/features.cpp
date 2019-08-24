@@ -177,7 +177,7 @@ bool features::operator=(const cv::Mat& image){
 	}
 
 	int k = 0;
-	DATA_TYPE scale = 1.0 / DATA_TYPE(AVE_VALUE);
+    DATA_TYPE scale = IMAGE_UNIT_VALUE / DATA_TYPE(AVE_VALUE);
 	switch (m_channels)
 	{
 	case 1:

@@ -58,67 +58,12 @@ int main(int argc, char* argv[]){
 	layers lys(image.channels(), image.rows, image.cols, layers_parameters, LAYERS_COUNTS);
 	int gt_10[10] = { 0 };
 	double accuracy[TEST_TIMES] = { 0.0 };
-	DATA_TYPE base_learning_rate = 0.05;
-	int rate_num = 200;
+    DATA_TYPE base_learning_rate = 0.04;
+	int rate_num = 25;
 	DATA_TYPE learning_rate = 0;
-	int mini_batches = 150;
+	int mini_batches = 200;
 	
 	for (int i = 0; i < rate_num * TEST_TIMES; ++i){/* 是 i*mini_bathes=输入图像的总次数 */
-
-		if (0 == i%rate_num){
-
-			std::cout << "\n\niterations  " << i*mini_batches << "   " << std::endl;
-			for (int sss = 0; sss < 10; ++sss){
-				std::cout << setw(10) << sss;
-			}
-			std::cout << std::endl;
-			for (int sss = 0; sss < 10; ++sss){
-				std::cout << setw(10) << gt_10[sss];
-			}
-			std::cout << std::endl;
-			for (int sss = 0; sss < 10; ++sss){
-				std::cout << setw(10) << lys.y.mp_matrixes[sss].mp_data[0];
-			}
-			std::cout << std::endl;
-			for (int sss = 0; sss < 10; ++sss){
-				std::cout << setw(10) << lys.t.mp_matrixes[sss].mp_data[0];
-			}
-			std::cout << std::endl;
-			for (int sss = 0; sss < 10; ++sss){
-				std::cout << setw(10) << 100.0*lys.q.mp_matrixes[sss].mp_data[0];
-			}
-			std::cout << std::endl;
-
-
-			int right = 0;
-			for (int k = 0; k < test_path_label.size(); ++k){
-				cv::Mat image = imread(test_path_label[k].path, 0);
-				lys.mp_layers[0].m_fts = image;
-				lys.forward_propagation();
-				double max = lys.q.mp_matrixes[0].mp_data[0];
-				int index = 0;
-				for (int j = 1; j < 10; ++j){
-					if (max < lys.q.mp_matrixes[j].mp_data[0]){
-						max = lys.q.mp_matrixes[j].mp_data[0];
-						index = j;
-					}
-				}
-				if (index == test_path_label[k].num){
-					++right;
-				}
-			}
-			accuracy[i / rate_num] = (0.0 + right) / (0.0 + test_path_label.size());
-			std::cout << "****************************************************************************************************************" << std::endl;
-			for (int jjj = 0; jjj <= i / rate_num; ++jjj){
-				if (jjj % 10 == 0){
-					std::cout << std::endl;
-				}
-				std::cout << setw(10) << 100.0*accuracy[jjj];
-			}
-			std::cout << std::endl << "****************************************************************************************************************" << std::endl;
-			//Sleep(6000);
-			int xxx = 0;
-		}//end if (0 == i%rate_num)
 
 		for (int k = 0; k < LAYERS_COUNTS; ++k){
 			switch (lys.mp_layers[k].m_layer_mode){
@@ -136,17 +81,43 @@ int main(int argc, char* argv[]){
 				break;
 			}
 		}
-		learning_rate = base_learning_rate*pow(0.99999, i / rate_num);
+		learning_rate = base_learning_rate*pow(0.9999, i / rate_num);
 		for (int j = 0; j < mini_batches; ++j){
 			get_gt_label(gt_10, train_path_label[(i*mini_batches + j) % train_path_label.size()]);
 			image = imread(train_path_label[(i*mini_batches + j) % train_path_label.size()].path, 0);
-			lys.mp_layers[0].m_fts = image;
+            lys.mp_layers[0].m_fts = image;/* todo */
 			//lys.mp_layers[0].m_fts.show(SHOW_IMAGE_SHAPE);
 			//std::cout << "\n\niterations  " << i*mini_batches + j + 1 << "   ";
 			//std::cout << "mini bacth " << j + 1 << std::endl;
 			//std::cout << train_path_label[(i*mini_batches + j) % train_path_label.size()].path << "    " \
 							<< train_path_label[(i*mini_batches + j) % train_path_label.size()].num << std::endl << std::endl;
+
 			lys.forward_propagation();
+            if (i % 10 == 0){
+                if (j % 100 == 0){
+                    std::cout << "\n\niterations  " << i*mini_batches + j + 1 << "   " << std::endl;
+                    for (int sss = 0; sss < 10; ++sss){
+                        std::cout << setw(10) << sss;
+                    }
+                    std::cout << std::endl;
+                    for (int sss = 0; sss < 10; ++sss){
+                        std::cout << setw(10) << gt_10[sss];
+                    }
+                    std::cout << std::endl;
+                    for (int sss = 0; sss < 10; ++sss){
+                        std::cout << setw(10) << lys.y.mp_matrixes[sss].mp_data[0];
+                    }
+                    std::cout << std::endl;
+                    for (int sss = 0; sss < 10; ++sss){
+                        std::cout << setw(10) << lys.t.mp_matrixes[sss].mp_data[0];
+                    }
+                    std::cout << std::endl;
+                    for (int sss = 0; sss < 10; ++sss){
+                        std::cout << setw(10) << 100.0*lys.q.mp_matrixes[sss].mp_data[0];
+                    }
+                    std::cout << std::endl;
+                }
+            }
 			lys.back_propagation(gt_10);
 			for (int k = LAYERS_COUNTS - 1; k >= 0; --k){
 				switch (lys.mp_layers[k].m_layer_mode){
@@ -170,11 +141,67 @@ int main(int argc, char* argv[]){
 			switch (lys.mp_layers[k].m_layer_mode){
 			case FULLCONNECTION_LAYER:
 			case CONVOLUTION_LAYER:
-				lys.mp_layers[k].m_kers -= (learning_rate)*((1.0 / mini_batches)*lys.mp_layers[k].m_kers_diffs);
+				lys.mp_layers[k].m_kers -= (learning_rate/mini_batches)*(lys.mp_layers[k].m_kers_diffs);
 				break;
 			case POOLING_LAYER: break;/* do nothing */
 			}
 		}
+
+        if (0 == i%rate_num){
+
+            std::cout << "\n\niterations  " << i*mini_batches << "   " << std::endl;
+            for (int sss = 0; sss < 10; ++sss){
+                std::cout << setw(10) << sss;
+            }
+            std::cout << std::endl;
+            for (int sss = 0; sss < 10; ++sss){
+                std::cout << setw(10) << gt_10[sss];
+            }
+            std::cout << std::endl;
+            for (int sss = 0; sss < 10; ++sss){
+                std::cout << setw(10) << lys.y.mp_matrixes[sss].mp_data[0];
+            }
+            std::cout << std::endl;
+            for (int sss = 0; sss < 10; ++sss){
+                std::cout << setw(10) << lys.t.mp_matrixes[sss].mp_data[0];
+            }
+            std::cout << std::endl;
+            for (int sss = 0; sss < 10; ++sss){
+                std::cout << setw(10) << 100.0*lys.q.mp_matrixes[sss].mp_data[0];
+            }
+            std::cout << std::endl;
+
+
+            int right = 0;
+            for (int k = 0; k < test_path_label.size(); ++k){
+                cv::Mat image = imread(test_path_label[k].path, 0);
+                lys.mp_layers[0].m_fts = image;
+                lys.forward_propagation();
+                double max = lys.q.mp_matrixes[0].mp_data[0];
+                int index = 0;
+                for (int j = 1; j < 10; ++j){
+                    if (max < lys.q.mp_matrixes[j].mp_data[0]){
+                        max = lys.q.mp_matrixes[j].mp_data[0];
+                        index = j;
+                    }
+                }
+                if (index == test_path_label[k].num){
+                    ++right;
+                }
+            }
+            accuracy[i / rate_num] = (0.0 + right) / (0.0 + test_path_label.size());
+            std::cout << "****************************************************************************************************************" << std::endl;
+            for (int jjj = 0; jjj <= i / rate_num; ++jjj){
+                if (jjj % 10 == 0){
+                    std::cout << std::endl;
+                }
+                std::cout << setw(10) << 100.0*accuracy[jjj];
+            }
+            std::cout << std::endl << "****************************************************************************************************************" << std::endl;
+            //Sleep(6000);
+            int xxx = 0;
+        }//end if (0 == i%rate_num)
+
 	}// end i
 	for (int i = 0; i < TEST_TIMES; ++i){
 		if (i % 10 == 0){

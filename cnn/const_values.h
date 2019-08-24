@@ -3,7 +3,7 @@
 
 #define DATA_TYPE                   double
 
-#define RANDOM_INITIAL_VAL          0.1
+#define RANDOM_INITIAL_VAL          0.06
 
 #define KERS_MIN_VAL                -RANDOM_INITIAL_VAL
 #define KERS_MAX_VAL                RANDOM_INITIAL_VAL
@@ -25,6 +25,7 @@
 #define AVE_POOLING                 1
 #define POOLING_SIZE                2
 
+#define IMAGE_UNIT_VALUE            2.0
 #define  AVE_VALUE                  127.5
 
 #define MINUS                       -1
@@ -53,4 +54,7 @@
 #define POW_NUM                     1.05
 
 #define  TEST_TIMES                 100000
+
+#define EPSILON                     0.001
+#define MAX_UP                      10000
 #endif
