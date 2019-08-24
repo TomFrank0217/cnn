@@ -3,7 +3,7 @@
 
 #define DATA_TYPE                   double
 
-#define RANDOM_INITIAL_VAL          0.03
+#define RANDOM_INITIAL_VAL          0.1
 
 #define KERS_MIN_VAL                -RANDOM_INITIAL_VAL
 #define KERS_MAX_VAL                RANDOM_INITIAL_VAL
@@ -48,5 +48,9 @@
 #define RELU_ON                     1
 
 #define LAYER_INITIAL_LENGTH        0
-#define LAYERS_COUNTS               3
+#define LAYERS_COUNTS               7
+
+#define POW_NUM                     1.05
+
+#define  TEST_TIMES                 100000
 #endif

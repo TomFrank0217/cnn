@@ -262,9 +262,6 @@ bool layers::back_propagation(int gt_label[]){
                 DEBUG_PRINT("back propagation error\n");
                 return false;
             }
-			//std::cout << i << std::endl;
-			//mp_layers[i].m_kers_diff.show();
-			//mp_layers[i].m_fts_diff.show();
             break;
         case POOLING_LAYER:
             switch (mp_layers[i].m_pooling_mode){
@@ -283,9 +280,6 @@ bool layers::back_propagation(int gt_label[]){
             case AVE_POOLING:
                 /* todo */
                 break;
-				//std::cout << i << std::endl;
-				//mp_layers[i].m_kers_diff.show();
-				//mp_layers[i].m_fts_diff.show();
             }
         }
 	}
@@ -297,7 +291,7 @@ bool layers::probability(){
 	DATA_TYPE sum = 0;
 	for (int i = 0; i < y.m_channels; ++i){
 		//t.mp_matrixes[i].mp_data[0] = exp(y.mp_matrixes[i].mp_data[0]);
-		t.mp_matrixes[i].mp_data[0] = exp(y.mp_matrixes[i].mp_data[0]);//pow(2.0, y.mp_matrixes[i].mp_data[0]);
+		t.mp_matrixes[i].mp_data[0] = pow(POW_NUM, y.mp_matrixes[i].mp_data[0]);//exp(y.mp_matrixes[i].mp_data[0]);//pow(2.0, y.mp_matrixes[i].mp_data[0]);
 		sum += t.mp_matrixes[i].mp_data[0];
 	}
 	

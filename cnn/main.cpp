@@ -23,6 +23,8 @@
 #include "layer.h"
 #include "layers.h"
 
+#include <windows.h>
+
 using namespace cv;
 using namespace std;
 
@@ -36,92 +38,90 @@ bool show(Mat &image, int show_image_mode = SHOW_IMAGE_SHAPE);
 bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name);
 bool show_layers_parameters(layer* players, int layers_count);
 bool show_layer_parameters(layer* player);
+bool get_gt_label(int *gt_10, num_path& np);
+
 int main(int argc, char* argv[]){
     /* todo random初始化不是很好 */
-	string img_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\0_0.bmp";
-	Mat image = imread(img_name, 0);
-	//int channels = image.channels();
-	//int rows = image.rows;
-	//int cols = image.cols;
-    int channels = 1;
-    int rows = 5;
-    int cols = 5;
-    int test_10[10] = { 1, 0, 0 };
-	layers lys(channels, rows, cols, layers_parameters, LAYERS_COUNTS);
-    //lys.show();
-    lys.mp_layers[0].m_fts = features(channels, rows, cols, -1, 1);
-    for (int k = 0; k < LAYERS_COUNTS; ++k){
-        //image = imread(img_name, 0);
-        //lys.mp_layers[0].m_fts = image;
-        if (CONVOLUTION_LAYER == lys.mp_layers[k].m_layer_mode\
-            || FULLCONNECTION_LAYER == lys.mp_layers[k].m_layer_mode){
-            int c = lys.mp_layers[k].m_kers.m_channels;
-            int r = lys.mp_layers[k].m_kers.m_rows;
-            int cc = lys.mp_layers[k].m_kers.m_cols;
-            int ccc = lys.mp_layers[k].m_kers.m_kers_counts;
-            lys.mp_layers[k].m_kers = kernels(c, r, cc, ccc, -1, 1);
-        }
-        switch (lys.mp_layers[k].m_layer_mode)
-        {
-        case FULLCONNECTION_LAYER:
-        case CONVOLUTION_LAYER:
-            lys.mp_layers[k].m_fts_diffs.reset(0.0);
-            lys.mp_layers[k].m_fts_mat_diffs.reset(0.0);
-            lys.mp_layers[k].m_kers_diffs.reset(0.0);
-            lys.mp_layers[k].m_conv_mat_diffs.reset(0.0);
-            lys.mp_layers[k].m_conv_relu_mat_diffs.reset(0.0);
-            lys.mp_layers[k].m_conv_relu_mat2fts_diffs.reset(0.0);
-            break;
-        case POOLING_LAYER:
-            lys.mp_layers[k].m_fts_diffs.reset(0.0);
-            break;
-        default:
-            break;
-        }
-    }
-    //lys.mp_layers[0].m_fts.show();
-    lys.forward_propagation();
-    lys.y.show();
-    //lys.show();
-    lys.t.show();
-    lys.q.show();
-	lys.back_propagation(test_10);
-	lys.q_diff.show();
-	lys.t_diff.show();
-	lys.y_diff.show();
-	//lys.mp_layers[0].m_fts = features(channels, rows, cols, -1, 1);
-	//lys.mp_layers[0].m_fts.show();
-	//lys.mp_layers[0].m_kers = kernels(channels, 2, 2, 2, 0, 1);
-	//lys.mp_layers[0].m_kers.show();
-	//lys.mp_layers[2].m_kers = kernels(2, 2, 2, 3, 0, 1);
-	//lys.show_shapes();
+	/* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑*/
+	/* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
 
-	string file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
-	std::cout << file_name << endl;
-	vector<num_path> vec_path_label;
-	get_image_path_and_label(vec_path_label, file_name);
-	//string str = "**************************************************************";
-	//for (int i = 0; i < vec_path_label.size(); ++i){
-	//	std::cout << vec_path_label[i].path << endl;
-	//	Mat image = imread(vec_path_label[i].path, 0);
-	//	//show(image, SHOW_IMAGE_SHAPE);
-	//	lys.mp_layers[0].m_fts = image;
-	//}
-	std::cout << vec_path_label.size() << std::endl;
-	for (int i = 0; i < vec_path_label.size(); ++i){
-		std::cout << vec_path_label[i].path << "  " << vec_path_label[i].num << std::endl;
+	string train_file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
+	string test_file_name = "F:\\chromeDownload\\test_image\\pic2\\0\\*.bmp";
+	vector<num_path> train_path_label;
+	vector<num_path> test_path_label;
+	get_image_path_and_label(train_path_label, train_file_name);
+	get_image_path_and_label(test_path_label, test_file_name);
+	for (int i = 0; i < test_path_label.size(); ++i){
+		std::cout << test_path_label[i].path << std::endl;
 	}
-	DATA_TYPE base_rate = RANDOM_INITIAL_VAL * 15;
-	int rate_num = 500;
-	DATA_TYPE rate = 0;
-	int mini_batches = 1;
-	for (int i = 0; i < 1000000; ++i){
-		
+	Mat image = imread(train_path_label[0].path, 0);
+	layers lys(image.channels(), image.rows, image.cols, layers_parameters, LAYERS_COUNTS);
+	int gt_10[10] = { 0 };
+	double accuracy[TEST_TIMES] = { 0.0 };
+	DATA_TYPE base_learning_rate = 0.05;
+	int rate_num = 200;
+	DATA_TYPE learning_rate = 0;
+	int mini_batches = 150;
+	
+	for (int i = 0; i < rate_num * TEST_TIMES; ++i){/* 是 i*mini_bathes=输入图像的总次数 */
+
+		if (0 == i%rate_num){
+
+			std::cout << "\n\niterations  " << i*mini_batches << "   " << std::endl;
+			for (int sss = 0; sss < 10; ++sss){
+				std::cout << setw(10) << sss;
+			}
+			std::cout << std::endl;
+			for (int sss = 0; sss < 10; ++sss){
+				std::cout << setw(10) << gt_10[sss];
+			}
+			std::cout << std::endl;
+			for (int sss = 0; sss < 10; ++sss){
+				std::cout << setw(10) << lys.y.mp_matrixes[sss].mp_data[0];
+			}
+			std::cout << std::endl;
+			for (int sss = 0; sss < 10; ++sss){
+				std::cout << setw(10) << lys.t.mp_matrixes[sss].mp_data[0];
+			}
+			std::cout << std::endl;
+			for (int sss = 0; sss < 10; ++sss){
+				std::cout << setw(10) << 100.0*lys.q.mp_matrixes[sss].mp_data[0];
+			}
+			std::cout << std::endl;
+
+
+			int right = 0;
+			for (int k = 0; k < test_path_label.size(); ++k){
+				cv::Mat image = imread(test_path_label[k].path, 0);
+				lys.mp_layers[0].m_fts = image;
+				lys.forward_propagation();
+				double max = lys.q.mp_matrixes[0].mp_data[0];
+				int index = 0;
+				for (int j = 1; j < 10; ++j){
+					if (max < lys.q.mp_matrixes[j].mp_data[0]){
+						max = lys.q.mp_matrixes[j].mp_data[0];
+						index = j;
+					}
+				}
+				if (index == test_path_label[k].num){
+					++right;
+				}
+			}
+			accuracy[i / rate_num] = (0.0 + right) / (0.0 + test_path_label.size());
+			std::cout << "****************************************************************************************************************" << std::endl;
+			for (int jjj = 0; jjj <= i / rate_num; ++jjj){
+				if (jjj % 10 == 0){
+					std::cout << std::endl;
+				}
+				std::cout << setw(10) << 100.0*accuracy[jjj];
+			}
+			std::cout << std::endl << "****************************************************************************************************************" << std::endl;
+			//Sleep(6000);
+			int xxx = 0;
+		}//end if (0 == i%rate_num)
+
 		for (int k = 0; k < LAYERS_COUNTS; ++k){
-			//image = imread(img_name, 0);
-			//lys.mp_layers[0].m_fts = image;
-			switch (lys.mp_layers[k].m_layer_mode)
-			{
+			switch (lys.mp_layers[k].m_layer_mode){
 			case FULLCONNECTION_LAYER:
 			case CONVOLUTION_LAYER:
 				lys.mp_layers[k].m_fts_diffs.reset(0.0);
@@ -134,57 +134,22 @@ int main(int argc, char* argv[]){
 			case POOLING_LAYER:
 				lys.mp_layers[k].m_fts_diffs.reset(0.0);
 				break;
-			default:
-				break;
 			}
 		}
-
-		rate = base_rate*pow(0.2, i / rate_num);
+		learning_rate = base_learning_rate*pow(0.99999, i / rate_num);
 		for (int j = 0; j < mini_batches; ++j){
-			std::cout << "\n\niterations  " << i*mini_batches + j << std::endl;
-			image = imread(vec_path_label[(i*mini_batches + j) % vec_path_label.size()].path, 0);
-			//show(image);
+			get_gt_label(gt_10, train_path_label[(i*mini_batches + j) % train_path_label.size()]);
+			image = imread(train_path_label[(i*mini_batches + j) % train_path_label.size()].path, 0);
 			lys.mp_layers[0].m_fts = image;
 			//lys.mp_layers[0].m_fts.show(SHOW_IMAGE_SHAPE);
-			for (int s = 0; s < 10; ++s){
-				if (s == vec_path_label[(i*mini_batches + j) % vec_path_label.size()].num){
-					test_10[s] = 1;
-				}
-				else{
-					test_10[s] = 0;
-				}
-			}
-			std::cout << "mini bacth " << j << std::endl;
-			std::cout << vec_path_label[(i*mini_batches + j) % vec_path_label.size()].path << "    " \
-				<< vec_path_label[(i*mini_batches + j) % vec_path_label.size()].num << std::endl;
-			cout << endl;
-			lys.mp_layers[0].m_fts = image;
+			//std::cout << "\n\niterations  " << i*mini_batches + j + 1 << "   ";
+			//std::cout << "mini bacth " << j + 1 << std::endl;
+			//std::cout << train_path_label[(i*mini_batches + j) % train_path_label.size()].path << "    " \
+							<< train_path_label[(i*mini_batches + j) % train_path_label.size()].num << std::endl << std::endl;
 			lys.forward_propagation();
-			//lys.back_propagation();
-			for (int sss = 0; sss < 10; ++sss){
-				std::cout << setw(10) << sss;
-			}
-			std::cout << std::endl;
-			for (int sss = 0; sss < 10; ++sss){
-				std::cout << setw(10) << test_10[sss];
-			}
-			std::cout << std::endl;
-			for (int sss = 0; sss < 10; ++sss){
-				std::cout << setw(10) << lys.y.mp_matrixes[sss].mp_data[0];
-			}
-			std::cout << std::endl;
-			for (int sss = 0; sss < 10; ++sss){
-				std::cout << setw(10) << lys.t.mp_matrixes[sss].mp_data[0];
-			}
-			std::cout << std::endl;
-			for (int sss = 0; sss < 10; ++sss){
-				std::cout << setw(10) /*<< setprecision(6)*/ << lys.q.mp_matrixes[sss].mp_data[0] * 100.0;
-			}
-			std::cout << std::endl;
-			lys.back_propagation(test_10);
+			lys.back_propagation(gt_10);
 			for (int k = LAYERS_COUNTS - 1; k >= 0; --k){
-				switch (lys.mp_layers[k].m_layer_mode)
-				{
+				switch (lys.mp_layers[k].m_layer_mode){
 				case FULLCONNECTION_LAYER:
 				case CONVOLUTION_LAYER:
 					lys.mp_layers[k].m_fts_diffs += lys.mp_layers[k].m_fts_diff;
@@ -197,47 +162,43 @@ int main(int argc, char* argv[]){
 				case POOLING_LAYER:
 					lys.mp_layers[k].m_fts_diffs += lys.mp_layers[k].m_fts_diff;
 					break;
-				default:
-					break;
 				}
-			}//end mini_batch
-			int xxx = 0;
-			for (int k = 0; k < LAYERS_COUNTS; ++k){
-				switch (lys.mp_layers[k].m_layer_mode)
-				{
-				case FULLCONNECTION_LAYER:
-				case CONVOLUTION_LAYER:
-					//lys.mp_layers[k].m_fts += rate*lys.mp_layers[k].m_fts_diffs;
-					//lys.mp_layers[k].m_fts_mat += rate*lys.mp_layers[k].m_fts_mat_diffs;
-					//rate*lys.mp_layers[k].m_kers_diffs.show();
-					//lys.mp_layers[k].m_kers.show();
-					lys.mp_layers[k].m_kers += (rate/mini_batches)*lys.mp_layers[k].m_kers_diffs;
-					//lys.mp_layers[k].m_kers.show();
-					//lys.mp_layers[k].m_conv_mat += rate*lys.mp_layers[k].m_conv_mat_diffs;
-					//lys.mp_layers[k].m_conv_relu_mat += rate*lys.mp_layers[k].m_conv_relu_mat_diffs;
-					//lys.mp_layers[k].m_conv_relu_mat2fts += rate*lys.mp_layers[k].m_conv_relu_mat2fts_diffs;
-					break;
-				case POOLING_LAYER:
-					//lys.mp_layers[k].m_fts += rate*lys.mp_layers[k].m_fts_diffs;
-					break;
-				default:
-					break;
-				}
+			}// end k
+		}//end j mini_batches
+
+		for (int k = 0; k < LAYERS_COUNTS; ++k){
+			switch (lys.mp_layers[k].m_layer_mode){
+			case FULLCONNECTION_LAYER:
+			case CONVOLUTION_LAYER:
+				lys.mp_layers[k].m_kers -= (learning_rate)*((1.0 / mini_batches)*lys.mp_layers[k].m_kers_diffs);
+				break;
+			case POOLING_LAYER: break;/* do nothing */
 			}
-		}//end mini_batches
-		//std::cout << vec_path_label[i*mini_batches + mini_batches - 1].path << "    " \
-			<< vec_path_label[i*mini_batches + mini_batches - 1].num << std::endl;
-		//lys.q.show();
-		int xxx = 0;
+		}
+	}// end i
+	for (int i = 0; i < TEST_TIMES; ++i){
+		if (i % 10 == 0){
+			std::cout << std::endl;
+		}
+		std::cout << setw(6) << 100.0*accuracy[i] << " ";
 	}
-
-    /* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑*/
- // /* todo 此处初始化必须重新写一个函数，否则每一个图像初始化都需要申请内存 这个不行 */
-    /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
-
+	std::cout << std::endl;
+	int xxx = 0;
     return 0;
 }
 
+
+bool get_gt_label(int *gt_10, num_path& np){
+	for (int s = 0; s < 10; ++s){
+		if (s == np.num){
+			gt_10[s] = 1;
+		}
+		else{
+			gt_10[s] = 0;
+		}
+	}
+	return true;
+}
 bool get_files(string file_name, vector<string> &files){
     _finddata_t file_info;
 	//intptr_t handle = _findfirst(file_name.c_str(), &file_info);/* win7 */
@@ -255,11 +216,9 @@ bool get_files(string file_name, vector<string> &files){
         files.push_back(full_name + file_info.name);
 		//cout << files[++i] << endl;
 		//Mat image = imread(files[i], 0);
-		
 		//cout << image.rows << "   " << image.cols << endl;
 		//imshow("000000",image);
 		//waitKey(100);
-		//int todo = 0;
 	} while (0== _findnext(handle, &file_info));
 
     return true;
