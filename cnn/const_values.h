@@ -53,9 +53,9 @@
 
 #define POW_NUM                     1.5
 
-#define  TEST_TIMES                 10
+#define  TEST_TIMES                 10000
 
 #define EPSILON                     0.01
 #define EPSILON2                    0.001
-#define MAX_UP                      100000
+#define MAX_UP                      500
 #endif
