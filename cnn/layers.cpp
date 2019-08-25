@@ -297,7 +297,7 @@ bool layers::probability(){
         if (y.mp_matrixes[i].mp_data[0] < -MAX_UP){
             y.mp_matrixes[i].mp_data[0] = -MAX_UP;
         }
-        t.mp_matrixes[i].mp_data[0] = EPSILON + pow(POW_NUM, y.mp_matrixes[i].mp_data[0]);//exp(y.mp_matrixes[i].mp_data[0]);//pow(2.0, y.mp_matrixes[i].mp_data[0]);
+		t.mp_matrixes[i].mp_data[0] = EPSILON + pow(POW_NUM, y.mp_matrixes[i].mp_data[0]);//exp(y.mp_matrixes[i].mp_data[0]);//pow(2.0, y.mp_matrixes[i].mp_data[0]);
         //if (t.mp_matrixes[i].mp_data[0] > MAX_UP){
         //    t.mp_matrixes[i].mp_data[0] = MAX_UP;
         //}
@@ -305,7 +305,7 @@ bool layers::probability(){
 	}
 	
 	for (int i = 0; i < y.m_channels; ++i){
-		q.mp_matrixes[i].mp_data[0] = t.mp_matrixes[i].mp_data[0] / sum;
+		q.mp_matrixes[i].mp_data[0] = EPSILON2 + t.mp_matrixes[i].mp_data[0] / sum;
 	}
 	return true;
 }

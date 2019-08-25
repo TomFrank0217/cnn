@@ -58,10 +58,10 @@ int main(int argc, char* argv[]){
 	layers lys(image.channels(), image.rows, image.cols, layers_parameters, LAYERS_COUNTS);
 	int gt_10[10] = { 0 };
 	double accuracy[TEST_TIMES] = { 0.0 };
-    DATA_TYPE base_learning_rate = 0.04;
-	int rate_num = 25;
+    DATA_TYPE base_learning_rate = 0.01;
+	int rate_num = 10;
 	DATA_TYPE learning_rate = 0;
-	int mini_batches = 200;
+	int mini_batches = 100;
 	
 	for (int i = 0; i < rate_num * TEST_TIMES; ++i){/* 是 i*mini_bathes=输入图像的总次数 */
 
