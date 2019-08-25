@@ -25,7 +25,7 @@
 #define AVE_POOLING                 1
 #define POOLING_SIZE                2
 
-#define IMAGE_UNIT_VALUE            4.0
+#define IMAGE_UNIT_VALUE            5.0
 #define  AVE_VALUE                  127.5
 
 #define MINUS                       -1
@@ -53,9 +53,9 @@
 
 #define POW_NUM                     1.5
 
-#define  TEST_TIMES                 100000
+#define  TEST_TIMES                 10
 
 #define EPSILON                     0.01
 #define EPSILON2                    0.001
-#define MAX_UP                      100
+#define MAX_UP                      100000
 #endif
