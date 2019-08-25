@@ -59,12 +59,11 @@ int main(int argc, char* argv[]){
 	int gt_10[10] = { 0 };
 	double accuracy[TEST_TIMES][11] = { 0.0 };
     DATA_TYPE base_learning_rate = 0.005;
-	int rate_num = 200;
+	int rate_num = 100;
 	DATA_TYPE learning_rate = 0;
-	int mini_batches = 200;
+	int mini_batches = 400;
 	
 	for (int i = 0; i < rate_num * TEST_TIMES; ++i){/* 是 i*mini_bathes=输入图像的总次数 */
-
 		for (int k = 0; k < LAYERS_COUNTS; ++k){
 			switch (lys.mp_layers[k].m_layer_mode){
 			case FULLCONNECTION_LAYER:
