@@ -61,7 +61,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 			MINUS,
 			MINUS,
 			MINUS,
-			RELU_ON,
+			RELU_OFF,
 			MAX_POOLING,
 			POOLING_SIZE
 		},

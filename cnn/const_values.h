@@ -3,7 +3,7 @@
 
 #define DATA_TYPE                   double
 
-#define RANDOM_INITIAL_VAL          0.05
+#define RANDOM_INITIAL_VAL          0.04
 
 #define KERS_MIN_VAL                -RANDOM_INITIAL_VAL
 #define KERS_MAX_VAL                RANDOM_INITIAL_VAL
@@ -25,7 +25,7 @@
 #define AVE_POOLING                 1
 #define POOLING_SIZE                2
 
-#define IMAGE_UNIT_VALUE            5.0
+#define IMAGE_UNIT_VALUE            10.0
 #define  AVE_VALUE                  127.5
 
 #define MINUS                       -1
@@ -39,7 +39,7 @@
 #define MATRIX2FEATURES             1
 
 #define ABS(X)                      ((X)>0.0?(X):-(X))
-#define DELTA                       0.001
+#define DELTA                       0.0001
 
 #define CONVOLUTION_LAYER           0
 #define POOLING_LAYER               1
@@ -51,11 +51,14 @@
 #define LAYER_INITIAL_LENGTH        0
 #define LAYERS_COUNTS               7
 
-#define POW_NUM                     1.5
+#define POW_NUM                     1.05
 
-#define  TEST_TIMES                 10000
+#define  TEST_TIMES                 1000
 
-#define EPSILON                     0.01
-#define EPSILON2                    0.001
-#define MAX_UP                      500
+#define DELTA                       0.0001 /* todo ÓÐÁ½¸ödelta */
+#define EPSILON                    0.0005
+#define MAX_UP                      1600
+
+#define F(x)                       (1.0-(x)*(x))
+#define THRESHOLD_                  0.90
 #endif

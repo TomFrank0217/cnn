@@ -176,35 +176,111 @@ bool layers::back_propagation(int gt_label[]){
 	}
 
 	double loss = -log(q.mp_matrixes[i].mp_data[0]);
-	for (int j = 0; j < q.m_channels; ++j){
-		if (0 == i - j){
-			q_diff.mp_matrixes[i].mp_data[0] = -1.0 / q.mp_matrixes[i].mp_data[0];
-		}
-		else{
-			q_diff.mp_matrixes[j].mp_data[0] = 0.0;
-		}
-	}
+	//for (int j = 0; j < q.m_channels; ++j){
+	//	if (0 == i - j){
+	//		q_diff.mp_matrixes[i].mp_data[0] = -1.0 / q.mp_matrixes[i].mp_data[0];
+	//	}
+	//	else{
+	//		q_diff.mp_matrixes[j].mp_data[0] = 0.0;
+	//	}
+	//}
 
 	double sum_t = 0.0;
 	for (int j = 0; j < t.m_channels; ++j){
 		sum_t += t.mp_matrixes[j].mp_data[0];
 	}
 
-	for (int j = 0; j < t.m_channels; ++j){
-		if (0 == i - j){
-			t_diff.mp_matrixes[i].mp_data[0] = q_diff.mp_matrixes[i].mp_data[0] * \
-				(sum_t - t.mp_matrixes[i].mp_data[0]) / (sum_t*sum_t);
+	for (int j = 0; j < 10; ++j){
+		if (j == i){
+			y_diff.mp_matrixes[i].mp_data[0] = (t.mp_matrixes[i].mp_data[0] - sum_t)*(t.mp_matrixes[i].mp_data[0] - DELTA);
 		}
 		else{
-			t_diff.mp_matrixes[j].mp_data[0] = q_diff.mp_matrixes[i].mp_data[0] * \
-				(-t.mp_matrixes[j].mp_data[0]) / (sum_t*sum_t);
+			y_diff.mp_matrixes[j].mp_data[0] = t.mp_matrixes[j].mp_data[0] * (t.mp_matrixes[j].mp_data[0] - DELTA);
 		}
 	}
 
-	for (int j = 0; j < y.m_channels; ++j){
-		y_diff.mp_matrixes[j].mp_data[0] = \
-			t_diff.mp_matrixes[j].mp_data[0] * t.mp_matrixes[j].mp_data[0];
+	//double max = y_diff.mp_matrixes[0].mp_data[0];
+	//double min = y_diff.mp_matrixes[0].mp_data[0];
+	//for (int j = 0; j < 10; ++j){
+	//	if (max < y_diff.mp_matrixes[j].mp_data[0]){
+	//		max = y_diff.mp_matrixes[j].mp_data[0];
+	//	}
+	//	if (min > y_diff.mp_matrixes[j].mp_data[0]){
+	//		min = y_diff.mp_matrixes[j].mp_data[0];
+	//	}
+	//}
+
+	////double p = y.mp_matrixes[i].mp_data[0];/* todo 此处有问题 */
+	////double p = q.mp_matrixes[i].mp_data[0] - EPSILON;
+	////double scale = (1.0 - sqrt(p));
+	//double p = q.mp_matrixes[i].mp_data[0] - EPSILON;
+	//double scale = (1.0 - p);
+	//for (int j = 0; j < 10; ++j){
+	//	y_diff.mp_matrixes[j].mp_data[0] = 2.0*(y_diff.mp_matrixes[j].mp_data[0] - min) / (max - min) - 1.0;
+	//	y_diff.mp_matrixes[j].mp_data[0] *= scale;
+	//}
+
+	double max =ABS(y_diff.mp_matrixes[0].mp_data[0]);
+	//double min = y_diff.mp_matrixes[0].mp_data[0];
+	for (int j = 1; j < 10; ++j){
+		if (max < ABS(y_diff.mp_matrixes[j].mp_data[0])){
+			max = ABS(y_diff.mp_matrixes[j].mp_data[0]);
+		}
 	}
+
+	//double p = y.mp_matrixes[i].mp_data[0];/* todo 此处有问题 */
+	//double p = q.mp_matrixes[i].mp_data[0] - EPSILON;
+	//double scale = (1.0 - sqrt(p));
+	double p = q.mp_matrixes[i].mp_data[0] - EPSILON;
+	if (p > THRESHOLD_){
+		for (int j = 0; j < 10; ++j){
+			//y_diff.mp_matrixes[j].mp_data[0] = 2.0*(y_diff.mp_matrixes[j].mp_data[0] - min) / (max - min) - 1.0;
+			y_diff.mp_matrixes[j].mp_data[0] = 0.0;
+		}
+	}
+	else{
+		double scale = (1.0 - p);
+
+		if (scale < 0.5){
+			scale = 0.1;
+		}
+		else{
+			scale = scale;//sqrt(scale);
+		}
+		for (int j = 0; j < 10; ++j){
+			//y_diff.mp_matrixes[j].mp_data[0] = 2.0*(y_diff.mp_matrixes[j].mp_data[0] - min) / (max - min) - 1.0;
+			y_diff.mp_matrixes[j].mp_data[0] /= max;
+			y_diff.mp_matrixes[j].mp_data[0] *= scale;
+		}
+
+	}
+	//double const_num = sum_t;
+	//if (t.mp_matrixes[i].mp_data[0] < 10000){
+	//	const_num *= t.mp_matrixes[i].mp_data[0];
+	//}
+	//else{
+	//	const_num *= 10000;
+	//}
+
+	//double const_num = sum_t;/* 线性scale */
+	//for (int j = 0; j < t.m_channels; ++j){
+	//	if (0 == i - j){
+	//		//t_diff.mp_matrixes[i].mp_data[0] = q_diff.mp_matrixes[i].mp_data[0] * \
+	//		//	(sum_t - t.mp_matrixes[i].mp_data[0]) / (sum_t*sum_t);
+	//		//t_diff.mp_matrixes[i].mp_data[0] = (t.mp_matrixes[i].mp_data[0] - sum_t) / const_num;
+	//		y_diff.mp_matrixes[i].mp_data[0] = (t.mp_matrixes[i].mp_data[0] - sum_t)*(t.mp_matrixes[i].mp_data[0] - EPSILON) / const_num;
+	//	}
+	//	else{
+	//		//t_diff.mp_matrixes[j].mp_data[0] = q_diff.mp_matrixes[i].mp_data[0] * \
+	//		//	(-t.mp_matrixes[j].mp_data[0]) / (sum_t*sum_t);
+	//		//t_diff.mp_matrixes[j].mp_data[0] = (t.mp_matrixes[j].mp_data[0]) / const_num;
+	//		y_diff.mp_matrixes[j].mp_data[0] = (t.mp_matrixes[j].mp_data[0])*(t.mp_matrixes[j].mp_data[0] - EPSILON) / const_num;
+	//	}
+	//}
+
+	//for (int j = 0; j < y.m_channels; ++j){
+	//	y_diff.mp_matrixes[j].mp_data[0] = t_diff.mp_matrixes[j].mp_data[0] * (t.mp_matrixes[j].mp_data[0] - EPSILON);
+	//}
 
     /* 先处理最后一层 */
     /* 最后一层是没有relu的 所以好处理一些 */
@@ -291,13 +367,14 @@ bool layers::probability(){
 	DATA_TYPE sum = 0;
 	for (int i = 0; i < y.m_channels; ++i){
 		//t.mp_matrixes[i].mp_data[0] = exp(y.mp_matrixes[i].mp_data[0]);
+		/* todo */
         if (y.mp_matrixes[i].mp_data[0] > MAX_UP){
             y.mp_matrixes[i].mp_data[0] = MAX_UP;
         }
         if (y.mp_matrixes[i].mp_data[0] < -MAX_UP){
             y.mp_matrixes[i].mp_data[0] = -MAX_UP;
         }
-		t.mp_matrixes[i].mp_data[0] = EPSILON + pow(POW_NUM, y.mp_matrixes[i].mp_data[0]);//exp(y.mp_matrixes[i].mp_data[0]);//pow(2.0, y.mp_matrixes[i].mp_data[0]);
+		t.mp_matrixes[i].mp_data[0] = DELTA + pow(POW_NUM, y.mp_matrixes[i].mp_data[0]);//exp(y.mp_matrixes[i].mp_data[0]);//pow(2.0, y.mp_matrixes[i].mp_data[0]);
         //if (t.mp_matrixes[i].mp_data[0] > MAX_UP){
         //    t.mp_matrixes[i].mp_data[0] = MAX_UP;
         //}
@@ -305,7 +382,7 @@ bool layers::probability(){
 	}
 	
 	for (int i = 0; i < y.m_channels; ++i){
-		q.mp_matrixes[i].mp_data[0] = EPSILON2 + t.mp_matrixes[i].mp_data[0] / sum;
+		q.mp_matrixes[i].mp_data[0] = t.mp_matrixes[i].mp_data[0] / sum + EPSILON;
 	}
 	return true;
 }
