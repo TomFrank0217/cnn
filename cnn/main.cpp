@@ -45,6 +45,9 @@ int main(int argc, char* argv[]){
 	/* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑*/
 	/* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
 
+
+
+	string  ttt = "*********************************************************************************************************************************************************************";
 	string train_file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
 	string test_file_name = "F:\\chromeDownload\\test_image\\pic2\\0\\*.bmp";
 	vector<num_path> train_path_label;
@@ -58,7 +61,7 @@ int main(int argc, char* argv[]){
 	layers lys(image.channels(), image.rows, image.cols, layers_parameters, LAYERS_COUNTS);
 	int gt_10[10] = { 0 };
 	double accuracy[TEST_TIMES][11] = { 0.0 };
-	DATA_TYPE base_learning_rate = 0.02;
+	DATA_TYPE base_learning_rate = 0.01;
 	int rate_num = 100;
 	DATA_TYPE learning_rate = 0;
 	int mini_batches = 100;
@@ -80,7 +83,7 @@ int main(int argc, char* argv[]){
 				break;
 			}
 		}
-		learning_rate = base_learning_rate*pow(0.997, i / rate_num);
+		learning_rate = base_learning_rate*pow(0.985, i / rate_num);
 		for (int j = 0; j < mini_batches; ++j){
 			get_gt_label(gt_10, train_path_label[(i*mini_batches + j) % train_path_label.size()]);
 			image = imread(train_path_label[(i*mini_batches + j) % train_path_label.size()].path, 0);
@@ -93,8 +96,8 @@ int main(int argc, char* argv[]){
 
 			lys.forward_propagation();
             if (i % 10 == 0){
-                if (j % 100 == 0){
-                    std::cout << "\n\niterations  " << i*mini_batches + j + 1 << "   " << std::endl;
+                if (j % 50 == 0){
+                    std::cout << "\n\niterations  " << i*mini_batches + j  << "   " << std::endl;
                     for (int sss = 0; sss < 10; ++sss){
                         std::cout << setw(10) << sss;
                     }
@@ -150,23 +153,23 @@ int main(int argc, char* argv[]){
 
             std::cout << "\n\niterations  " << i*mini_batches << "   " << std::endl;
             for (int sss = 0; sss < 10; ++sss){
-                std::cout << setw(10) << sss;
+				std::cout << setw(SHOW_PROBABILITY_WIDTH) << sss;
             }
             std::cout << std::endl;
             for (int sss = 0; sss < 10; ++sss){
-                std::cout << setw(10) << gt_10[sss];
+				std::cout << setw(SHOW_PROBABILITY_WIDTH) << gt_10[sss];
             }
             std::cout << std::endl;
             for (int sss = 0; sss < 10; ++sss){
-                std::cout << setw(10) << lys.y.mp_matrixes[sss].mp_data[0];
+				std::cout << setw(SHOW_PROBABILITY_WIDTH) << lys.y.mp_matrixes[sss].mp_data[0];
             }
             std::cout << std::endl;
             for (int sss = 0; sss < 10; ++sss){
-                std::cout << setw(10) << lys.t.mp_matrixes[sss].mp_data[0];
+				std::cout << setw(SHOW_PROBABILITY_WIDTH) << lys.t.mp_matrixes[sss].mp_data[0];
             }
             std::cout << std::endl;
             for (int sss = 0; sss < 10; ++sss){
-                std::cout << setw(10) << 100.0*lys.q.mp_matrixes[sss].mp_data[0];
+				std::cout << setw(SHOW_PROBABILITY_WIDTH) << 100.0*lys.q.mp_matrixes[sss].mp_data[0];
             }
             std::cout << std::endl;
 
@@ -200,7 +203,7 @@ int main(int argc, char* argv[]){
                 accuracy[i / rate_num][r] = (0.0 + right[r]) \
                     / (0.0 + counts[r]);
             }
-            std::cout << "****************************************************************************************************************" << std::endl;
+            std::cout << ttt << std::endl;
             for (int t = 0; t <= i / rate_num; ++t){
                 //for (int s = 0; s < 11; ++s){
                 //    std::cout << setw(10) << right[s];
@@ -211,11 +214,11 @@ int main(int argc, char* argv[]){
                 //}
                 //std::cout << std::endl;
                 for (int s = 0; s < 11; ++s){
-                    std::cout << setw(10) << 100.0*accuracy[t][s];
+					std::cout << setw(SHOW_PROBABILITY_WIDTH) << 100.0*accuracy[t][s];
                 }
                 std::cout << endl;
             }
-            std::cout << std::endl << "****************************************************************************************************************" << std::endl;
+			std::cout << std::endl << ttt << std::endl;
             //Sleep(6000);
             int xxx = 0;
         }//end if (0 == i%rate_num)

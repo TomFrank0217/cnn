@@ -3,7 +3,7 @@
 
 #define DATA_TYPE                   double
 
-#define RANDOM_INITIAL_VAL          0.04
+#define RANDOM_INITIAL_VAL          0.03
 
 #define KERS_MIN_VAL                -RANDOM_INITIAL_VAL
 #define KERS_MAX_VAL                RANDOM_INITIAL_VAL
@@ -15,6 +15,7 @@
 #define SHOW_IMAGE_SHAPE            2
 #define SHOW_IMAGE_CROP_LENGTH      0
 #define SHOW_WIDTH                  5
+#define SHOW_PROBABILITY_WIDTH      15
 
 #define VALID_PADDING               0
 #define SAME_PADDING                1
@@ -56,9 +57,10 @@
 #define  TEST_TIMES                 1000
 
 #define DELTA                       0.0001 /* todo ÓÐÁ½¸ödelta */
-#define EPSILON                    0.0005
+#define EPSILON                    0.0000
 #define MAX_UP                      1600
 
 #define F(x)                       (1.0-(x)*(x))
-#define THRESHOLD_                  0.90
+#define THRESHOLD_                  0.95
+
 #endif

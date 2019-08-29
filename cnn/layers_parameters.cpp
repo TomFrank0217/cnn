@@ -46,7 +46,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		1,
 		5,
 		5,
-		8,
+		6,
 		STRIDE,
 		VALID_PADDING,
 		RELU_OFF,
@@ -67,7 +67,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		},
 		layer_parameters{//3
 				CONVOLUTION_LAYER,
-				8,
+				6,
 				5,
 				5,
 				16,

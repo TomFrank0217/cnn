@@ -167,14 +167,22 @@ bool layers::forward_propagation(){
 bool layers::back_propagation(int gt_label[]){
 	/* todo */
 	//p_.reset(0.0);
-	int i = 0;
+	int i = -1;
+
 	for (int j = 0; j < q.m_channels; ++j){
 		if (0 != gt_label[j]){
 			i = j;
 			break;
 		}
 	}
-
+	int qmax_index = 0;
+	double q_max = q.mp_matrixes[0].mp_data[0];
+	for (int j = 1; j < q.m_channels; ++j){
+		if (q_max < q.mp_matrixes[j].mp_data[0]){
+			qmax_index = j;
+			q_max = q.mp_matrixes[j].mp_data[0];
+		}
+	}
 	double loss = -log(q.mp_matrixes[i].mp_data[0]);
 	//for (int j = 0; j < q.m_channels; ++j){
 	//	if (0 == i - j){
@@ -186,6 +194,7 @@ bool layers::back_propagation(int gt_label[]){
 	//}
 
 	double sum_t = 0.0;
+
 	for (int j = 0; j < t.m_channels; ++j){
 		sum_t += t.mp_matrixes[j].mp_data[0];
 	}
@@ -221,10 +230,13 @@ bool layers::back_propagation(int gt_label[]){
 	//}
 
 	double max =ABS(y_diff.mp_matrixes[0].mp_data[0]);
+	int index = 0;
+	/* qj tj  ydiffj （j!=i） 正相关    ti最大 max=y_diff[i]   else max=最大的y_diff[j] */
 	//double min = y_diff.mp_matrixes[0].mp_data[0];
 	for (int j = 1; j < 10; ++j){
 		if (max < ABS(y_diff.mp_matrixes[j].mp_data[0])){
 			max = ABS(y_diff.mp_matrixes[j].mp_data[0]);
+			index = j;
 		}
 	}
 
@@ -239,14 +251,24 @@ bool layers::back_propagation(int gt_label[]){
 		}
 	}
 	else{
-		double scale = (1.0 - p);
-
-		if (scale < 0.5){
+		double scale;
+		if (p > 0.5){
 			scale = 0.1;
 		}
 		else{
-			scale = scale;//sqrt(scale);
+			scale = 1 - p;
 		}
+		//scale = pow(scale, 2);
+		//if (scale < 0.05){
+		//	scale = 0.05;
+		//}
+		//if (qmax_index != i){
+		////	scale += 5.0*(q.mp_matrixes[qmax_index].mp_data[0] - q.mp_matrixes[i].mp_data[0]);
+		////	if (scale < 2.0){
+		////		scale = 2.0;
+		////	}
+		//	scale *= 2.0;
+		//}
 		for (int j = 0; j < 10; ++j){
 			//y_diff.mp_matrixes[j].mp_data[0] = 2.0*(y_diff.mp_matrixes[j].mp_data[0] - min) / (max - min) - 1.0;
 			y_diff.mp_matrixes[j].mp_data[0] /= max;
@@ -254,6 +276,7 @@ bool layers::back_propagation(int gt_label[]){
 		}
 
 	}
+
 	//double const_num = sum_t;
 	//if (t.mp_matrixes[i].mp_data[0] < 10000){
 	//	const_num *= t.mp_matrixes[i].mp_data[0];
