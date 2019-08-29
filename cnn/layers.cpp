@@ -244,7 +244,7 @@ bool layers::back_propagation(int gt_label[]){
 	//double p = q.mp_matrixes[i].mp_data[0] - EPSILON;
 	//double scale = (1.0 - sqrt(p));
 	double p = q.mp_matrixes[i].mp_data[0] - EPSILON;
-	if (false&&p > THRESHOLD_){
+	if (p > THRESHOLD_){
 		for (int j = 0; j < 10; ++j){
 			//y_diff.mp_matrixes[j].mp_data[0] = 2.0*(y_diff.mp_matrixes[j].mp_data[0] - min) / (max - min) - 1.0;
 			y_diff.mp_matrixes[j].mp_data[0] = 0.0;
@@ -253,10 +253,10 @@ bool layers::back_propagation(int gt_label[]){
 	else{
 		double scale;
 		if (p > 0.5){
-            scale = THRESHOLD_ - 1.0;
+            scale = 0.1;
 		}
 		else{
-            scale = 2.5 - p;
+            scale = 1.5 - p;
 		}
 		//scale = pow(scale, 2);
 		//if (scale < 0.05){

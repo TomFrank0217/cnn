@@ -59,7 +59,7 @@ int main(int argc, char* argv[]){
 	layers lys(image.channels(), image.rows, image.cols, layers_parameters, LAYERS_COUNTS);
 	int gt_10[10] = { 0 };
 	double accuracy[TEST_TIMES][11] = { 0.0 };
-	DATA_TYPE base_learning_rate = 0.02;
+	DATA_TYPE base_learning_rate = 0.015;
 	int rate_num = 100;
 	DATA_TYPE learning_rate = 0;
 	int mini_batches = 100;
