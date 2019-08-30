@@ -243,17 +243,22 @@ bool layers::back_propagation(int gt_label[]){
 	//double p = y.mp_matrixes[i].mp_data[0];/* todo 此处有问题 */
 	//double p = q.mp_matrixes[i].mp_data[0] - EPSILON;
 	//double scale = (1.0 - sqrt(p));
+	double scale = 0;
 	double p = q.mp_matrixes[i].mp_data[0] - EPSILON;
-	if (p > THRESHOLD_){
-		for (int j = 0; j < 10; ++j){
-			//y_diff.mp_matrixes[j].mp_data[0] = 2.0*(y_diff.mp_matrixes[j].mp_data[0] - min) / (max - min) - 1.0;
-			y_diff.mp_matrixes[j].mp_data[0] = 0.0;
+	if ( p > THRESHOLD_){
+		if (p > 0.99){
+			scale = -0.1;
+		}
+		else{
+			scale = 0.01;
 		}
 	}
 	else{
-		double scale;
 		if (p > 0.5){
-            scale = 0.1;
+			scale = 1.0 - p;
+			if (scale > 0.2){
+				scale = 0.2;
+			}
 		}
 		else{
             scale = 1.5 - p;
@@ -269,14 +274,12 @@ bool layers::back_propagation(int gt_label[]){
 		////	}
 		//	scale *= 2.0;
 		//}
-		for (int j = 0; j < 10; ++j){
-			//y_diff.mp_matrixes[j].mp_data[0] = 2.0*(y_diff.mp_matrixes[j].mp_data[0] - min) / (max - min) - 1.0;
-			y_diff.mp_matrixes[j].mp_data[0] /= max;
-			y_diff.mp_matrixes[j].mp_data[0] *= scale;
-		}
-
 	}
-
+	for (int j = 0; j < 10; ++j){
+		//y_diff.mp_matrixes[j].mp_data[0] = 2.0*(y_diff.mp_matrixes[j].mp_data[0] - min) / (max - min) - 1.0;
+		y_diff.mp_matrixes[j].mp_data[0] /= max;
+		y_diff.mp_matrixes[j].mp_data[0] *= scale;
+	}
 	//double const_num = sum_t;
 	//if (t.mp_matrixes[i].mp_data[0] < 10000){
 	//	const_num *= t.mp_matrixes[i].mp_data[0];

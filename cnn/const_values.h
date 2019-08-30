@@ -61,6 +61,6 @@
 #define MAX_UP                      1500
 
 #define F(x)                       (1.0-(x)*(x))
-#define THRESHOLD_                  0.90
+#define THRESHOLD_                  0.95
 
 #endif

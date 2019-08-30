@@ -62,7 +62,7 @@ int main(int argc, char* argv[]){
 	DATA_TYPE base_learning_rate = 0.015;
 	int rate_num = 100;
 	DATA_TYPE learning_rate = 0;
-	int mini_batches = 100;
+	int mini_batches = 200;
 	
 	for (int i = 0; i < rate_num * TEST_TIMES; ++i){/* 是 i*mini_bathes=输入图像的总次数 */
 		for (int k = 0; k < LAYERS_COUNTS; ++k){
@@ -77,18 +77,27 @@ int main(int argc, char* argv[]){
 				break;
 			}
 		}
-		learning_rate = base_learning_rate*pow(0.985, i / rate_num);
+		learning_rate = base_learning_rate*pow(0.97, i / rate_num);
 		for ( int j = 0; j < mini_batches; ++j){
 			get_gt_label(gt_10, train_path_label[(i*mini_batches + j) % train_path_label.size()]);
 			image = imread(train_path_label[(i*mini_batches + j) % train_path_label.size()].path, 0);
             lys.mp_layers[0].m_fts = image;/* todo */
 			lys.forward_propagation();
-            if (i % 11 == 0){
+            if (i % 7 == 0){
                 if (j % 37 == 0){
                     std::cout << "\n\niterations  " << i*mini_batches + j  << "   " << std::endl;
                     for (int sss = 0; sss < 10; ++sss){
-                        std::cout << setw(SHOW_PROBABILITY_WIDTH - 1) << sss;
-                        std::cout << " ";
+						if (0 == gt_10[sss]){
+							for (int kkk = 0; kkk < SHOW_PROBABILITY_WIDTH; ++kkk){
+								std::cout << " ";
+							}
+						}
+						else{
+							for (int kkk = 0; kkk < SHOW_PROBABILITY_WIDTH - 2; ++kkk){
+								std::cout << " ";
+							}
+							std::cout << sss << " ";
+						}
                     }
                     std::cout << std::endl;
                     for (int sss = 0; sss < 10; ++sss){
