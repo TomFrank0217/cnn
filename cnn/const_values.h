@@ -52,13 +52,13 @@
 #define LAYER_INITIAL_LENGTH        0
 #define LAYERS_COUNTS               7
 
-#define POW_NUM                     1.08
+#define POW_NUM                     1.05
 
 #define  TEST_TIMES                 1000
 
 #define DELTA                       0.0001 /* todo ÓÐÁ½¸ödelta */
 #define EPSILON                    0.0000
-#define MAX_UP                      1500
+#define MAX_UP                      2000
 
 #define F(x)                       (1.0-(x)*(x))
 #define THRESHOLD_                  0.95

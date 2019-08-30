@@ -246,18 +246,18 @@ bool layers::back_propagation(int gt_label[]){
 	double scale = 0;
 	double p = q.mp_matrixes[i].mp_data[0] - EPSILON;
 	if ( p > THRESHOLD_){
-		if (p > 0.99){
-			scale = -0.1;
+		if (p > 0.995){
+			scale = -0.03;
 		}
 		else{
-			scale = 0.01;
+			scale = (1.0 - p) / 2;
 		}
 	}
 	else{
 		if (p > 0.5){
 			scale = 1.0 - p;
-			if (scale > 0.2){
-				scale = 0.2;
+			if (scale > 0.25){
+				scale = 0.25;
 			}
 		}
 		else{

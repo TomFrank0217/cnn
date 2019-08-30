@@ -62,7 +62,7 @@ int main(int argc, char* argv[]){
 	DATA_TYPE base_learning_rate = 0.015;
 	int rate_num = 100;
 	DATA_TYPE learning_rate = 0;
-	int mini_batches = 200;
+	int mini_batches = 300;
 	
 	for (int i = 0; i < rate_num * TEST_TIMES; ++i){/* 是 i*mini_bathes=输入图像的总次数 */
 		for (int k = 0; k < LAYERS_COUNTS; ++k){
@@ -77,7 +77,7 @@ int main(int argc, char* argv[]){
 				break;
 			}
 		}
-		learning_rate = base_learning_rate*pow(0.97, i / rate_num);
+		learning_rate = base_learning_rate*pow(0.955, i / rate_num);
 		for ( int j = 0; j < mini_batches; ++j){
 			get_gt_label(gt_10, train_path_label[(i*mini_batches + j) % train_path_label.size()]);
 			image = imread(train_path_label[(i*mini_batches + j) % train_path_label.size()].path, 0);
