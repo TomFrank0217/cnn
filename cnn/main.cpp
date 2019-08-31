@@ -62,10 +62,10 @@ int main(int argc, char* argv[]){
 	layers lys(image.channels(), image.rows, image.cols, layers_parameters, LAYERS_COUNTS);
 	int gt_10[10] = { 0 };
 	double accuracy[TEST_TIMES][11] = { 0.0 };
-	DATA_TYPE base_learning_rate = 0.008;
-	int rate_num = 150;
+	DATA_TYPE base_learning_rate = 0.010;
+	int rate_num = 100;
 	DATA_TYPE learning_rate = 0;
-	int mini_batches = 400;
+	int mini_batches = 200;
 	
 	for (int i = 0; i < rate_num * TEST_TIMES; ++i){/* 是 i*mini_bathes=输入图像的总次数 */
 		for (int k = 0; k < LAYERS_COUNTS; ++k){
@@ -80,7 +80,7 @@ int main(int argc, char* argv[]){
 				break;
 			}
 		}
-		learning_rate = base_learning_rate*pow(0.95, i / rate_num);
+		learning_rate = base_learning_rate*pow(0.96, i / rate_num);
 		for ( int j = 0; j < mini_batches; ++j){
 			get_gt_label(gt_10, train_path_label[(i*mini_batches + j) % train_path_label.size()]);
 			image = imread(train_path_label[(i*mini_batches + j) % train_path_label.size()].path, 0);
@@ -159,7 +159,7 @@ int main(int argc, char* argv[]){
 			case POOLING_LAYER: break;/* do nothing */
 			}
 		}
-		int rate_num_x = rate_num / 3;
+		int rate_num_x = rate_num;
 		if (0 == i % (rate_num_x) /*&& 3 == j%mini_batches*/){
             std::cout << "\n\niterations  " << i*mini_batches << "   " << std::endl;
             std::cout << std::endl;

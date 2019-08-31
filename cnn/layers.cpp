@@ -256,12 +256,15 @@ bool layers::back_propagation(int gt_label[]){
 	else{
 		if (p > 0.5){
 			scale = 1.0 - p;
-			if (scale > 0.2){
-				scale = 0.2;
+			if (scale > 0.15){
+				scale = 0.15;
 			}
 		}
 		else{
             scale = 1.2 - p;
+            if (p < 0.15){
+                scale *= 2.0;
+            }
 		}
 		//scale = pow(scale, 2);
 		//if (scale < 0.05){
