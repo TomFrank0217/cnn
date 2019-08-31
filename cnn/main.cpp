@@ -44,7 +44,6 @@ int main(int argc, char* argv[]){
     /* todo random初始化不是很好 */
 	/* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑*/
 	/* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
-
 	string  ttt = "*********************************************************************************************************************************************************************";
 	string train_file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
 	string test_file_name = "F:\\chromeDownload\\test_image\\pic2\\0\\*.bmp";
