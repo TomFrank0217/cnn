@@ -51,18 +51,21 @@ int main(int argc, char* argv[]){
 	vector<num_path> train_path_label;
 	vector<num_path> test_path_label;
 	get_image_path_and_label(train_path_label, train_file_name);
+	std::cout << "train_counts = "<<train_path_label.size() << std::endl;
 	get_image_path_and_label(test_path_label, test_file_name);
+	std::cout << "test_counts = " << test_path_label.size() << std::endl;
 	for (int i = 0; i < test_path_label.size(); ++i){
-		std::cout << test_path_label[i].path << std::endl;
+		//std::cout << test_path_label[i].path << std::endl;
+		;
 	}
 	Mat image = imread(train_path_label[0].path, 0);
 	layers lys(image.channels(), image.rows, image.cols, layers_parameters, LAYERS_COUNTS);
 	int gt_10[10] = { 0 };
 	double accuracy[TEST_TIMES][11] = { 0.0 };
-	DATA_TYPE base_learning_rate = 0.015;
-	int rate_num = 100;
+	DATA_TYPE base_learning_rate = 0.008;
+	int rate_num = 150;
 	DATA_TYPE learning_rate = 0;
-	int mini_batches = 100;
+	int mini_batches = 400;
 	
 	for (int i = 0; i < rate_num * TEST_TIMES; ++i){/* 是 i*mini_bathes=输入图像的总次数 */
 		for (int k = 0; k < LAYERS_COUNTS; ++k){
@@ -77,14 +80,14 @@ int main(int argc, char* argv[]){
 				break;
 			}
 		}
-		learning_rate = base_learning_rate*pow(0.96, i / rate_num);
+		learning_rate = base_learning_rate*pow(0.95, i / rate_num);
 		for ( int j = 0; j < mini_batches; ++j){
 			get_gt_label(gt_10, train_path_label[(i*mini_batches + j) % train_path_label.size()]);
 			image = imread(train_path_label[(i*mini_batches + j) % train_path_label.size()].path, 0);
             lys.mp_layers[0].m_fts = image;/* todo */
 			lys.forward_propagation();
             if (i % 7 == 0){
-                if (j % 37 == 0){
+                if (j % 58 == 0){
                     std::cout << "\n\niterations  " << i*mini_batches + j  << "   " << std::endl;
                     for (int sss = 0; sss < 10; ++sss){
 						if (0 == gt_10[sss]){
@@ -107,10 +110,10 @@ int main(int argc, char* argv[]){
                             }
                         }
                         else{
-                            for (int kkk = 0; kkk < SHOW_PROBABILITY_WIDTH - 3; ++kkk){
+                            for (int kkk = 0; kkk < SHOW_PROBABILITY_WIDTH - 5; ++kkk){
                                 std::cout << " ";
                             }
-                            std::cout << "***";
+                            std::cout << "*****";
                         }
                     }//end sss
                     std::cout << std::endl;
@@ -156,8 +159,8 @@ int main(int argc, char* argv[]){
 			case POOLING_LAYER: break;/* do nothing */
 			}
 		}
-
-        if (0 == i%rate_num /*&& 3 == j%mini_batches*/){
+		int rate_num_x = rate_num / 3;
+		if (0 == i % (rate_num_x) /*&& 3 == j%mini_batches*/){
             std::cout << "\n\niterations  " << i*mini_batches << "   " << std::endl;
             std::cout << std::endl;
             for (int sss = 0; sss < 10; ++sss){
@@ -174,10 +177,10 @@ int main(int argc, char* argv[]){
                     }
                 }
                 else{
-                    for (int kkk = 0; kkk < SHOW_PROBABILITY_WIDTH - 3; ++kkk){
+                    for (int kkk = 0; kkk < SHOW_PROBABILITY_WIDTH - 5; ++kkk){
                         std::cout << " ";
                     }
-                    std::cout << "***";
+                    std::cout << "*****";
                 }
             }
             std::cout << std::endl;
@@ -221,7 +224,7 @@ int main(int argc, char* argv[]){
                 right[10] += right[r];
             }
             for (int r = 0; r < 11; ++r){
-                accuracy[i / rate_num][r] = (0.0 + right[r]) \
+				accuracy[i / rate_num_x][r] = (0.0 + right[r]) \
                     / (0.0 + counts[r]);
             }
             std::cout << "******************************************************" << std::endl;
@@ -231,7 +234,7 @@ int main(int argc, char* argv[]){
                 //std::cout << " ";
             }
             std::cout << std::endl;
-            for (int t = 0; t <= i / rate_num; ++t){
+			for (int t = 0; t <= i / rate_num_x; ++t){
                 //for (int s = 0; s < 11; ++s){
                 //    std::cout << setw(10) << right[s];
                 //}
