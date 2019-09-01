@@ -46,8 +46,11 @@ int main(int argc, char* argv[]){
 	/* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
 	string  ttt = "*********************************************************************************************************************************************************************";
 
-	string train_file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
-	string test_file_name = "F:\\chromeDownload\\test_image\\pic2\\0\\*.bmp";
+	//string train_file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
+	//string test_file_name = "F:\\chromeDownload\\test_image\\pic2\\0\\*.bmp";
+    string train_file_name = ".\\data\\trainimage\\0\\*.bmp";
+    string test_file_name =  ".\\data\\test_image\\0\\*.bmp";
+    std::cout << train_file_name << std::endl;
 	vector<num_path> train_path_label;
 	vector<num_path> test_path_label;
 	get_image_path_and_label(train_path_label, train_file_name);
@@ -285,7 +288,7 @@ bool get_files(string file_name, vector<string> &files){
 	//intptr_t handle = _findfirst(file_name.c_str(), &file_info);/* win7 */
 	intptr_t handle = _findfirst(file_name.c_str(), &file_info);  /* win10 */
     //cout << file_name << endl;
-    string full_name = file_name.substr(0, 36);
+    string full_name = file_name.substr(0, 20);
     //cout << full_name << endl;
     if (-1 == handle){
         cerr << "failed to transfer files" << endl;
@@ -358,7 +361,7 @@ bool get_image_path_and_label(vector<num_path> &vec_path_label, string file_name
     int num_counts = 0;
     //for (int i = 0; i < 10; ++i){    /* todo */
     for (int i = 0; i < 10; ++i){    /* todo */
-        file_name[34] = '0' + i;
+        file_name[18] = '0' + i;
 		std::cout << file_name << endl;
         file_names.push_back(file_name);
         get_files(file_name, num_file);
