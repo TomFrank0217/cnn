@@ -45,6 +45,7 @@ int main(int argc, char* argv[]){
 	/* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑*/
 	/* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
 	string  ttt = "*********************************************************************************************************************************************************************";
+
 	string train_file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
 	string test_file_name = "F:\\chromeDownload\\test_image\\pic2\\0\\*.bmp";
 	vector<num_path> train_path_label;
@@ -80,7 +81,7 @@ int main(int argc, char* argv[]){
 				break;
 			}
 		}
-		learning_rate = base_learning_rate*pow(0.96, i / rate_num);
+		learning_rate = base_learning_rate*pow(0.955, i / rate_num);
 		for ( int j = 0; j < mini_batches; ++j){
 			get_gt_label(gt_10, train_path_label[(i*mini_batches + j) % train_path_label.size()]);
 			image = imread(train_path_label[(i*mini_batches + j) % train_path_label.size()].path, 0);
@@ -159,7 +160,7 @@ int main(int argc, char* argv[]){
 			case POOLING_LAYER: break;/* do nothing */
 			}
 		}
-		int rate_num_x = rate_num;
+        int rate_num_x = rate_num / 2;
 		if (0 == i % (rate_num_x) /*&& 3 == j%mini_batches*/){
             std::cout << "\n\niterations  " << i*mini_batches << "   " << std::endl;
             std::cout << std::endl;

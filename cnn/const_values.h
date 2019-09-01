@@ -54,7 +54,7 @@
 
 #define POW_NUM                     1.05
 
-#define  TEST_TIMES                 1000
+#define  TEST_TIMES                 2000
 
 #define DELTA                       0.0001 /* todo ÓÐÁ½¸ödelta */
 #define EPSILON                    0.0000
