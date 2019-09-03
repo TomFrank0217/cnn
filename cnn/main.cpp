@@ -91,17 +91,21 @@ int main(int argc, char* argv[]){
 		//for ( int j = 0; j < MINI_BATCHES; ++j){
 			int j = 0;
 			for (int k = 0; k < LABELS_COUNTS; ++k){
+				
 				for (int l = 0; l < nums_counts[k]; ++l){
 					++j;
 					get_gt_label(gt_10, train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()]);
 					++num_counts[k];
 					image = imread(train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()].path, 0);
+					if (k%10==0&&l%10==0)
+						std::cout << train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()].path << std::endl;
 					lys.mp_layers[0].m_fts = image;/* todo */
 					lys.forward_propagation();
 					show_train_probability(gt_10, lys, i, j);
 					lys.back_propagation(gt_10);
 					add_batch_diffs(lys);
 				}
+				std::cout << nums_counts[k] << "  ";
 			}
 
 			//get_gt_label(gt_10, train_path_label[(i*MINI_BATCHES + j) % train_path_label.size()]);
