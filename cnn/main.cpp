@@ -98,7 +98,7 @@ int main(int argc, char* argv[]){
 					image = imread(train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()].path, 0);
 					lys.mp_layers[0].m_fts = image;/* todo */
 					lys.forward_propagation();
-					//show_train_probability(gt_10, lys, i, j);
+					show_train_probability(gt_10, lys, i, j);
 					lys.back_propagation(gt_10);
 					add_batch_diffs(lys);
 				}
@@ -113,12 +113,13 @@ int main(int argc, char* argv[]){
 			//add_batch_diffs(lys);
 		//}//end j mini_batches
 		upadate_params_after_batches_back_propagations(lys, learning_rate);
+		int iii = i / RATE_CHANHE_NUMS;
 		if (0 == i % (RATE_CHANHE_NUMS)){/* todo valid accuarcy的下标冲突了 */
-			calculate_accuracy(lys, test_path_label, test_accuracy, i / (RATE_CHANHE_NUMS));
+			calculate_accuracy(lys, test_path_label, test_accuracy, iii);
 			
 			sum_errors = 0.0;
 			for (int j = 0; j < LABELS_COUNTS; ++j){
-				errors[j] = 1.0 - test_accuracy[i][j];
+				errors[j] = 1.0 - test_accuracy[iii][j];
 				sum_errors += errors[j];
 			}
 			for (int j = 0; j < LABELS_COUNTS; ++j){
@@ -133,20 +134,19 @@ int main(int argc, char* argv[]){
 			}
 
 			int t = MINI_BATCHES - sum;
+			double xxx = 0;
 			for (int j = 0; j < LABELS_COUNTS - 1; ++j){
-				double xxx = double(t) / double(LABELS_COUNTS);
-				xxx = xxx>int(xxx) + 0.8 ? xxx + 1 : xxx;
+				xxx = double(t) / double(LABELS_COUNTS);
+				xxx = xxx>int(xxx) + 0.35 ? xxx + 1 : xxx;
 				nums_counts[j] += xxx;
 			}
-			nums_counts[LABELS_COUNTS - 1] += t - int((t / LABELS_COUNTS))*(LABELS_COUNTS - 1);
+			nums_counts[LABELS_COUNTS - 1] += t - int(xxx)*(LABELS_COUNTS - 1);
 			int tmp = 0;
 			for (int k = 0; k < LABELS_COUNTS; ++k){
 				std::cout << nums_counts[k] << "  ";
 				tmp += nums_counts[k];
 			}
 			cout << "tmp=" << tmp << std::endl;
-			
-			int xxx = 0;
 		}
 	}// end i
 
