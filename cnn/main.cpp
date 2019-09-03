@@ -44,7 +44,7 @@ bool reset_params_before_batches_forward_propagations(layers& lys);
 bool show_train_probability(int* gt_10, layers& lys, int iters_count, int bacthes_count);
 bool add_batch_diffs(layers& lys);
 bool upadate_params_after_batches_back_propagations(layers& lys, double learning_rate);
-bool calculate_accuracy(layers& lys, vector<num_path>& test_path_label, double accuracy[][LABELS_COUNTS + 1]);
+bool calculate_accuracy(layers& lys, vector<num_path>& test_path_label, double accuracy[][LABELS_COUNTS + 1], int test_count);
 /* todo random初始化不是很好 */
 /* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑*/
 /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
@@ -66,30 +66,87 @@ int main(int argc, char* argv[]){
 	get_image_path_and_label(valid_label_imgs, vaild_path_label, valid_file_name);
 	get_image_path_and_label(test_label_imgs, test_path_label, test_file_name);
 
+	int num_counts[LABELS_COUNTS] = { 0 };
+	int nums_counts[LABELS_COUNTS] = { 0 };
+	double scale = 0.5;
+	for (int i = 0; i < LABELS_COUNTS; ++i){
+		std::cout << nums_counts[i] << "  ";
+		nums_counts[i] = MINI_BATCHES / LABELS_COUNTS;//todo 必须是整数
+	}
+
 	Mat image = imread(train_path_label[0].path, 0);
 	std::cout << train_path_label[0].path << std::endl;
 	std::cout << image.rows << "  " << image.cols << std::endl;
 	layers lys(image.channels(), image.rows, image.cols, layers_parameters, LAYERS_COUNTS);
 	int gt_10[LAYERS_COUNTS] = { 0 };
-	double accuracy[TEST_TIMES][LABELS_COUNTS + 1] = { 0.0 };
+	double test_accuracy[TEST_TIMES][LABELS_COUNTS + 1] = { 0.0 };
+	double valid_accuracy[TEST_TIMES][LABELS_COUNTS + 1] = { 0.0 };
+	double errors[LABELS_COUNTS] = { 0.0 }, sum_errors;
 	DATA_TYPE learning_rate = 0;
 	long iters[LABELS_COUNTS] = { 0 }; /* iters[i]这个变量用来计算i下一个使用的下标 */
 
 	for (int i = 0; i < RATE_CHANHE_NUMS * TEST_TIMES; ++i){
 		learning_rate = BASE_LEARNING_RATE*pow(DECAY_RATE, i / RATE_CHANHE_NUMS);
 		reset_params_before_batches_forward_propagations(lys);  /* 每一次batch传播之前所有的梯度清零 */
-		for ( int j = 0; j < MINI_BATCHES; ++j){
-			get_gt_label(gt_10, train_path_label[(i*MINI_BATCHES + j) % train_path_label.size()]);
-			image = imread(train_path_label[(i*MINI_BATCHES + j) % train_path_label.size()].path, 0);
-            lys.mp_layers[0].m_fts = image;/* todo */
-			lys.forward_propagation();
-				show_train_probability(gt_10, lys, i, j);
-			lys.back_propagation(gt_10);
-			add_batch_diffs(lys);
-		}//end j mini_batches
+		//for ( int j = 0; j < MINI_BATCHES; ++j){
+			int j = 0;
+			for (int k = 0; k < LABELS_COUNTS; ++k){
+				for (int l = 0; l < nums_counts[k]; ++l){
+					++j;
+					get_gt_label(gt_10, train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()]);
+					++num_counts[k];
+					image = imread(train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()].path, 0);
+					lys.mp_layers[0].m_fts = image;/* todo */
+					lys.forward_propagation();
+					//show_train_probability(gt_10, lys, i, j);
+					lys.back_propagation(gt_10);
+					add_batch_diffs(lys);
+				}
+			}
+
+			//get_gt_label(gt_10, train_path_label[(i*MINI_BATCHES + j) % train_path_label.size()]);
+			//image = imread(train_path_label[(i*MINI_BATCHES + j) % train_path_label.size()].path, 0);
+   //         lys.mp_layers[0].m_fts = image;/* todo */
+			//lys.forward_propagation();
+			//	show_train_probability(gt_10, lys, i, j);
+			//lys.back_propagation(gt_10);
+			//add_batch_diffs(lys);
+		//}//end j mini_batches
 		upadate_params_after_batches_back_propagations(lys, learning_rate);
-		if (0 == i % (RATE_CHANHE_NUMS / 3)){
-			calculate_accuracy(lys, test_path_label, accuracy);
+		if (0 == i % (RATE_CHANHE_NUMS)){/* todo valid accuarcy的下标冲突了 */
+			calculate_accuracy(lys, test_path_label, test_accuracy, i / (RATE_CHANHE_NUMS));
+			
+			sum_errors = 0.0;
+			for (int j = 0; j < LABELS_COUNTS; ++j){
+				errors[j] = 1.0 - test_accuracy[i][j];
+				sum_errors += errors[j];
+			}
+			for (int j = 0; j < LABELS_COUNTS; ++j){
+				errors[j] = (errors[j] + DELTA) / (sum_errors + DELTA*LABELS_COUNTS);
+			}
+
+			int sum = 0;
+			for (int j = 0; j < LABELS_COUNTS; ++j){
+				nums_counts[j] = scale*errors[j] * MINI_BATCHES;
+				nums_counts[j] += ((scale*errors[j] * MINI_BATCHES > nums_counts[j] + 0.5) ? 1 : 0);
+				sum += nums_counts[j];
+			}
+
+			int t = MINI_BATCHES - sum;
+			for (int j = 0; j < LABELS_COUNTS - 1; ++j){
+				double xxx = double(t) / double(LABELS_COUNTS);
+				xxx = xxx>int(xxx) + 0.8 ? xxx + 1 : xxx;
+				nums_counts[j] += xxx;
+			}
+			nums_counts[LABELS_COUNTS - 1] += t - int((t / LABELS_COUNTS))*(LABELS_COUNTS - 1);
+			int tmp = 0;
+			for (int k = 0; k < LABELS_COUNTS; ++k){
+				std::cout << nums_counts[k] << "  ";
+				tmp += nums_counts[k];
+			}
+			cout << "tmp=" << tmp << std::endl;
+			
+			int xxx = 0;
 		}
 	}// end i
 
@@ -97,7 +154,7 @@ int main(int argc, char* argv[]){
     std::cout << std::endl << "****************************************************************************************************************" << std::endl;
 	for (int i = 0; i < TEST_TIMES; ++i){
         for (int j = 0; j < 11; ++j){
-            std::cout << setw(6) << 100.0*accuracy[i][j] << " ";
+            std::cout << setw(6) << 100.0*test_accuracy[i][j] << " ";
         }
         std::cout << endl;
 	}
@@ -256,7 +313,7 @@ bool upadate_params_after_batches_back_propagations(layers& lys, double learning
 	return true;
 }
 
-bool calculate_accuracy(layers& lys, vector<num_path>& test_path_label, double accuracy[][LABELS_COUNTS + 1]){
+bool calculate_accuracy(layers& lys, vector<num_path>& test_path_label, double accuracy[][LABELS_COUNTS + 1], int test_counts){
 	//std::cout << "\n\niterations  " << i*MINI_BATCHES << "   " << std::endl;
 	//std::cout << std::endl;
 	//for (int i = 0; i < LABELS_COUNTS; ++i){
@@ -294,11 +351,10 @@ bool calculate_accuracy(layers& lys, vector<num_path>& test_path_label, double a
 	//}
 	//std::cout << std::endl;
 
-	static int calculate_accuracy_count = 0;
 	string  str = "*********************************************************************************************************************************************************************";
-	for (int i = 0; i < LABELS_COUNTS; ++i){
-		std::cout << setw(SHOW_PROBABILITY_WIDTH) << i;
-	}
+	//for (int i = 0; i < LABELS_COUNTS; ++i){
+	//	std::cout << setw(SHOW_PROBABILITY_WIDTH) << i;
+	//}
 	std::cout << std::endl;
 
 	int right[11] = { 0 };
@@ -327,17 +383,16 @@ bool calculate_accuracy(layers& lys, vector<num_path>& test_path_label, double a
 		right[LABELS_COUNTS] += right[r];
 	}
 	for (int r = 0; r < LABELS_COUNTS + 1; ++r){
-		accuracy[calculate_accuracy_count][r] = (0.0 + right[r]) \
+		accuracy[test_counts][r] = (0.0 + right[r]) \
 			/ (0.0 + counts[r]);
 	}
-	++calculate_accuracy_count;
 	std::cout << "******************************************************" << std::endl;
 	std::cout << str << std::endl;
 	for (int j = 0; j < LABELS_COUNTS; ++j){
 		std::cout << setw(SHOW_PROBABILITY_WIDTH) << j;
 	}
 	std::cout << std::endl;
-	for (int i = 0; i <= calculate_accuracy_count; ++i){
+	for (int i = 0; i <= test_counts; ++i){
 		//for (int s = 0; s < 11; ++s){
 		//    std::cout << setw(LABELS_COUNTS) << right[s];
 		//}
