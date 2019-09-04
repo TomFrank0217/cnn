@@ -50,9 +50,9 @@ bool calculate_accuracy(layers& lys, vector<num_path>& test_path_label, double a
 /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
 int main(int argc, char* argv[]){
 
-	string train_file_name = ".\\data\\train_image_32_small\\0\\*.bmp";
+	string train_file_name = ".\\data\\train_image\\0\\*.bmp";
 	string valid_file_name = ".\\data\\test_image\\0\\*.bmp";
-	string test_file_name =  ".\\data\\test_image_32_small\\0\\*.bmp";
+	string test_file_name =  ".\\data\\test_image\\0\\*.bmp";
 	//vector<num_path> train_label_imgs[LABELS_COUNTS];
 	//vector<num_path> valid_label_imgs[LABELS_COUNTS];
 	//vector<num_path> test_label_imgs[LABELS_COUNTS];
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]){
 
 	int num_counts[LABELS_COUNTS] = { 0 };
 	int nums_counts[LABELS_COUNTS] = { 0 };
-	double scale = 0.5;
+	double scale = 0.10;
 	for (int i = 0; i < LABELS_COUNTS; ++i){	
 		nums_counts[i] = MINI_BATCHES / LABELS_COUNTS;//todo 必须是整数
 		std::cout << nums_counts[i] << "  ";
@@ -83,7 +83,7 @@ int main(int argc, char* argv[]){
 	double valid_accuracy[TEST_TIMES][LABELS_COUNTS + 1] = { 0.0 };
 	double errors[LABELS_COUNTS] = { 0.0 }, sum_errors;
 	DATA_TYPE learning_rate = 0;
-	long iters[LABELS_COUNTS] = { 0 }; /* iters[i]这个变量用来计算i下一个使用的下标 */
+	//long iters[LABELS_COUNTS] = { 0 }; /* iters[i]这个变量用来计算i下一个使用的下标 */
 
 	for (int i = 0; i < RATE_CHANHE_NUMS * TEST_TIMES; ++i){
 		learning_rate = BASE_LEARNING_RATE*pow(DECAY_RATE, i / RATE_CHANHE_NUMS);
@@ -91,11 +91,16 @@ int main(int argc, char* argv[]){
 		//for ( int j = 0; j < MINI_BATCHES; ++j){
 			int j = 0;
 			for (int k = 0; k < LABELS_COUNTS; ++k){
-				std::cout << "nums_counts[" << k << "]=" << nums_counts[k] << "  ";
+				//std::cout << "nums_counts[" << k << "]=" << nums_counts[k] << "  " << std::endl;
 				for (int l = 0; l < nums_counts[k]; ++l){
 					++j;
 					get_gt_label(gt_10, train_label_imgs[k][ (num_counts[k]+l)%train_label_imgs[k].size()] );
 					image = imread(train_label_imgs[k][ (num_counts[k]+l)%train_label_imgs[k].size() ].path, 0);
+					show(image, 2);
+					//std::cout << train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()].path << std::endl;
+					//std::cout << num_counts[k] << std::endl;
+					//std::cout << num_counts[k] + l << std::endl;
+
 					//if (k%10==0&&l%10==0)
 						//std::cout << train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()].path << std::endl;
 					lys.mp_layers[0].m_fts = image;/* todo */
@@ -103,8 +108,10 @@ int main(int argc, char* argv[]){
 					show_train_probability(gt_10, lys, i, j);
 					lys.back_propagation(gt_10);
 					add_batch_diffs(lys);
-					++num_counts[k];
+					//++num_counts[k];
 				}
+				//std::cout << std::endl;
+				num_counts[k] += nums_counts[k];
 			}
 			std::cout << std::endl;
 			//get_gt_label(gt_10, train_path_label[(i*MINI_BATCHES + j) % train_path_label.size()]);
@@ -127,6 +134,12 @@ int main(int argc, char* argv[]){
 				errors[j] = 1.0 - test_accuracy[iii][j];
 				std::cout << setw(SHOW_PROBABILITY_WIDTH) << errors[j];
 				sum_errors += errors[j];
+			}
+			if (sum_errors / (0.0 + LABELS_COUNTS) > 0.10){
+				scale = 0.0;
+			}
+			else{
+				scale = 0.20;
 			}
 			std::cout << "\n相对 errors" << std::endl;
 			for (int j = 0; j < LABELS_COUNTS; ++j){
