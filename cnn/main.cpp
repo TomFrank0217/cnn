@@ -50,9 +50,9 @@ bool calculate_accuracy(layers& lys, vector<num_path>& test_path_label, double a
 /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
 int main(int argc, char* argv[]){
 
-	string train_file_name = "data\\test_image_32_small\\0\\*.bmp";
-	string valid_file_name = ".\\data\\test_image\\0\\*.bmp";
-	string test_file_name =  ".\\data\\test_image_32_small\\0\\*.bmp";
+	string train_file_name = ".\\data\\train_image_32_small\\0\\*.bmp";
+	string valid_file_name = "data\\test_image\\0\\*.bmp";
+	string test_file_name =  "data\\test_image_32_small\\0\\*.bmp";
 	//vector<num_path> train_label_imgs[LABELS_COUNTS];
 	//vector<num_path> valid_label_imgs[LABELS_COUNTS];
 	//vector<num_path> test_label_imgs[LABELS_COUNTS];
@@ -450,10 +450,10 @@ bool get_files(string file_name, vector<string> &files){
 			break;
 		}
 	}
-	string full_name = file_name.substr(0, n);
+	string full_name = file_name.substr(0, n + 1);
 	//intptr_t handle = _findfirst(file_name.c_str(), &file_info);/* win7 */
 	intptr_t handle = _findfirst(file_name.c_str(), &file_info);  /* win10 */
-	cout << file_name << endl;
+	//cout << file_name << endl;
 	std::cout << full_name << std::endl;
 	if (-1 == handle){
 		cerr << "failed to transfer files" << endl;
