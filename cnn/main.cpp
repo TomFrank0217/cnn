@@ -50,9 +50,9 @@ bool calculate_accuracy(layers& lys, vector<num_path>& test_path_label, double a
 /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
 int main(int argc, char* argv[]){
 
-	string train_file_name = ".\\data\\trainimage\\0\\*.bmp";
+	string train_file_name = "data\\test_image_32_small\\0\\*.bmp";
 	string valid_file_name = ".\\data\\test_image\\0\\*.bmp";
-	string test_file_name =  ".\\data\\test_image\\0\\*.bmp";
+	string test_file_name =  ".\\data\\test_image_32_small\\0\\*.bmp";
 	//vector<num_path> train_label_imgs[LABELS_COUNTS];
 	//vector<num_path> valid_label_imgs[LABELS_COUNTS];
 	//vector<num_path> test_label_imgs[LABELS_COUNTS];
@@ -69,9 +69,9 @@ int main(int argc, char* argv[]){
 	int num_counts[LABELS_COUNTS] = { 0 };
 	int nums_counts[LABELS_COUNTS] = { 0 };
 	double scale = 0.5;
-	for (int i = 0; i < LABELS_COUNTS; ++i){
-		std::cout << nums_counts[i] << "  ";
+	for (int i = 0; i < LABELS_COUNTS; ++i){	
 		nums_counts[i] = MINI_BATCHES / LABELS_COUNTS;//todo 必须是整数
+		std::cout << nums_counts[i] << "  ";
 	}
 
 	Mat image = imread(train_path_label[0].path, 0);
@@ -91,12 +91,11 @@ int main(int argc, char* argv[]){
 		//for ( int j = 0; j < MINI_BATCHES; ++j){
 			int j = 0;
 			for (int k = 0; k < LABELS_COUNTS; ++k){
-				
+				std::cout << "nums_counts[" << k << "]=" << nums_counts[k] << "  ";
 				for (int l = 0; l < nums_counts[k]; ++l){
 					++j;
-					get_gt_label(gt_10, train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()]);
-					++num_counts[k];
-					image = imread(train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()].path, 0);
+					get_gt_label(gt_10, train_label_imgs[k][ (num_counts[k]+l)%train_label_imgs[k].size()] );
+					image = imread(train_label_imgs[k][ (num_counts[k]+l)%train_label_imgs[k].size() ].path, 0);
 					if (k%10==0&&l%10==0)
 						std::cout << train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()].path << std::endl;
 					lys.mp_layers[0].m_fts = image;/* todo */
@@ -104,8 +103,8 @@ int main(int argc, char* argv[]){
 					show_train_probability(gt_10, lys, i, j);
 					lys.back_propagation(gt_10);
 					add_batch_diffs(lys);
+					++num_counts[k];
 				}
-				std::cout << nums_counts[k] << "  ";
 			}
 
 			//get_gt_label(gt_10, train_path_label[(i*MINI_BATCHES + j) % train_path_label.size()]);
@@ -124,19 +123,23 @@ int main(int argc, char* argv[]){
 			sum_errors = 0.0;
 			for (int j = 0; j < LABELS_COUNTS; ++j){
 				errors[j] = 1.0 - test_accuracy[iii][j];
+				std::cout << setw(SHOW_PROBABILITY_WIDTH) << errors[j];
 				sum_errors += errors[j];
 			}
+			std::cout << std::endl;
 			for (int j = 0; j < LABELS_COUNTS; ++j){
 				errors[j] = (errors[j] + DELTA) / (sum_errors + DELTA*LABELS_COUNTS);
+				std::cout << setw(SHOW_PROBABILITY_WIDTH) << errors[j];
 			}
-
+			std::cout << std::endl;
 			int sum = 0;
 			for (int j = 0; j < LABELS_COUNTS; ++j){
 				nums_counts[j] = scale*errors[j] * MINI_BATCHES;
 				nums_counts[j] += ((scale*errors[j] * MINI_BATCHES > nums_counts[j] + 0.5) ? 1 : 0);
+				std::cout << setw(SHOW_PROBABILITY_WIDTH) << nums_counts[j];
 				sum += nums_counts[j];
 			}
-
+			std::cout << std::endl;
 			int t = MINI_BATCHES - sum;
 			double xxx = 0;
 			for (int j = 0; j < LABELS_COUNTS - 1; ++j){
@@ -147,7 +150,7 @@ int main(int argc, char* argv[]){
 			nums_counts[LABELS_COUNTS - 1] += t - int(xxx)*(LABELS_COUNTS - 1);
 			int tmp = 0;
 			for (int k = 0; k < LABELS_COUNTS; ++k){
-				std::cout << nums_counts[k] << "  ";
+				std::cout << setw(SHOW_PROBABILITY_WIDTH) << nums_counts[k];
 				tmp += nums_counts[k];
 			}
 			cout << "tmp=" << tmp << std::endl;
@@ -174,8 +177,16 @@ bool get_image_path_and_label(vector<vector<num_path>>& label_imgs, vector<num_p
     vector<string> file_names;
     int num_counts = 0;
     //for (int i = 0; i < 10; ++i){    /* todo */
-    for (int i = 0; i < 10; ++i){    /* todo */
-        file_name[18] = '0' + i;
+	int n = 0;
+	for (int i = file_name.size() - 1; i >= 0; --i){
+		if ('\\' == file_name[i]){
+			n = i;
+			break;
+		}
+	}
+
+    for (int i = 0; i < LABELS_COUNTS; ++i){    /* todo */
+		file_name[n - 1] = '0' + i;
 		std::cout << file_name << endl;
         file_names.push_back(file_name);
         get_files(file_name, num_file);
@@ -430,10 +441,19 @@ bool get_gt_label(int *gt_10, num_path& np){
 }
 bool get_files(string file_name, vector<string> &files){
 	_finddata_t file_info;
+
+
+	int n = 0;
+	for (int i = file_name.size() - 1; i >= 0; --i){
+		if ('\\' == file_name[i]){
+			n = i;
+			break;
+		}
+	}
+	string full_name = file_name.substr(0, n);
 	//intptr_t handle = _findfirst(file_name.c_str(), &file_info);/* win7 */
 	intptr_t handle = _findfirst(file_name.c_str(), &file_info);  /* win10 */
-	//cout << file_name << endl;
-	string full_name = file_name.substr(0, 20);
+	cout << file_name << endl;
 	std::cout << full_name << std::endl;
 	if (-1 == handle){
 		cerr << "failed to transfer files" << endl;
