@@ -64,8 +64,8 @@
 #define THRESHOLD_                  0.95
 
 #define LABELS_COUNTS               10
-#define BASE_LEARNING_RATE          0.010
-#define RATE_CHANHE_NUMS            100
-#define MINI_BATCHES                LABELS_COUNTS*10
+#define BASE_LEARNING_RATE          0.000
+#define RATE_CHANHE_NUMS            10
+#define MINI_BATCHES                LABELS_COUNTS*20
 #define DECAY_RATE                  0.95
 #endif
