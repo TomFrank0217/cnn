@@ -90,7 +90,7 @@ int main(int argc, char* argv[]){
 		reset_params_before_batches_forward_propagations(lys);  /* 每一次batch传播之前所有的梯度清零 */
 		int j = 0;
 		for (int k = 0; k < LABELS_COUNTS; ++k){
-			std::cout << "nums_counts[" << k << "]=" << nums_counts[k] << "  " << std::endl;
+			//std::cout << "nums_counts[" << k << "]=" << nums_counts[k] << "  " << std::endl;
 			for (int l = 0; l < nums_counts[k]; ++l){
 				++j;
 				num_path_ = train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()];
@@ -102,15 +102,15 @@ int main(int argc, char* argv[]){
 					}
 				}
 				image = imread(num_path_.path, 0);
-				if (i % 7 == 0){
-					if (j % 58 == 0){
-						for (int t = 0; t < LABELS_COUNTS; ++t){
-							if (1 == gt_10[t]){
-								std::cout << t << endl;
-							}
-						}
-					}
-				}
+				//if (i % 7 == 0){
+				//	if (j % 58 == 0){
+				//		for (int t = 0; t < LABELS_COUNTS; ++t){
+				//			if (1 == gt_10[t]){
+				//				std::cout << t << endl;
+				//			}
+				//		}
+				//	}
+				//}
 				//show(image, 2);
 				lys.mp_layers[0].m_fts = image;/* todo */
 				lys.forward_propagation();
@@ -121,8 +121,8 @@ int main(int argc, char* argv[]){
 			}
 			//std::cout << std::endl;
 			num_counts[k] += nums_counts[k];
-			std::cout << std::endl;
-			std::cout << "num_counts[" << k << "]=" << num_counts[k] << "  " << std::endl;
+			//std::cout << std::endl;
+			//std::cout << "num_counts[" << k << "]=" << num_counts[k] << "  " << std::endl;
 			int xxx = 0;
 		}   
 		upadate_params_after_batches_back_propagations(lys, learning_rate);
