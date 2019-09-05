@@ -57,9 +57,9 @@ layers::layers(int channels, int rows, int cols, layer_parameters* mp_layers_par
 			y = features(mp_layers[i].m_kers.m_kers_counts, 1, 1, 0.0);
 			t = features(mp_layers[i].m_kers.m_kers_counts, 1, 1, 0.0);
 			q = features(mp_layers[i].m_kers.m_kers_counts, 1, 1, 0.0);
-            y_diff = features(mp_layers[i].m_kers.m_kers_counts, 1, 1, 0.0);
-            t_diff = features(mp_layers[i].m_kers.m_kers_counts, 1, 1, 0.0);
-            q_diff = features(mp_layers[i].m_kers.m_kers_counts, 1, 1, 0.0);
+			y_diff = features(mp_layers[i].m_kers.m_kers_counts, 1, 1, 0.0);
+			t_diff = features(mp_layers[i].m_kers.m_kers_counts, 1, 1, 0.0);
+			q_diff = features(mp_layers[i].m_kers.m_kers_counts, 1, 1, 0.0);
 		}
 	}
 }
@@ -82,12 +82,13 @@ bool layers::show_shapes(){
 		mp_layers[i].show_shapes();
 		std::cout << std::endl;
 	}
+	return true;
 }
 
 bool layers::show(){
 	for (int i = 0; i < LAYERS_COUNTS; ++i){
 		mp_layers[i].show();
-        std::cout << "*****************************************\n";
+		std::cout << "*****************************************\n";
 	}
 	return true;
 }
@@ -95,7 +96,7 @@ bool layers::show(){
 bool layers::forward_propagation(){
 	;/* todo */
 	for (int i = 0; i < m_layers_counts; ++i){
-		
+
 		switch (mp_layers[i].m_layer_mode)
 		{
 		case FULLCONNECTION_LAYER:/* 全连接层当作卷积层的特殊情况 */
@@ -135,7 +136,7 @@ bool layers::forward_propagation(){
 					mp_layers[i].reshape(mp_layers[i].m_conv_mat, y);
 				}
 			}
-				break;
+			break;
 		case POOLING_LAYER:/* todo 实际上我们认为pooling 不是最后一层 */
 			if (MAX_POOLING == mp_layers[i].m_pooling_mode){
 				mp_layers[i].reshape(mp_layers[i].m_pooling_mask, mp_layers[i + 1].m_fts);
@@ -229,7 +230,7 @@ bool layers::back_propagation(int gt_label[]){
 	//	y_diff.mp_matrixes[j].mp_data[0] *= scale;
 	//}
 
-	double max =ABS(y_diff.mp_matrixes[0].mp_data[0]);
+	double max = ABS(y_diff.mp_matrixes[0].mp_data[0]);
 	int index = 0;
 	/* qj tj  ydiffj （j!=i） 正相关    ti最大 max=y_diff[i]   else max=最大的y_diff[j] */
 	//double min = y_diff.mp_matrixes[0].mp_data[0];
@@ -245,12 +246,12 @@ bool layers::back_propagation(int gt_label[]){
 	//double scale = (1.0 - sqrt(p));
 	double scale = 0;
 	double p = q.mp_matrixes[i].mp_data[0] - EPSILON;
-	if ( p > THRESHOLD_){
-		if (p > 0.996){
-			scale = -0.015;
+	if (p > THRESHOLD_){
+		if (p > 0.993){
+			scale = -0.02;
 		}
 		else{
-            scale = 0.020;
+			scale = 0.015;
 		}
 	}
 	else{
@@ -261,10 +262,10 @@ bool layers::back_propagation(int gt_label[]){
 			}
 		}
 		else{
-            scale = 1.2 - p;
-            if (p < 0.15){
-                scale *= 2.0;
-            }
+			scale = 1.2 - p;
+			if (p < 0.15){
+				scale *= 2.0;
+			}
 		}
 		//scale = pow(scale, 2);
 		//if (scale < 0.05){
@@ -295,13 +296,13 @@ bool layers::back_propagation(int gt_label[]){
 	//for (int j = 0; j < t.m_channels; ++j){
 	//	if (0 == i - j){
 	//		//t_diff.mp_matrixes[i].mp_data[0] = q_diff.mp_matrixes[i].mp_data[0] * \
-	//		//	(sum_t - t.mp_matrixes[i].mp_data[0]) / (sum_t*sum_t);
+			//		//	(sum_t - t.mp_matrixes[i].mp_data[0]) / (sum_t*sum_t);
 	//		//t_diff.mp_matrixes[i].mp_data[0] = (t.mp_matrixes[i].mp_data[0] - sum_t) / const_num;
 	//		y_diff.mp_matrixes[i].mp_data[0] = (t.mp_matrixes[i].mp_data[0] - sum_t)*(t.mp_matrixes[i].mp_data[0] - EPSILON) / const_num;
 	//	}
 	//	else{
 	//		//t_diff.mp_matrixes[j].mp_data[0] = q_diff.mp_matrixes[i].mp_data[0] * \
-	//		//	(-t.mp_matrixes[j].mp_data[0]) / (sum_t*sum_t);
+			//		//	(-t.mp_matrixes[j].mp_data[0]) / (sum_t*sum_t);
 	//		//t_diff.mp_matrixes[j].mp_data[0] = (t.mp_matrixes[j].mp_data[0]) / const_num;
 	//		y_diff.mp_matrixes[j].mp_data[0] = (t.mp_matrixes[j].mp_data[0])*(t.mp_matrixes[j].mp_data[0] - EPSILON) / const_num;
 	//	}
@@ -311,82 +312,82 @@ bool layers::back_propagation(int gt_label[]){
 	//	y_diff.mp_matrixes[j].mp_data[0] = t_diff.mp_matrixes[j].mp_data[0] * (t.mp_matrixes[j].mp_data[0] - EPSILON);
 	//}
 
-    /* 先处理最后一层 */
-    /* 最后一层是没有relu的 所以好处理一些 */
-    mp_layers[LAYERS_COUNTS - 1].reshape_(y_diff, mp_layers[LAYERS_COUNTS - 1].m_conv_mat_diff);
-    mp_layers[LAYERS_COUNTS - 1].transposition(mp_layers[LAYERS_COUNTS - 1].m_kers_mat, mp_layers[LAYERS_COUNTS - 1].m_kers_mat_T);
-    mp_layers[LAYERS_COUNTS - 1].transposition(mp_layers[LAYERS_COUNTS - 1].m_fts_mat, mp_layers[LAYERS_COUNTS - 1].m_fts_mat_T);
-    mp_layers[LAYERS_COUNTS - 1].m_kers_mat_diff = mp_layers[LAYERS_COUNTS - 1].m_fts_mat_T*mp_layers[LAYERS_COUNTS - 1].m_conv_mat_diff;/* 此处的乘法会有内存的申请释放 todo */
-    mp_layers[LAYERS_COUNTS - 1].m_fts_mat_diff = mp_layers[LAYERS_COUNTS - 1].m_conv_mat_diff*mp_layers[LAYERS_COUNTS - 1].m_kers_mat_T;
-    mp_layers[LAYERS_COUNTS - 1].reshape_ (mp_layers[LAYERS_COUNTS - 1].m_kers_mat_diff, \
-        mp_layers[LAYERS_COUNTS - 1].m_kers_diff);
-    mp_layers[LAYERS_COUNTS - 1].reshape_(mp_layers[LAYERS_COUNTS - 1].m_fts_mat_diff, \
-        mp_layers[LAYERS_COUNTS - 1].m_fts_diff);
+	/* 先处理最后一层 */
+	/* 最后一层是没有relu的 所以好处理一些 */
+	mp_layers[LAYERS_COUNTS - 1].reshape_(y_diff, mp_layers[LAYERS_COUNTS - 1].m_conv_mat_diff);
+	mp_layers[LAYERS_COUNTS - 1].transposition(mp_layers[LAYERS_COUNTS - 1].m_kers_mat, mp_layers[LAYERS_COUNTS - 1].m_kers_mat_T);
+	mp_layers[LAYERS_COUNTS - 1].transposition(mp_layers[LAYERS_COUNTS - 1].m_fts_mat, mp_layers[LAYERS_COUNTS - 1].m_fts_mat_T);
+	mp_layers[LAYERS_COUNTS - 1].m_kers_mat_diff = mp_layers[LAYERS_COUNTS - 1].m_fts_mat_T*mp_layers[LAYERS_COUNTS - 1].m_conv_mat_diff;/* 此处的乘法会有内存的申请释放 todo */
+	mp_layers[LAYERS_COUNTS - 1].m_fts_mat_diff = mp_layers[LAYERS_COUNTS - 1].m_conv_mat_diff*mp_layers[LAYERS_COUNTS - 1].m_kers_mat_T;
+	mp_layers[LAYERS_COUNTS - 1].reshape_(mp_layers[LAYERS_COUNTS - 1].m_kers_mat_diff, \
+		mp_layers[LAYERS_COUNTS - 1].m_kers_diff);
+	mp_layers[LAYERS_COUNTS - 1].reshape_(mp_layers[LAYERS_COUNTS - 1].m_fts_mat_diff, \
+		mp_layers[LAYERS_COUNTS - 1].m_fts_diff);
 	//std::cout << "LAYERS_COUNTS-1" << std::endl;
 	//mp_layers[LAYERS_COUNTS - 1].m_fts_diff.show();
 	for (int i = LAYERS_COUNTS - 2; i >= 0; --i){
-        switch (mp_layers[i].m_layer_mode)
-        {
-        case FULLCONNECTION_LAYER:
-        case CONVOLUTION_LAYER:/* 卷积层实际上是默认 relu_on 的 */
-            if (RELU_OFF == mp_layers[i].m_relu){
-                mp_layers[i].reshape_(mp_layers[i + 1].m_fts_diff, mp_layers[i].m_conv_mat_diff);
-                mp_layers[i].transposition(mp_layers[i].m_kers_mat, mp_layers[i].m_kers_mat_T);
-                mp_layers[i].transposition(mp_layers[i].m_fts_mat, mp_layers[i].m_fts_mat_T);
-                mp_layers[i].m_kers_mat_diff = mp_layers[i].m_fts_mat_T*mp_layers[i].m_conv_mat_diff;/* 此处的乘法会有内存的申请释放 todo */
-                mp_layers[i].m_fts_mat_diff = mp_layers[i].m_conv_mat_diff*mp_layers[i].m_kers_mat_T;
-                mp_layers[i].reshape_(mp_layers[i].m_kers_mat_diff, \
-                    mp_layers[i].m_kers_diff);
-                mp_layers[i].reshape_(mp_layers[i].m_fts_mat_diff, \
-                    mp_layers[i].m_fts_diff);
+		switch (mp_layers[i].m_layer_mode)
+		{
+		case FULLCONNECTION_LAYER:
+		case CONVOLUTION_LAYER:/* 卷积层实际上是默认 relu_on 的 */
+			if (RELU_OFF == mp_layers[i].m_relu){
+				mp_layers[i].reshape_(mp_layers[i + 1].m_fts_diff, mp_layers[i].m_conv_mat_diff);
+				mp_layers[i].transposition(mp_layers[i].m_kers_mat, mp_layers[i].m_kers_mat_T);
+				mp_layers[i].transposition(mp_layers[i].m_fts_mat, mp_layers[i].m_fts_mat_T);
+				mp_layers[i].m_kers_mat_diff = mp_layers[i].m_fts_mat_T*mp_layers[i].m_conv_mat_diff;/* 此处的乘法会有内存的申请释放 todo */
+				mp_layers[i].m_fts_mat_diff = mp_layers[i].m_conv_mat_diff*mp_layers[i].m_kers_mat_T;
+				mp_layers[i].reshape_(mp_layers[i].m_kers_mat_diff, \
+					mp_layers[i].m_kers_diff);
+				mp_layers[i].reshape_(mp_layers[i].m_fts_mat_diff, \
+					mp_layers[i].m_fts_diff);
 
-            }
-            else if (RELU_ON == mp_layers[i].m_relu){
-                mp_layers[i].reshape_(mp_layers[i + 1].m_fts_diff, mp_layers[i].m_conv_relu_mat_diff);
+			}
+			else if (RELU_ON == mp_layers[i].m_relu){
+				mp_layers[i].reshape_(mp_layers[i + 1].m_fts_diff, mp_layers[i].m_conv_relu_mat_diff);
 				//mp_layers[i].m_conv_relu_mat_diff.show();
 				//mp_layers[i].m_relu_mask.show();
-                mp_layers[i].hadamard_product(mp_layers[i].m_conv_relu_mat_diff, mp_layers[i].m_relu_mask, mp_layers[i].m_conv_mat_diff);
+				mp_layers[i].hadamard_product(mp_layers[i].m_conv_relu_mat_diff, mp_layers[i].m_relu_mask, mp_layers[i].m_conv_mat_diff);
 				//mp_layers[i].m_conv_mat_diff.show();
-                mp_layers[i].transposition(mp_layers[i].m_kers_mat, mp_layers[i].m_kers_mat_T);
+				mp_layers[i].transposition(mp_layers[i].m_kers_mat, mp_layers[i].m_kers_mat_T);
 				//mp_layers[i].m_kers_mat_T.show();
-                mp_layers[i].transposition(mp_layers[i].m_fts_mat, mp_layers[i].m_fts_mat_T);
+				mp_layers[i].transposition(mp_layers[i].m_fts_mat, mp_layers[i].m_fts_mat_T);
 				//mp_layers[i].m_fts_mat_T.show();
-                mp_layers[i].m_kers_mat_diff = mp_layers[i].m_fts_mat_T*mp_layers[i].m_conv_mat_diff;/* 此处的乘法会有内存的申请释放 todo */
+				mp_layers[i].m_kers_mat_diff = mp_layers[i].m_fts_mat_T*mp_layers[i].m_conv_mat_diff;/* 此处的乘法会有内存的申请释放 todo */
 				//mp_layers[i].m_kers_mat_diff.show();
-                mp_layers[i].m_fts_mat_diff = mp_layers[i].m_conv_mat_diff*mp_layers[i].m_kers_mat_T;
+				mp_layers[i].m_fts_mat_diff = mp_layers[i].m_conv_mat_diff*mp_layers[i].m_kers_mat_T;
 				//mp_layers[i].m_kers_mat_diff.show();
-                mp_layers[i].reshape_(mp_layers[i].m_kers_mat_diff, \
-                    mp_layers[i].m_kers_diff);
+				mp_layers[i].reshape_(mp_layers[i].m_kers_mat_diff, \
+					mp_layers[i].m_kers_diff);
 				//mp_layers[i].m_kers_diff.show();
-                mp_layers[i].reshape_(mp_layers[i].m_fts_mat_diff, \
-                    mp_layers[i].m_fts_diff);
+				mp_layers[i].reshape_(mp_layers[i].m_fts_mat_diff, \
+					mp_layers[i].m_fts_diff);
 				//mp_layers[i].m_fts_diff.show();
-            }
-            else{
-                ;/* todo */
-                DEBUG_PRINT("back propagation error\n");
-                return false;
-            }
-            break;
-        case POOLING_LAYER:
-            switch (mp_layers[i].m_pooling_mode){
-            case MAX_POOLING:
-                mp_layers[i].m_fts_diff.reset(0.0);
-                for (int channel = 0; channel < mp_layers[i].m_fts_diff.m_channels; ++channel){
-                    for (int k = 0; k < mp_layers[i].m_fts_diff.m_rows; ++k){
-                        for (int j = 0; j < mp_layers[i].m_fts_diff.m_cols; ++j){
-                            if (1 == mp_layers[i].m_pooling_mask.mp_matrixes[channel].mp_data[k*mp_layers[i].m_fts_diff.m_cols + j]){
-                                mp_layers[i].m_fts_diff.mp_matrixes[channel].mp_data[k*mp_layers[i].m_fts_diff.m_cols + j] = mp_layers[i + 1].m_fts_diff.mp_matrixes[channel].mp_data[(k / mp_layers[i].m_pooling_size)*mp_layers[i + 1].m_fts_diff.m_cols + (j / mp_layers[i].m_pooling_size)];
-                            }
-                        }
-                    }
-                }
-                break;
-            case AVE_POOLING:
-                /* todo */
-                break;
-            }
-        }
+			}
+			else{
+				;/* todo */
+				DEBUG_PRINT("back propagation error\n");
+				return false;
+			}
+			break;
+		case POOLING_LAYER:
+			switch (mp_layers[i].m_pooling_mode){
+			case MAX_POOLING:
+				mp_layers[i].m_fts_diff.reset(0.0);
+				for (int channel = 0; channel < mp_layers[i].m_fts_diff.m_channels; ++channel){
+					for (int k = 0; k < mp_layers[i].m_fts_diff.m_rows; ++k){
+						for (int j = 0; j < mp_layers[i].m_fts_diff.m_cols; ++j){
+							if (1 == mp_layers[i].m_pooling_mask.mp_matrixes[channel].mp_data[k*mp_layers[i].m_fts_diff.m_cols + j]){
+								mp_layers[i].m_fts_diff.mp_matrixes[channel].mp_data[k*mp_layers[i].m_fts_diff.m_cols + j] = mp_layers[i + 1].m_fts_diff.mp_matrixes[channel].mp_data[(k / mp_layers[i].m_pooling_size)*mp_layers[i + 1].m_fts_diff.m_cols + (j / mp_layers[i].m_pooling_size)];
+							}
+						}
+					}
+				}
+				break;
+			case AVE_POOLING:
+				/* todo */
+				break;
+			}
+		}
 	}
 
 	return true;
@@ -397,19 +398,19 @@ bool layers::probability(){
 	for (int i = 0; i < y.m_channels; ++i){
 		//t.mp_matrixes[i].mp_data[0] = exp(y.mp_matrixes[i].mp_data[0]);
 		/* todo */
-        if (y.mp_matrixes[i].mp_data[0] > MAX_UP){
-            y.mp_matrixes[i].mp_data[0] = MAX_UP;
-        }
-        if (y.mp_matrixes[i].mp_data[0] < -MAX_UP){
-            y.mp_matrixes[i].mp_data[0] = -MAX_UP;
-        }
+		if (y.mp_matrixes[i].mp_data[0] > MAX_UP){
+			y.mp_matrixes[i].mp_data[0] = MAX_UP;
+		}
+		if (y.mp_matrixes[i].mp_data[0] < -MAX_UP){
+			y.mp_matrixes[i].mp_data[0] = -MAX_UP;
+		}
 		t.mp_matrixes[i].mp_data[0] = DELTA + pow(POW_NUM, y.mp_matrixes[i].mp_data[0]);//exp(y.mp_matrixes[i].mp_data[0]);//pow(2.0, y.mp_matrixes[i].mp_data[0]);
-        //if (t.mp_matrixes[i].mp_data[0] > MAX_UP){
-        //    t.mp_matrixes[i].mp_data[0] = MAX_UP;
-        //}
+		//if (t.mp_matrixes[i].mp_data[0] > MAX_UP){
+		//    t.mp_matrixes[i].mp_data[0] = MAX_UP;
+		//}
 		sum += t.mp_matrixes[i].mp_data[0];
 	}
-	
+
 	for (int i = 0; i < y.m_channels; ++i){
 		q.mp_matrixes[i].mp_data[0] = t.mp_matrixes[i].mp_data[0] / sum + EPSILON;
 	}

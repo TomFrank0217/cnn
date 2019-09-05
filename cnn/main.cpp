@@ -3,7 +3,7 @@
 ****    Date: 5th, Oct, 2019                                               ****
 ****    This a project to test my math(algorithm) and code.                ****
 ****    Hello, cnn.                                                        ****
-*******************************************************************************/                    
+*******************************************************************************/
 #include <iostream>
 #include <string>
 #include <io.h>
@@ -29,10 +29,15 @@ using namespace cv;
 using namespace std;
 
 struct num_path{
-    int num;
-    string path;
+	int num;
+	string path;
 };
 
+#define MINI_BATCHES 200
+#define LABELS_COUNTS 10
+#define RATE_CHANHE_NUMS 100
+#define BASE_LEARNING_RATE 0.010
+#define DECAY_RATE  0.955
 bool get_files(string file_name, vector<string> &files);
 bool show(Mat &image, int show_image_mode = SHOW_IMAGE_SHAPE);
 bool get_image_path_and_label(vector<vector<num_path>>& label_imgs, vector<num_path> &vec_path_label, string file_name);
@@ -50,9 +55,11 @@ bool calculate_accuracy(layers& lys, vector<num_path>& test_path_label, double a
 /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
 int main(int argc, char* argv[]){
 
-	string train_file_name = ".\\data\\train_image_32_small\\0\\*.bmp";
-	string valid_file_name = ".\\data\\test_image\\0\\*.bmp";
-	string test_file_name =  ".\\data\\test_image_32_small\\0\\*.bmp";
+	//string train_file_name = "F:\\chromeDownload\\train_image_32_small\\0\\*.bmp";
+	//string valid_file_name = ".\\data\\test_image\\0\\*.bmp";
+	//string test_file_name = "F:\\chromeDownload\\test_image_32_small\\0\\*.bmp";
+	string train_file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
+	string test_file_name = "F:\\chromeDownload\\test_image\\pic2\\0\\*.bmp";
 	//vector<num_path> train_label_imgs[LABELS_COUNTS];
 	//vector<num_path> valid_label_imgs[LABELS_COUNTS];
 	//vector<num_path> test_label_imgs[LABELS_COUNTS];
@@ -63,14 +70,14 @@ int main(int argc, char* argv[]){
 	vector<num_path> vaild_path_label;
 	vector<num_path> test_path_label;
 	get_image_path_and_label(train_label_imgs, train_path_label, train_file_name);
-	get_image_path_and_label(valid_label_imgs, vaild_path_label, valid_file_name);
+	//get_image_path_and_label(valid_label_imgs, vaild_path_label, valid_file_name);
 	get_image_path_and_label(test_label_imgs, test_path_label, test_file_name);
 
 	num_path num_path_;
 	int num_counts[LABELS_COUNTS] = { 0 };
 	int nums_counts[LABELS_COUNTS] = { 0 };
 	double scale = 0.10;
-	for (int i = 0; i < LABELS_COUNTS; ++i){	
+	for (int i = 0; i < LABELS_COUNTS; ++i){
 		nums_counts[i] = MINI_BATCHES / LABELS_COUNTS;//todo 必须是整数
 		std::cout << nums_counts[i] << "  ";
 	}
@@ -93,25 +100,17 @@ int main(int argc, char* argv[]){
 			//std::cout << "nums_counts[" << k << "]=" << nums_counts[k] << "  " << std::endl;
 			for (int l = 0; l < nums_counts[k]; ++l){
 				++j;
-				num_path_ = train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()];
-				std::cout << num_path_.path << "   " << num_path_.num << std::endl;
+				//get_gt_label(gt_10, train_path_label[(i*mini_batches + j) % train_path_label.size()]);
+				//num_path_ = train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()];
+				num_path_ = train_path_label[(i*MINI_BATCHES + j) % train_path_label.size()];
+				//std::cout << num_path_.path << "   " << num_path_.num << std::endl;
 				get_gt_label(gt_10, num_path_);
-				for (int t = 0; t < LABELS_COUNTS; ++t){
-					if (1 == gt_10[t]){
-						std::cout << t << endl;
-					}
-				}
-				image = imread(num_path_.path, 0);
-				//if (i % 7 == 0){
-				//	if (j % 58 == 0){
-				//		for (int t = 0; t < LABELS_COUNTS; ++t){
-				//			if (1 == gt_10[t]){
-				//				std::cout << t << endl;
-				//			}
-				//		}
+				//for (int t = 0; t < LABELS_COUNTS; ++t){
+				//	if (1 == gt_10[t]){
+				//		std::cout << t << endl;
 				//	}
 				//}
-				//show(image, 2);
+				image = imread(num_path_.path, 0);
 				lys.mp_layers[0].m_fts = image;/* todo */
 				lys.forward_propagation();
 				lys.back_propagation(gt_10);
@@ -124,12 +123,12 @@ int main(int argc, char* argv[]){
 			//std::cout << std::endl;
 			//std::cout << "num_counts[" << k << "]=" << num_counts[k] << "  " << std::endl;
 			int xxx = 0;
-		}   
+		}
 		upadate_params_after_batches_back_propagations(lys, learning_rate);
 		int iii = i / RATE_CHANHE_NUMS;
 		if (0 == i % (RATE_CHANHE_NUMS)){/* todo valid accuarcy的下标冲突了 */
 			calculate_accuracy(lys, test_path_label, test_accuracy, iii);
-			
+
 			/* 由于竞争性学习，概率造成的四舍五入，所以前向传播的minibatch 只是近似等于batch_size */
 			sum_errors = 0.0;
 			std::cout << "errors" << std::endl;
@@ -142,7 +141,7 @@ int main(int argc, char* argv[]){
 				scale = 0.0;
 			}
 			else{
-				scale = 0.20;
+				scale = 0.0;
 			}
 			std::cout << "\n相对 errors" << std::endl;
 			for (int j = 0; j < LABELS_COUNTS; ++j){
@@ -177,25 +176,25 @@ int main(int argc, char* argv[]){
 	}// end i
 
 
-    std::cout << std::endl << "****************************************************************************************************************" << std::endl;
+	std::cout << std::endl << "****************************************************************************************************************" << std::endl;
 	for (int i = 0; i < TEST_TIMES; ++i){
-        for (int j = 0; j < 11; ++j){
-            std::cout << setw(6) << 100.0*test_accuracy[i][j] << " ";
-        }
-        std::cout << endl;
+		for (int j = 0; j < 11; ++j){
+			std::cout << setw(6) << 100.0*test_accuracy[i][j] << " ";
+		}
+		std::cout << endl;
 	}
 	std::cout << std::endl;
-    std::cout << std::endl << "****************************************************************************************************************" << std::endl;
-    return 0;
+	std::cout << std::endl << "****************************************************************************************************************" << std::endl;
+	return 0;
 }
 
 bool get_image_path_and_label(vector<vector<num_path>>& label_imgs, vector<num_path> &vec_path_label, string file_name){
-    vector<string> num_file;
-    vector<vector<string> > num_files;
-    /*                                                        35              */
-    vector<string> file_names;
-    int num_counts = 0;
-    //for (int i = 0; i < 10; ++i){    /* todo */
+	vector<string> num_file;
+	vector<vector<string> > num_files;
+	/*                                                        35              */
+	vector<string> file_names;
+	int num_counts = 0;
+	//for (int i = 0; i < 10; ++i){    /* todo */
 	int n = 0;
 	for (int i = file_name.size() - 1; i >= 0; --i){
 		if ('\\' == file_name[i]){
@@ -204,58 +203,58 @@ bool get_image_path_and_label(vector<vector<num_path>>& label_imgs, vector<num_p
 		}
 	}
 
-    for (int i = 0; i < LABELS_COUNTS; ++i){    /* todo */
+	for (int i = 0; i < LABELS_COUNTS; ++i){    /* todo */
 		file_name[n - 1] = '0' + i;
 		std::cout << file_name << endl;
-        file_names.push_back(file_name);
-        get_files(file_name, num_file);
-        std::cout << i << " num_file= " << num_file.size() << std::endl;
-        num_files.push_back(num_file);
-        num_counts += num_files[i].size();
+		file_names.push_back(file_name);
+		get_files(file_name, num_file);
+		std::cout << i << " num_file= " << num_file.size() << std::endl;
+		num_files.push_back(num_file);
+		num_counts += num_files[i].size();
 		label_imgs[i].resize(num_files[i].size());
-        num_file.clear();
-    }
-    
-    vec_path_label.resize(num_counts);
-    //vector<num_path> image_label(num_counts);
-    int k = -1;
-    for (int i = 0; i < num_files.size(); ++i){
+		num_file.clear();
+	}
 
-        int n = num_files[i].size();
-        for (int j = 0; j < n; ++j){
-            vec_path_label[++k] = num_path{ i, num_files[i][j] };
+	vec_path_label.resize(num_counts);
+	//vector<num_path> image_label(num_counts);
+	int k = -1;
+	for (int i = 0; i < num_files.size(); ++i){
+
+		int n = num_files[i].size();
+		for (int j = 0; j < n; ++j){
+			vec_path_label[++k] = num_path{ i, num_files[i][j] };
 			label_imgs[i][j] = vec_path_label[k];
-            //cout << image_label[k].num << " " << image_label[k].path << endl;
-        }
-    }
-    random_shuffle(vec_path_label.begin(), vec_path_label.end());
-    //cout << " images_labels= " << image_label.size() << endl;
-    //Mat image;
-    //for (int i = 0; i < image_label.size(); ++i){
-    //    if (0 == i % 10){
-    //        Mat image = imread(image_label[i].path, 0);
-    //        //cout << "i=" << setw(8) << i << "   " << image_label[i].num \
-    //                                    << "   " << image_label[i].path << endl;
-    //        //show(image_label[i].path);
-    //        //cout<< "############\n";
-    //    }
-    //}
+			//cout << image_label[k].num << " " << image_label[k].path << endl;
+		}
+	}
+	random_shuffle(vec_path_label.begin(), vec_path_label.end());
+	//cout << " images_labels= " << image_label.size() << endl;
+	//Mat image;
+	//for (int i = 0; i < image_label.size(); ++i){
+	//    if (0 == i % 10){
+	//        Mat image = imread(image_label[i].path, 0);
+	//        //cout << "i=" << setw(8) << i << "   " << image_label[i].num \
+				    //                                    << "   " << image_label[i].path << endl;
+	//        //show(image_label[i].path);
+	//        //cout<< "############\n";
+	//    }
+	//}
 
-    return true;
+	return true;
 }
 
 bool reset_params_before_batches_forward_propagations(layers& lys){
 	for (int k = 0; k < LAYERS_COUNTS; ++k){
 		switch (lys.mp_layers[k].m_layer_mode){
 		case FULLCONNECTION_LAYER:
-		case CONVOLUTION_LAYER: lys.mp_layers[k].m_fts_diffs.reset(0.0); 
-			lys.mp_layers[k].m_fts_mat_diffs.reset(0.0); 
+		case CONVOLUTION_LAYER: lys.mp_layers[k].m_fts_diffs.reset(0.0);
+			lys.mp_layers[k].m_fts_mat_diffs.reset(0.0);
 			lys.mp_layers[k].m_kers_diffs.reset(0.0);
-			lys.mp_layers[k].m_conv_mat_diffs.reset(0.0); 
-			lys.mp_layers[k].m_conv_relu_mat_diffs.reset(0.0); 
+			lys.mp_layers[k].m_conv_mat_diffs.reset(0.0);
+			lys.mp_layers[k].m_conv_relu_mat_diffs.reset(0.0);
 			lys.mp_layers[k].m_conv_relu_mat2fts_diffs.reset(0.0);
 			break;
-		case POOLING_LAYER: 
+		case POOLING_LAYER:
 			lys.mp_layers[k].m_fts_diffs.reset(0.0);
 			break;
 		}
