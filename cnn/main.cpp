@@ -33,11 +33,7 @@ struct num_path{
 	string path;
 };
 
-#define MINI_BATCHES 200
-#define LABELS_COUNTS 10
-#define RATE_CHANHE_NUMS 100
-#define BASE_LEARNING_RATE 0.010
-#define DECAY_RATE  0.955
+
 bool get_files(string file_name, vector<string> &files);
 bool show(Mat &image, int show_image_mode = SHOW_IMAGE_SHAPE);
 bool get_image_path_and_label(vector<vector<num_path>>& label_imgs, vector<num_path> &vec_path_label, string file_name);
@@ -55,11 +51,11 @@ bool calculate_accuracy(layers& lys, vector<num_path>& test_path_label, double a
 /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
 int main(int argc, char* argv[]){
 
-	//string train_file_name = "F:\\chromeDownload\\train_image_32_small\\0\\*.bmp";
+	string train_file_name = ".\\data\\train_image\\0\\*.bmp";
 	//string valid_file_name = ".\\data\\test_image\\0\\*.bmp";
-	//string test_file_name = "F:\\chromeDownload\\test_image_32_small\\0\\*.bmp";
-	string train_file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
-	string test_file_name = "F:\\chromeDownload\\test_image\\pic2\\0\\*.bmp";
+	string test_file_name = ".\\data\\test_image\\0\\*.bmp";
+	//string train_file_name = "F:\\chromeDownload\\trainimage\\pic2\\0\\*.bmp";
+	//string test_file_name = "F:\\chromeDownload\\test_image\\pic2\\0\\*.bmp";
 	//vector<num_path> train_label_imgs[LABELS_COUNTS];
 	//vector<num_path> valid_label_imgs[LABELS_COUNTS];
 	//vector<num_path> test_label_imgs[LABELS_COUNTS];
@@ -101,8 +97,8 @@ int main(int argc, char* argv[]){
 			for (int l = 0; l < nums_counts[k]; ++l){
 				++j;
 				//get_gt_label(gt_10, train_path_label[(i*mini_batches + j) % train_path_label.size()]);
-				//num_path_ = train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()];
-				num_path_ = train_path_label[(i*MINI_BATCHES + j) % train_path_label.size()];
+				num_path_ = train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()];
+				//num_path_ = train_path_label[(i*MINI_BATCHES + j) % train_path_label.size()];
 				//std::cout << num_path_.path << "   " << num_path_.num << std::endl;
 				get_gt_label(gt_10, num_path_);
 				//for (int t = 0; t < LABELS_COUNTS; ++t){
