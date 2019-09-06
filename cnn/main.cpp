@@ -69,6 +69,9 @@ int main(int argc, char* argv[]){
 	//get_image_path_and_label(valid_label_imgs, vaild_path_label, valid_file_name);
 	get_image_path_and_label(test_label_imgs, test_path_label, test_file_name);
 
+	for (int i = 0; i < LABELS_COUNTS; ++i){
+		random_shuffle(train_label_imgs[i].begin(), train_label_imgs[i].end());
+	}
 	num_path num_path_;
 	int num_counts[LABELS_COUNTS] = { 0 };
 	int nums_counts[LABELS_COUNTS] = { 0 };
