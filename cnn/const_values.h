@@ -63,11 +63,10 @@
 #define F(x)                       (1.0-(x)*(x))
 #define THRESHOLD_                  0.95
 
-
-#define MINI_BATCHES 200
-#define LABELS_COUNTS 10
-#define RATE_CHANHE_NUMS 100
-#define BASE_LEARNING_RATE 0.010
-#define DECAY_RATE  0.955
+#define LABELS_COUNTS               10
+#define MINI_BATCHES                LABELS_COUNTS*20
+#define RATE_CHANHE_NUMS            40
+#define BASE_LEARNING_RATE          0.012
+#define DECAY_RATE                  0.955
 
 #endif
