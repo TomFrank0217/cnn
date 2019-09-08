@@ -53,7 +53,7 @@ int main(int argc, char* argv[]){
 
 	string train_file_name = ".\\data\\train_imagx\\0\\*.bmp";
 	//string valid_file_name = ".\\data\\test_image\\0\\*.bmp";
-	string test_file_name = ".\\data\\test_image_32_small\\0\\*.bmp";
+	string test_file_name = ".\\data\\test_imagx\\0\\*.bmp";
 
 	vector<vector<num_path>> train_label_imgs; train_label_imgs.resize(LABELS_COUNTS);
 	vector<vector<num_path>> valid_label_imgs; valid_label_imgs.resize(LABELS_COUNTS);
@@ -94,7 +94,6 @@ int main(int argc, char* argv[]){
 		for (int k = 0; k < LABELS_COUNTS; ++k){
 			//std::cout << "nums_counts[" << k << "]=" << nums_counts[k] << "  " << std::endl;
 			for (int l = 0; l < nums_counts[k]; ++l){
-
 				//num_path_ = train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()];
 				num_path_ = train_path_label[(i*MINI_BATCHES + j) % train_path_label.size()];
                 //std::cout << "sss=" << (i*MINI_BATCHES + j) % train_path_label.size() << std::endl;
