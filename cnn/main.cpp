@@ -51,15 +51,19 @@ bool calculate_accuracy(layers& lys, vector<num_path>& test_path_label, double a
 /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
 int main(int argc, char* argv[]){
 
-	string train_file_name = ".\\data\\train_imagx\\0\\*.bmp";
+	//string train_file_name = ".\\data\\train_imagx\\0\\*.bmp";
 	//string valid_file_name = ".\\data\\test_image\\0\\*.bmp";
-	string test_file_name = ".\\data\\test_imagx\\0\\*.bmp";
+	//string test_file_name = ".\\data\\test_imagx\\0\\*.bmp";
+
+    string train_file_name = ".\\data\\train_image_32_small\\0\\*.bmp";
+    //string valid_file_name = ".\\data\\test_image\\0\\*.bmp";
+    string test_file_name = ".\\data\\test_image_32_small\\0\\*.bmp";
 
 	vector<vector<num_path>> train_label_imgs; train_label_imgs.resize(LABELS_COUNTS);
-	vector<vector<num_path>> valid_label_imgs; valid_label_imgs.resize(LABELS_COUNTS);
+	//vector<vector<num_path>> valid_label_imgs; valid_label_imgs.resize(LABELS_COUNTS);
 	vector<vector<num_path>> test_label_imgs;  test_label_imgs.resize(LABELS_COUNTS);
 	vector<num_path> train_path_label;
-	vector<num_path> vaild_path_label;
+	//vector<num_path> vaild_path_label;
 	vector<num_path> test_path_label;
 	get_image_path_and_label(train_label_imgs, train_path_label, train_file_name);
 	//get_image_path_and_label(valid_label_imgs, vaild_path_label, valid_file_name);
@@ -94,8 +98,8 @@ int main(int argc, char* argv[]){
 		for (int k = 0; k < LABELS_COUNTS; ++k){
 			//std::cout << "nums_counts[" << k << "]=" << nums_counts[k] << "  " << std::endl;
 			for (int l = 0; l < nums_counts[k]; ++l){
-				//num_path_ = train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()];
-				num_path_ = train_path_label[(i*MINI_BATCHES + j) % train_path_label.size()];
+				num_path_ = train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()];
+				//num_path_ = train_path_label[(i*MINI_BATCHES + j) % train_path_label.size()];
                 //std::cout << "sss=" << (i*MINI_BATCHES + j) % train_path_label.size() << std::endl;
 			    //std::cout << num_path_.path << "   " << num_path_.num << std::endl;
 				get_gt_label(gt_10, num_path_);
@@ -115,8 +119,8 @@ int main(int argc, char* argv[]){
 		upadate_params_after_batches_back_propagations(lys, learning_rate);
         int iii = i / (RATE_CHANHE_NUMS);
 		if (0 == i % (RATE_CHANHE_NUMS)){/* todo valid accuarcy的下标冲突了 */
-			calculate_accuracy(lys, test_path_label, test_accuracy, iii);
-
+			//calculate_accuracy(lys, test_path_label, test_accuracy, iii);
+            
 			/* 由于竞争性学习，概率造成的四舍五入，所以前向传播的minibatch 只是近似等于batch_size */
 			sum_errors = 0.0;
 			std::cout << "errors" << std::endl;
@@ -160,7 +164,9 @@ int main(int argc, char* argv[]){
 			}
 
 			std::cout << std::endl << "tmp=" << tmp << std::endl;
+            calculate_accuracy(lys, test_path_label, test_accuracy, iii);
 		}
+
 	}// end i
 
 
