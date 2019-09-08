@@ -57,16 +57,16 @@
 #define  TEST_TIMES                 2000
 
 #define DELTA                       0.0001 /* todo ÓÐÁ½¸ödelta */
-#define EPSILON                    0.0000
+#define EPSILON                     0.0000
 #define MAX_UP                      2000
 
 #define F(x)                       (1.0-(x)*(x))
 #define THRESHOLD_                  0.95
 
 #define LABELS_COUNTS               10
-#define MINI_BATCHES                LABELS_COUNTS*20
+#define MINI_BATCHES                300
 #define RATE_CHANHE_NUMS            40
-#define BASE_LEARNING_RATE          0.012
+#define BASE_LEARNING_RATE          0.008
 #define DECAY_RATE                  0.955
 
 #endif

@@ -284,13 +284,6 @@ bool layers::back_propagation(int gt_label[]){
 		y_diff.mp_matrixes[j].mp_data[0] /= max;
 		y_diff.mp_matrixes[j].mp_data[0] *= scale;
 	}
-	//double const_num = sum_t;
-	//if (t.mp_matrixes[i].mp_data[0] < 10000){
-	//	const_num *= t.mp_matrixes[i].mp_data[0];
-	//}
-	//else{
-	//	const_num *= 10000;
-	//}
 
 	//double const_num = sum_t;/* ÏßÐÔscale */
 	//for (int j = 0; j < t.m_channels; ++j){
