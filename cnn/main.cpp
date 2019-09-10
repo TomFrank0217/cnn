@@ -55,9 +55,9 @@ int main(int argc, char* argv[]){
 	//string valid_file_name = ".\\data\\test_image\\0\\*.bmp";
 	//string test_file_name = ".\\data\\test_imagx\\0\\*.bmp";
 
-    string train_file_name = ".\\data\\train_image_32_small\\0\\*.bmp";
+    string train_file_name = ".\\data\\train_imagx\\0\\*.bmp";
     //string valid_file_name = ".\\data\\test_image\\0\\*.bmp";
-    string test_file_name = ".\\data\\test_image_32_small\\0\\*.bmp";
+    string test_file_name = ".\\data\\test_imagx\\0\\*.bmp";
 
 	vector<vector<num_path>> train_label_imgs; train_label_imgs.resize(LABELS_COUNTS);
 	//vector<vector<num_path>> valid_label_imgs; valid_label_imgs.resize(LABELS_COUNTS);
