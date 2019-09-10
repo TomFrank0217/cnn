@@ -66,7 +66,7 @@
 #define LABELS_COUNTS               10
 #define MINI_BATCHES                200
 #define RATE_CHANHE_NUMS            100
-#define BASE_LEARNING_RATE          0.010
+#define BASE_LEARNING_RATE          0.008
 #define DECAY_RATE                  0.95
 
 #endif

@@ -72,6 +72,9 @@ int main(int argc, char* argv[]){
 	for (int i = 0; i < LABELS_COUNTS; ++i){
 		random_shuffle(train_label_imgs[i].begin(), train_label_imgs[i].end());
 	}
+	for (int i = 0; i < LABELS_COUNTS; ++i){
+		random_shuffle(train_label_imgs[i].begin(), train_label_imgs[i].end());
+	}
 	num_path num_path_;
 	int num_counts[LABELS_COUNTS] = { 0 };
 	int nums_counts[LABELS_COUNTS] = { 0 };
