@@ -45,7 +45,7 @@ bool show_train_probability(int* gt_10, layers& lys, int iters_count, int bacthe
 bool add_batch_diffs(layers& lys);
 bool upadate_params_after_batches_back_propagations(layers& lys, double learning_rate);
 bool calculate_accuracy(layers& lys, vector<num_path>& test_path_label, double accuracy[][LABELS_COUNTS + 1], int test_count);
-bool get_nums_counts(double errors[], double test_accuracy[][LABELS_COUNTS + 1], int test_counts, double &scale, int nums_counts[]);/* todo random初始化不是很好 */
+bool get_nums_counts(double errors[], double test_accuracy[][LABELS_COUNTS + 1], int test_counts, double &scale, int nums_counts[], int& module); /*todo random初始化不是很好 * /
 /* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑*/
 /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
 int main(int argc, char* argv[]){
@@ -54,9 +54,9 @@ int main(int argc, char* argv[]){
 	//string valid_file_name = ".\\data\\test_image\\0\\*.bmp";
 	//string test_file_name = ".\\data\\test_imagx\\0\\*.bmp";
 
-    string train_file_name = ".\\data\\train_image_32_small\\0\\*.bmp";
+    string train_file_name = ".\\data\\train_image\\0\\*.bmp";
     //string valid_file_name = ".\\data\\test_image\\0\\*.bmp";
-    string test_file_name = ".\\data\\test_image_32_small\\0\\*.bmp";
+    string test_file_name = ".\\data\\test_image\\0\\*.bmp";
 
 	vector<vector<num_path>> train_label_imgs; train_label_imgs.resize(LABELS_COUNTS);
 	//vector<vector<num_path>> valid_label_imgs; valid_label_imgs.resize(LABELS_COUNTS);
@@ -89,7 +89,7 @@ int main(int argc, char* argv[]){
 	double valid_accuracy[TEST_TIMES][LABELS_COUNTS + 1] = { 0.0 };
 	double errors[LABELS_COUNTS] = { 0.0 }, sum_errors;
 	DATA_TYPE learning_rate = 0;
-
+    int module = 0;
 	for (int i = 0; i < RATE_CHANHE_NUMS * TEST_TIMES; ++i){
 		learning_rate = BASE_LEARNING_RATE*pow(DECAY_RATE, i / RATE_CHANHE_NUMS);
 		reset_params_before_batches_forward_propagations(lys);  /* 每一次batch传播之前所有的梯度清零 */
@@ -97,8 +97,13 @@ int main(int argc, char* argv[]){
 		for (int k = 0; k < LABELS_COUNTS; ++k){
 			//std::cout << "nums_counts[" << k << "]=" << nums_counts[k] << "  " << std::endl;
 			for (int l = 0; l < nums_counts[k]; ++l){
-				num_path_ = train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()];
-				//num_path_ = train_path_label[(i*MINI_BATCHES + j) % train_path_label.size()];
+
+                if (0 == module){
+                    num_path_ = train_path_label[(i*MINI_BATCHES + j) % train_path_label.size()];
+                }
+                else{
+                    num_path_ = train_label_imgs[k][(num_counts[k] + l) % train_label_imgs[k].size()];
+                }
                 //std::cout << "sss=" << (i*MINI_BATCHES + j) % train_path_label.size() << std::endl;
 			    //std::cout << num_path_.path << "   " << num_path_.num << std::endl;
 				get_gt_label(gt_10, num_path_);
@@ -120,9 +125,9 @@ int main(int argc, char* argv[]){
 		if (0 == i % (RATE_CHANHE_NUMS)){/* todo valid accuarcy的下标冲突了 */
 			calculate_accuracy(lys, test_path_label, test_accuracy, test_counts);
             if (0 != test_counts){
-                get_nums_counts(errors, test_accuracy, test_counts - 1, scale, nums_counts);
+                get_nums_counts(errors, test_accuracy, test_counts - 1, scale, nums_counts, module);
             }
-            get_nums_counts(errors, test_accuracy, test_counts, scale, nums_counts);
+            get_nums_counts(errors, test_accuracy, test_counts, scale, nums_counts, module);
 		}
 
 	}// end i
@@ -417,9 +422,9 @@ bool show(Mat &image, int show_image_mode){
 	return true;
 }
 
-bool get_nums_counts(double errors[], double test_accuracy[][LABELS_COUNTS + 1], int test_counts, double &scale, int nums_counts[]){
+
     /* 由于竞争性学习，概率造成的四舍五入，所以前向传播的minibatch 只是近似等于batch_size */
-    double sum_errors = 0.0;
+    double sum_errors = 0.0;bool get_nums_counts(double errors[], double test_accuracy[][LABELS_COUNTS + 1], int test_counts, double &scale, int nums_counts[],int &module){
     std::cout << "errors" << std::endl;
     for (int j = 0; j < LABELS_COUNTS; ++j){
         errors[j] = 1.0 - test_accuracy[test_counts][j];
@@ -428,8 +433,10 @@ bool get_nums_counts(double errors[], double test_accuracy[][LABELS_COUNTS + 1],
     }
     if (sum_errors / (0.0 + LABELS_COUNTS) > 0.10){
         scale = 0.0;
+        module = 0;
     }
     else{
+        module = 1;
         scale = 0.30;
     }
     std::cout << "\n相对 errors" << std::endl;
