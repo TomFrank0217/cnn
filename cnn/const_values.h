@@ -3,7 +3,7 @@
 
 #define DATA_TYPE                   double
 
-#define RANDOM_INITIAL_VAL          0.03
+#define RANDOM_INITIAL_VAL          0.030
 
 #define KERS_MIN_VAL                -RANDOM_INITIAL_VAL
 #define KERS_MAX_VAL                RANDOM_INITIAL_VAL
@@ -26,13 +26,12 @@
 #define AVE_POOLING                 1
 #define POOLING_SIZE                2
 
-#define IMAGE_UNIT_VALUE            10.0
+#define IMAGE_UNIT_VALUE            16.0
 #define  AVE_VALUE                  127.5
 
 #define MINUS                       -1
 #define KERNEL_ROWS                 2
 #define KERNEL_COLS                 3
-
 #define KERNELS2MATRIEX             0
 #define MATRIEX2KERNELS             1
 
@@ -50,7 +49,7 @@
 #define RELU_ON                     1
 
 #define LAYER_INITIAL_LENGTH        0
-#define LAYERS_COUNTS               7
+#define LAYERS_COUNTS               8
 
 #define POW_NUM                     1.05
 
@@ -64,9 +63,9 @@
 #define THRESHOLD_                  0.95
 
 #define LABELS_COUNTS               10
-#define MINI_BATCHES                100
-#define RATE_CHANHE_NUMS            50
-#define BASE_LEARNING_RATE          0.015
-#define DECAY_RATE                  0.95
+#define MINI_BATCHES                250
+#define RATE_CHANHE_NUMS            40
+#define BASE_LEARNING_RATE          0.012
+#define DECAY_RATE                  0.96
 
 #endif

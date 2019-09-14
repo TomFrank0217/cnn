@@ -41,12 +41,24 @@
 //};
 
 layer_parameters layers_parameters[LAYERS_COUNTS] = {
+    layer_parameters{//1
+        CONVOLUTION_LAYER,
+        1,
+        3,
+        3,
+        8,
+        STRIDE,
+        VALID_PADDING,
+        RELU_OFF,
+        MINUS,
+        MINUS
+    },
 	layer_parameters{//1
 		CONVOLUTION_LAYER,
-		1,
-		5,
-		5,
-		6,
+		8,
+		3,
+		3,
+		20,
 		STRIDE,
 		VALID_PADDING,
 		RELU_OFF,
@@ -67,10 +79,10 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 		},
 		layer_parameters{//3
 				CONVOLUTION_LAYER,
-				6,
+				20,
 				5,
 				5,
-				16,
+				30,
 				STRIDE,
 				VALID_PADDING,
 				RELU_OFF,
@@ -91,10 +103,10 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 				},
 				layer_parameters{//5
 						FULLCONNECTION_LAYER,
-						16,
+						30,
 						5,
 						5,
-						160,
+						180,
 						STRIDE,
 						VALID_PADDING,
 						RELU_ON,
@@ -103,10 +115,10 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 					},
 					layer_parameters{//6
 							FULLCONNECTION_LAYER,
-							160,
+							180,
 							1,
 							1,
-							84,
+							100,
 							STRIDE,
 							VALID_PADDING,
 							RELU_OFF,
@@ -115,7 +127,7 @@ layer_parameters layers_parameters[LAYERS_COUNTS] = {
 						},
 						layer_parameters{//7
 								FULLCONNECTION_LAYER,
-								84,
+								100,
 								1,
 								1,
 								10,

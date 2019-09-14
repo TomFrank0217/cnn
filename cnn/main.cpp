@@ -51,10 +51,9 @@ bool show_results(double test_accuracy[][LABELS_COUNTS + 1]);
 /* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑*/
 /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
 int main(int argc, char* argv[]){
-
-	//string train_file_name = ".\\data\\train_imagx\\0\\*.bmp";
-	//string valid_file_name = ".\\data\\test_image\\0\\*.bmp";
-	//string test_file_name = ".\\data\\test_imagx\\0\\*.bmp";
+	//string train_file_name = ".\\data\\train_image\\0\\*.bmp";
+	//string valid_file_name = ".\\data\\valid_image\\0\\*.bmp";
+	//string test_file_name = ".\\data\\test_image\\0\\*.bmp";
 
     string train_file_name = ".\\data\\small_train_image\\0\\*.bmp";
     string valid_file_name = ".\\data\\small_valid_image\\0\\*.bmp";
@@ -96,6 +95,7 @@ int main(int argc, char* argv[]){
 		learning_rate = BASE_LEARNING_RATE*pow(DECAY_RATE, i / RATE_CHANHE_NUMS);
 		reset_params_before_batches_forward_propagations(lys);  /* 每一次batch传播之前所有的梯度清零 */
 		int j = 0;
+        //Sleep(10000);
 		for (int k = 0; k < LABELS_COUNTS; ++k){
 			//std::cout << "nums_counts[" << k << "]=" << nums_counts[k] << "  " << std::endl;
 			for (int l = 0; l < nums_counts[k]; ++l){
@@ -110,7 +110,6 @@ int main(int argc, char* argv[]){
 				get_gt_label(gt_10, num_path_);
 				image = imread(num_path_.path, 0);
 				lys.mp_layers[0].m_fts = image;/* todo */
-                //show(image);
 				lys.forward_propagation();
 				lys.back_propagation(gt_10);
 				show_train_probability(gt_10, lys, i, j);
@@ -123,9 +122,11 @@ int main(int argc, char* argv[]){
 		}
 		upadate_params_after_batches_back_propagations(lys, learning_rate);
         int test_counts = i / (RATE_CHANHE_NUMS);
-		if (0 == i % (RATE_CHANHE_NUMS)){/* todo valid accuarcy的下标冲突了 */
+		if (0 == i % (RATE_CHANHE_NUMS)){
 			calculate_accuracy(lys, test_path_label, test_accuracy, test_counts);
+            //Sleep(30000);
             calculate_accuracy(lys, vaild_path_label, valid_accuracy, test_counts);
+            //Sleep(30000);
             if (0 != test_counts){
                 get_nums_counts(errors, valid_accuracy, test_counts - 1, scale, nums_counts, module);
             }
@@ -232,8 +233,8 @@ bool reset_params_before_batches_forward_propagations(layers& lys){
 }
 
 bool show_train_probability(int* gt_10, layers& lys, int iters_count, int bacthes_count){
-	if (iters_count % 17 == 0){
-		if (bacthes_count % 51 == 0){
+	if (iters_count % 11 == 0){
+		if (bacthes_count % 23 == 0){
 			std::cout << "\n\niterations  " << iters_count*MINI_BATCHES + bacthes_count << "   " << std::endl;
 			for (int i = 0; i < LABELS_COUNTS; ++i){
 				if (0 == gt_10[i]){
@@ -341,9 +342,11 @@ bool calculate_accuracy(layers& lys, vector<num_path>& test_path_label, double a
 		}
 	}
 	right[LABELS_COUNTS] = 0;
+
 	for (int r = 0; r < LABELS_COUNTS; ++r){
 		right[LABELS_COUNTS] += right[r];
 	}
+
 	for (int r = 0; r < LABELS_COUNTS + 1; ++r){
 		accuracy[test_counts][r] = (0.0 + right[r]) \
 			/ (0.0 + counts[r]);
@@ -351,7 +354,6 @@ bool calculate_accuracy(layers& lys, vector<num_path>& test_path_label, double a
 
 	return true;
 }
-
 
 bool get_gt_label(int *gt_10, num_path& np){
 	for (int s = 0; s < 10; ++s){
@@ -364,6 +366,7 @@ bool get_gt_label(int *gt_10, num_path& np){
 	}
 	return true;
 }
+
 bool get_files(string file_name, vector<string> &files){
 	_finddata_t file_info;
 	int n = 0;
@@ -434,13 +437,13 @@ bool show(Mat &image, int show_image_mode){
 	return true;
 }
 
-
-    /* 由于竞争性学习，概率造成的四舍五入，所以前向传播的minibatch 只是近似等于batch_size */
-    double sum_errors = 0.0;bool get_nums_counts(double errors[], double test_accuracy[][LABELS_COUNTS + 1], int test_counts, double &scale, int nums_counts[],int &module){
+/* 由于竞争性学习，概率造成的四舍五入，所以前向传播的minibatch 只是近似等于batch_size */
+bool get_nums_counts(double errors[], double test_accuracy[][LABELS_COUNTS + 1], int test_counts, double &scale, int nums_counts[],int &module){
+    double sum_errors = 0.0;
     std::cout << "errors" << std::endl;
     for (int j = 0; j < LABELS_COUNTS; ++j){
         errors[j] = 1.0 - test_accuracy[test_counts][j];
-        std::cout << setw(SHOW_PROBABILITY_WIDTH) << errors[j]*100.0;
+        std::cout << setw(SHOW_PROBABILITY_WIDTH) << errors[j] * 100.0;
         sum_errors += errors[j];
     }
     if (sum_errors / (0.0 + LABELS_COUNTS) > 0.10){
@@ -449,7 +452,7 @@ bool show(Mat &image, int show_image_mode){
     }
     else{
         module = 1;
-        scale = 0.30;
+        scale = 0.20;
     }
     std::cout << "\n相对 errors" << std::endl;
     for (int j = 0; j < LABELS_COUNTS; ++j){
