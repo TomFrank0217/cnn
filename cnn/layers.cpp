@@ -289,13 +289,13 @@ bool layers::back_propagation(int gt_label[]){
 	//for (int j = 0; j < t.m_channels; ++j){
 	//	if (0 == i - j){
 	//		//t_diff.mp_matrixes[i].mp_data[0] = q_diff.mp_matrixes[i].mp_data[0] * \
-			//		//	(sum_t - t.mp_matrixes[i].mp_data[0]) / (sum_t*sum_t);
+									//		//	(sum_t - t.mp_matrixes[i].mp_data[0]) / (sum_t*sum_t);
 	//		//t_diff.mp_matrixes[i].mp_data[0] = (t.mp_matrixes[i].mp_data[0] - sum_t) / const_num;
 	//		y_diff.mp_matrixes[i].mp_data[0] = (t.mp_matrixes[i].mp_data[0] - sum_t)*(t.mp_matrixes[i].mp_data[0] - EPSILON) / const_num;
 	//	}
 	//	else{
 	//		//t_diff.mp_matrixes[j].mp_data[0] = q_diff.mp_matrixes[i].mp_data[0] * \
-			//		//	(-t.mp_matrixes[j].mp_data[0]) / (sum_t*sum_t);
+									//		//	(-t.mp_matrixes[j].mp_data[0]) / (sum_t*sum_t);
 	//		//t_diff.mp_matrixes[j].mp_data[0] = (t.mp_matrixes[j].mp_data[0]) / const_num;
 	//		y_diff.mp_matrixes[j].mp_data[0] = (t.mp_matrixes[j].mp_data[0])*(t.mp_matrixes[j].mp_data[0] - EPSILON) / const_num;
 	//	}
