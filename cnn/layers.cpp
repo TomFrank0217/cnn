@@ -290,6 +290,7 @@ bool layers::back_propagation(int gt_label[]){
 	//	if (0 == i - j){
 	//		//t_diff.mp_matrixes[i].mp_data[0] = q_diff.mp_matrixes[i].mp_data[0] * \
 							//		//	(sum_t - t.mp_matrixes[i].mp_data[0]) / (sum_t*sum_t);
+
 	//		//t_diff.mp_matrixes[i].mp_data[0] = (t.mp_matrixes[i].mp_data[0] - sum_t) / const_num;
 	//		y_diff.mp_matrixes[i].mp_data[0] = (t.mp_matrixes[i].mp_data[0] - sum_t)*(t.mp_matrixes[i].mp_data[0] - EPSILON) / const_num;
 	//	}
