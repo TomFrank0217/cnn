@@ -94,6 +94,7 @@ int main(int argc, char* argv[]){
 		learning_rate = BASE_LEARNING_RATE*pow(DECAY_RATE, i / RATE_CHANHE_NUMS);
 		reset_params_before_batches_forward_propagations(lys);  /* 每一次batch传播之前所有的梯度清零 */
 		int j = 0;
+		//Sleep(5000);
 		for (int k = 0; k < LABELS_COUNTS; ++k){
 			//std::cout << "nums_counts[" << k << "]=" << nums_counts[k] << "  " << std::endl;
 			for (int l = 0; l < nums_counts[k]; ++l){
@@ -122,9 +123,9 @@ int main(int argc, char* argv[]){
 		int test_counts = i / (RATE_CHANHE_NUMS);
 		if (0 == i % (RATE_CHANHE_NUMS)){
 			calculate_accuracy(lys, test_path_label, test_accuracy, test_counts);
-			//Sleep(200000);
+			Sleep(300000);
 			calculate_accuracy(lys, vaild_path_label, valid_accuracy, test_counts);
-			//Sleep(300000);
+			Sleep(300000);
 			if (0 != test_counts){
 				get_nums_counts(errors, valid_accuracy, test_counts - 1, scale, nums_counts, module);
 			}

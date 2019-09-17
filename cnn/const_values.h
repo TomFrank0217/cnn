@@ -67,6 +67,6 @@
 #define MINI_BATCHES                200
 #define RATE_CHANHE_NUMS            100
 #define BASE_LEARNING_RATE          0.015
-#define DECAY_RATE                  0.96
+#define DECAY_RATE                  0.95
 
 #endif
