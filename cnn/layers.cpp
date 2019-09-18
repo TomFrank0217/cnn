@@ -200,7 +200,7 @@ bool layers::back_propagation(int gt_label[]){
 		sum_t += t.mp_matrixes[j].mp_data[0];
 	}
 
-	for (int j = 0; j < 10; ++j){
+	for (int j = 0; j < LABELS_COUNTS; ++j){
 		if (j == i){
 			y_diff.mp_matrixes[i].mp_data[0] = (t.mp_matrixes[i].mp_data[0] - sum_t)*(t.mp_matrixes[i].mp_data[0] - DELTA);
 		}
@@ -234,7 +234,7 @@ bool layers::back_propagation(int gt_label[]){
 	int index = 0;
 	/* qj tj  ydiffj （j!=i） 正相关    ti最大 max=y_diff[i]   else max=最大的y_diff[j] */
 	//double min = y_diff.mp_matrixes[0].mp_data[0];
-	for (int j = 1; j < 10; ++j){
+	for (int j = 1; j < LABELS_COUNTS; ++j){
 		if (max < ABS(y_diff.mp_matrixes[j].mp_data[0])){
 			max = ABS(y_diff.mp_matrixes[j].mp_data[0]);
 			index = j;
@@ -247,8 +247,8 @@ bool layers::back_propagation(int gt_label[]){
 	double scale = 0;
 	double p = q.mp_matrixes[i].mp_data[0] - EPSILON;
 	if (p > THRESHOLD_){
-		if (p > 0.996){
-			scale = -0.015;
+		if (p > 0.999){
+			scale = -0.008;
 		}
 		else{
 			scale = 0.016;
