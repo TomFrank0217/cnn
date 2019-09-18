@@ -123,9 +123,9 @@ int main(int argc, char* argv[]){
 		int test_counts = i / (RATE_CHANHE_NUMS);
 		if (0 == i % (RATE_CHANHE_NUMS)){
 			calculate_accuracy(lys, test_path_label, test_accuracy, test_counts);
-			Sleep(300000);
+			Sleep(100000);
 			calculate_accuracy(lys, vaild_path_label, valid_accuracy, test_counts);
-			Sleep(300000);
+			Sleep(200000);
 			if (0 != test_counts){
 				get_nums_counts(errors, valid_accuracy, test_counts - 1, scale, nums_counts, module);
 			}
