@@ -146,23 +146,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="kernels.cpp" />
-    <ClCompile Include="layer.cpp" />
-    <ClCompile Include="layers.cpp" />
-    <ClCompile Include="layers_parameters.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="matrix.cpp" />
-    <ClCompile Include="features.cpp" />
+    <ClCompile Include="src\features.cpp" />
+    <ClCompile Include="src\kernels.cpp" />
+    <ClCompile Include="src\layer.cpp" />
+    <ClCompile Include="src\layers.cpp" />
+    <ClCompile Include="src\layers_parameters.cpp" />
+    <ClCompile Include="src\matrix.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="const_values.h" />
-    <ClInclude Include="debug_print.h" />
-    <ClInclude Include="kernels.h" />
-    <ClInclude Include="layer.h" />
-    <ClInclude Include="layers.h" />
-    <ClInclude Include="layers_parameters.h" />
-    <ClInclude Include="matrix.h" />
-    <ClInclude Include="features.h" />
+    <ClInclude Include="include\const_values.h" />
+    <ClInclude Include="include\debug_print.h" />
+    <ClInclude Include="include\features.h" />
+    <ClInclude Include="include\kernels.h" />
+    <ClInclude Include="include\layer.h" />
+    <ClInclude Include="include\layers.h" />
+    <ClInclude Include="include\layers_parameters.h" />
+    <ClInclude Include="include\matrix.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

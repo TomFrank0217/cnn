@@ -18,48 +18,48 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="matrix.cpp">
+    <ClCompile Include="src\features.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="kernels.cpp">
+    <ClCompile Include="src\kernels.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="layer.cpp">
+    <ClCompile Include="src\layer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="features.cpp">
+    <ClCompile Include="src\layers.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="layers_parameters.cpp">
+    <ClCompile Include="src\layers_parameters.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="layers.cpp">
+    <ClCompile Include="src\matrix.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="matrix.h">
+    <ClInclude Include="include\const_values.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="const_values.h">
+    <ClInclude Include="include\debug_print.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="debug_print.h">
+    <ClInclude Include="include\features.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="kernels.h">
+    <ClInclude Include="include\kernels.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="layer.h">
+    <ClInclude Include="include\layer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="features.h">
+    <ClInclude Include="include\layers.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="layers_parameters.h">
+    <ClInclude Include="include\layers_parameters.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="layers.h">
+    <ClInclude Include="include\matrix.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

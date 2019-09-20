@@ -20,7 +20,7 @@ public:
 	layer(int channels, int rows, int cols, layer_parameters* layer_params_);
 	layer(layer_parameters ly_params);
     //layer(int kers_channels, int kers_rows, int kers_cols, int kers_count, \
-        int fts_channels/*kers_channels*/, int fts_rows, int fts_cols,cv::Mat image)
+        //int fts_channels/*kers_channels*/, int fts_rows, int fts_cols,cv::Mat image)
 	
 	bool show_shapes();
 	matrix conv();

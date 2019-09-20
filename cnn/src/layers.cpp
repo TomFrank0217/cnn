@@ -1,4 +1,4 @@
-#include "layers.h"
+#include "../include/layers.h"
 #include <math.h>/* for exp */
 
 layers::layers(){
@@ -254,10 +254,9 @@ bool layers::back_propagation(int gt_label[]){
 		//	scale = 0.012;
 		//}
 		scale = 0;
-		if (p > 0.9995){
-			scale = -0.001;
+		if (p > 0.999){
+			scale = -0.005;
 		}
-		
 	}
 	else{
 		if (p > 0.5){
@@ -272,17 +271,6 @@ bool layers::back_propagation(int gt_label[]){
 				scale *= 2.0;
 			}
 		}
-		//scale = pow(scale, 2);
-		//if (scale < 0.05){
-		//	scale = 0.05;
-		//}
-		//if (qmax_index != i){
-		////	scale += 5.0*(q.mp_matrixes[qmax_index].mp_data[0] - q.mp_matrixes[i].mp_data[0]);
-		////	if (scale < 2.0){
-		////		scale = 2.0;
-		////	}
-		//	scale *= 2.0;
-		//}
 	}
 	for (int j = 0; j < 10; ++j){
 		//y_diff.mp_matrixes[j].mp_data[0] = 2.0*(y_diff.mp_matrixes[j].mp_data[0] - min) / (max - min) - 1.0;

@@ -1,5 +1,5 @@
-#include "layers_parameters.h"
-#include "const_values.h"
+#include "../include/layers_parameters.h"
+#include "../include/const_values.h"
 
 layer_parameters layers_parameters[LAYERS_COUNTS] = {
 	layer_parameters{//1

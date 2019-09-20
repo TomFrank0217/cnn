@@ -15,13 +15,13 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "layers_parameters.h"
+#include "./include/layers_parameters.h"
 
-#include "matrix.h"
-#include "features.h"
-#include "kernels.h"
-#include "layer.h"
-#include "layers.h"
+#include "./include/matrix.h"
+#include "./include/features.h"
+#include "./include/kernels.h"
+#include "./include/layer.h"
+#include "./include/layers.h"
 
 #include <windows.h>
 

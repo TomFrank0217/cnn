@@ -12,7 +12,7 @@ typedef struct layer_parameters{
 	int relu;
 	int pooling_mode;
 	int pooling_size;
-};//layer_parameters;
+}layer_parameters;//layer_parameters;
 
 extern layer_parameters layers_parameters[];
 

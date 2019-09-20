@@ -1,4 +1,4 @@
-#include "kernels.h"
+#include "../include/kernels.h"
 
 kernels::kernels(){
 	mp_kers = NULL;
@@ -163,6 +163,7 @@ kernels& kernels::operator=(const kernels& ker_){
 	for (int i = 0; i < m_kers_counts; ++i){
 		mp_kers[i] = ker_.mp_kers[i];
 	}
+	return *this;
 }
 
 kernels kernels::operator+(DATA_TYPE add_num){

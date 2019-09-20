@@ -1,7 +1,7 @@
-#include "matrix.h"
 #include <iostream>
 #include <iomanip>
-#include "const_values.h"
+#include "../include/matrix.h"
+#include "../include/const_values.h"
 
 int matrix::rand_num = 0;
 

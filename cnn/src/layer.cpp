@@ -1,4 +1,4 @@
-#include "layer.h"
+#include "../include/layer.h"
 
 layer::layer(){
 	m_padding_mode = VALID_PADDING;
@@ -622,6 +622,8 @@ bool layer::reshape(features& pooling_mask, features& dst_fts){
 	else{
 		;/* error*/
 	}
+
+	return true;
 }
 
 bool layer::show_shapes(){
