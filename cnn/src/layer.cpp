@@ -289,8 +289,8 @@ bool layer::conv(){
 			t = i*m_conv_mat_m_cols;
 			for (int j = 0; j < m_fts_mat_m_cols; ++j){
 				//r = j*m_kers_mat_m_cols;
-				m_conv_mat_mp_data[s] += \
-					m_fts_mat_mp_data[t++] * m_kers_mat_mp_data[j*m_kers_mat_m_cols + k];
+				m_conv_mat.mp_data[s] += \
+					m_fts_mat.mp_data[t++] * m_kers_mat.mp_data[j*m_kers_mat_m_cols + k];
 			}
 			++s;
 		}
@@ -364,8 +364,8 @@ bool layer::reshape(kernels& src_kers, matrix& dst_kers_mat){
 
 					i = t1 + t2 + c;
 					//j = C;
-					dst_kers_mat_mp_data[i*dst_kers_mat_m_cols + C] = \
-						src_kers_mp_kers[C].mp_matrixes[R].mp_data[t2 + c];
+					dst_kers_mat.mp_data[i*dst_kers_mat_m_cols + C] = \
+						src_kers.mp_kers[C].mp_matrixes[R].mp_data[t2 + c];
 
 				}
 			}
@@ -423,8 +423,8 @@ bool layer::reshape_(matrix& src_kers_mat_diff, kernels& dst_kers_diff){
 			index = i - ROW*t0;
 			row = index / m_kers_m_cols;
 			col = index - row*m_kers_m_cols;
-			dst_kers_diff_mp_kers[j].mp_matrixes[ROW].mp_data[index/*row*m_kers_m_cols + col*/] \
-				= src_kers_mat_diff_mp_data[t1 + j];
+			dst_kers_diff.mp_kers[j].mp_matrixes[ROW].mp_data[index/*row*m_kers_m_cols + col*/] \
+				= src_kers_mat_diff.mp_data[t1 + j];
 
 		}
 	}
@@ -526,8 +526,8 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 					cpf = cpk + ckf;/* 元素在原始特征中的列数 = 元素在卷积核(二维)中的列数 + 卷积核(二维)在特征中的列数 */
 					/* 元素在卷积核中的位置是指元素相对于卷积核左上方元素而言 */
 					/* 卷积核在特征图中的位置是指卷积核左上方元素相对于特征图左上方元素的位置 */
-					dst_fts_mat_mp_data[++t1] = \
-						src_fts_mp_matrixes[channel].mp_data[rpf*src_fts_m_cols + cpf];
+					dst_fts_mat.mp_data[++t1] = \
+						src_fts.mp_matrixes[channel].mp_data[rpf*src_fts_m_cols + cpf];
 					//std::cout << "i=" << i << " j=" << j << std::endl;
 				}
 			}
@@ -636,8 +636,8 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 					//channel = channel;
 					rpf = rpk + rkf;
 					cpf = cpk + ckf;
-					dst_fts_diff_mp_matrixes[channel].mp_data[rpf*dst_fts_diff_m_cols + cpf]\
-						+= src_fts_mat_diff_mp_data[t1 + j];
+					dst_fts_diff.mp_matrixes[channel].mp_data[rpf*dst_fts_diff_m_cols + cpf]\
+						+= src_fts_mat_diff.mp_data[t1 + j];
 				}
 			}
 			break;
@@ -712,8 +712,8 @@ bool layer::reshape(matrix& src_conv_mat, features& dst_conv_mat2fts){
 				i = t0 + col;
 
 				//dst_conv_mat2fts.mp_matrixes[channel].mp_data[row*dst_conv_mat2fts.m_cols + col]
-				dst_conv_mat2fts_mp_matrixes[channel].mp_data[i]
-					= src_conv_mat_mp_data[i*src_conv_mat_m_cols + channel];
+				dst_conv_mat2fts.mp_matrixes[channel].mp_data[i]
+					= src_conv_mat.mp_data[i*src_conv_mat_m_cols + channel];
 
 			}
 		}
@@ -759,9 +759,8 @@ bool layer::reshape_(features& src_conv_mat2fts_diff, matrix& dst_conv_mat_diff)
 			//channel = j;
 			row = i / src_conv_mat2fts_diff_m_cols;
 			col = i - row*src_conv_mat2fts_diff_m_cols;
-			dst_conv_mat_diff_mp_data[t0 + j] = \
-				src_conv_mat2fts_diff_mp_matrixes[j].\
-				mp_data[i/*row*src_conv_mat2fts_diff_m_cols + col*/];
+			dst_conv_mat_diff.mp_data[t0 + j] = \
+				src_conv_mat2fts_diff.mp_matrixes[j].mp_data[i/*row*src_conv_mat2fts_diff_m_cols + col*/];
 		}
 	}
 	return true;
@@ -841,9 +840,9 @@ bool layer::reshape(features& pooling_mask, features& dst_fts){
 								}
 							}/* end t */
 						}/* end s */
-						pooling_mask_mp_matrixes[channel].\
+						pooling_mask.mp_matrixes[channel].\
 							mp_data[max_row*pooling_mask_m_cols + max_col] = 1;
-						dst_fts_mp_matrixes[channel].mp_data[t2 + j] = max;
+						dst_fts.mp_matrixes[channel].mp_data[t2 + j] = max;
 					} //end j
 				}//end i
 			}//end channel
