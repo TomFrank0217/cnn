@@ -23,7 +23,8 @@ public:
         //int fts_channels/*kers_channels*/, int fts_rows, int fts_cols,cv::Mat image)
 	
 	bool show_shapes();
-	matrix conv();
+	//matrix convxxx();
+	bool conv();
 	bool show();
 	/* reshape是前向 reshape_是后向 */
 	/* (channel, row ,col) -> (i,j) 是单射(f)，(i,j) -> (channel, row ,col)是多射

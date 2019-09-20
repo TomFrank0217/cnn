@@ -382,20 +382,37 @@ matrix matrix::operator*(const matrix &multiplier_matrix){
     matrix product_matrix(this->m_rows, multiplier_matrix.m_cols, 0.0);
 
     int s = 0, t = 0, r = 0;
-    for (int i = 0; i < product_matrix.m_rows; ++i){
-        for (int k = 0; k < product_matrix.m_cols; ++k){
-            product_matrix.mp_data[s] = 0.0;
-            int j = 0;
-            t = i*this->m_cols;
-            for (j = 0; j < this->m_cols; ++j){
-                r = j*multiplier_matrix.m_cols;
-                product_matrix.mp_data[s] += \
-                    this->mp_data[t++] * multiplier_matrix.mp_data[r + k];
-            }
-            ++s;
-        }
-    }
+	int product_matrix_m_rows = product_matrix.m_rows;
+	int product_matrix_m_cols = product_matrix.m_cols;
+	int multiplier_matrix_m_cols = multiplier_matrix.m_cols;
+	DATA_TYPE *product_matrix_mp_data = product_matrix.mp_data;
+	DATA_TYPE *multiplier_matrix_mp_data = multiplier_matrix.mp_data;
 
+	for (int i = 0; i < product_matrix_m_rows; ++i){
+		for (int k = 0; k < product_matrix_m_cols; ++k){
+			//product_matrix.mp_data[s] = 0.0;
+			//int j = 0;
+			t = i*m_cols;
+			for (int j = 0; j < m_cols; ++j){
+				r = j*multiplier_matrix_m_cols;
+				product_matrix_mp_data[s] += \
+					mp_data[t++] * multiplier_matrix_mp_data[r + k];
+			}
+			++s;
+		}
+	}
+	//for (int i = 0; i < product_matrix_m_rows; ++i){
+	//    for (int k = 0; k < product_matrix_m_cols; ++k){
+	//        product_matrix.mp_data[s] = 0.0;
+	//        int j = 0;
+	//        t = i*this->m_cols;
+	//        for (j = 0; j < this->m_cols; ++j){
+	//            r = j*multiplier_matrix.m_cols;
+	//            product_matrix.mp_data[s] += \
+		    //                this->mp_data[t++] * multiplier_matrix.mp_data[r + k];
+	//        }
+	//        ++s;
+	//    }
     return product_matrix;
 }
 

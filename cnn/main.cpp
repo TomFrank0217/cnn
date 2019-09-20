@@ -90,6 +90,8 @@ int main(int argc, char* argv[]){
 	double errors[LABELS_COUNTS] = { 0.0 }, sum_errors;
 	DATA_TYPE learning_rate = 0;
 	int module = 0;
+	clock_t begins[TEST_TIMES] = { 0 };
+	clock_t ends[TEST_TIMES] = { 0 };
 	for (int i = 0; i < RATE_CHANHE_NUMS * TEST_TIMES; ++i){
 		learning_rate = BASE_LEARNING_RATE*pow(DECAY_RATE, i / RATE_CHANHE_NUMS);
 		reset_params_before_batches_forward_propagations(lys);  /* 每一次batch传播之前所有的梯度清零 */
@@ -124,9 +126,15 @@ int main(int argc, char* argv[]){
 			calculate_accuracy(lys, test_path_label, test_accuracy, test_counts);
 			//Sleep(1000);
 			calculate_accuracy(lys, vaild_path_label, valid_accuracy, test_counts);
-			Sleep(30000);
+			//Sleep(30000);
+
 			if (0 != test_counts){
 				get_nums_counts(errors, valid_accuracy, test_counts - 1, scale, nums_counts, module);
+			}
+			begins[test_counts] = clock();
+			ends[test_counts] = clock();
+			if (0 != test_counts){
+				std::cout << " time used " << (ends[test_counts] - begins[test_counts - 1]) / CLOCKS_PER_SEC << std::endl;
 			}
 			string str = "*************************************************************************************************************************************************************";
 			std::cout << "******************************************************" << std::endl;

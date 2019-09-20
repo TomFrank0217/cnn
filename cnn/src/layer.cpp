@@ -256,14 +256,71 @@ layer::~layer(){
     ;
 }
 
+//matrix layer::conv(){
+//	/* todo check two mats */
+//	reshape(m_fts, m_fts_mat);
+//	reshape(m_kers, m_kers_mat);
+//	m_conv_mat = m_fts_mat*m_kers_mat;/* hanzhi todo */
+//	return  m_conv_mat;
+//}
 
-matrix layer::conv(){
+bool layer::conv(){
 	/* todo check two mats */
 	reshape(m_fts, m_fts_mat);
 	reshape(m_kers, m_kers_mat);
-	m_conv_mat = m_fts_mat*m_kers_mat;
-	return  m_conv_mat;
+	//m_conv_mat = m_fts_mat*m_kers_mat;/* hanzhi todo */
+	//return m_conv_mat;
+	/* product = this *  multiplier_matrix */
+	matrix m_conv_mat(m_fts_mat.m_rows, m_kers_mat.m_cols, 0.0);
+
+	int s = 0, t = 0, r = 0;
+	int m_conv_mat_m_rows = m_conv_mat.m_rows;
+	int m_conv_mat_m_cols = m_conv_mat.m_cols;
+	int m_kers_mat_m_cols = m_kers_mat.m_cols;
+	int m_fts_mat_m_cols = m_fts_mat.m_cols;
+	DATA_TYPE *m_conv_mat_mp_data = m_conv_mat.mp_data;
+	//DATA_TYPE *m_kers_mat_mp_data = m_kers_mat.mp_data;
+	DATA_TYPE *m_fts_mat_mp_data = m_fts_mat.mp_data;
+	DATA_TYPE *m_kers_mat_mp_data = m_kers_mat.mp_data;
+	for (int i = 0; i < m_conv_mat_m_rows; ++i){
+		for (int k = 0; k < m_conv_mat_m_cols; ++k){
+			//product_matrix.mp_data[s] = 0.0;
+			//int j = 0;
+			t = i*m_conv_mat_m_cols;
+			for (int j = 0; j < m_fts_mat_m_cols; ++j){
+				//r = j*m_kers_mat_m_cols;
+				m_conv_mat_mp_data[s] += \
+					m_fts_mat_mp_data[t++] * m_kers_mat_mp_data[j*m_kers_mat_m_cols + k];
+			}
+			++s;
+		}
+	}
+	return true;
+	//matrix product_matrix(this->m_rows, multiplier_matrix.m_cols, 0.0);
+
+	//int s = 0, t = 0, r = 0;
+	//int product_matrix_m_rows = product_matrix.m_rows;
+	//int product_matrix_m_cols = product_matrix.m_cols;
+	//int multiplier_matrix_m_cols = multiplier_matrix.m_cols;
+	//DATA_TYPE *product_matrix_mp_data = product_matrix.mp_data;
+	//DATA_TYPE *multiplier_matrix_mp_data = multiplier_matrix.mp_data;
+
+	//for (int i = 0; i < product_matrix_m_rows; ++i){
+	//	for (int k = 0; k < product_matrix_m_cols; ++k){
+	//		//product_matrix.mp_data[s] = 0.0;
+	//		//int j = 0;
+	//		t = i*m_cols;
+	//		for (int j = 0; j < m_cols; ++j){
+	//			r = j*multiplier_matrix_m_cols;
+	//			product_matrix_mp_data[s] += \
+	//				mp_data[t++] * multiplier_matrix_mp_data[r + k];
+	//		}
+	//		++s;
+	//	}
+	//}
+
 }
+
 
 bool layer::reshape(kernels& src_kers, matrix& dst_kers_mat){
 	/* (R,C,r,c)->(i,j)
@@ -286,12 +343,20 @@ bool layer::reshape(kernels& src_kers, matrix& dst_kers_mat){
 	int t1 = 0;
 	int t2 = 0;
 	int t3 = 0;
-	for (int R = 0; R < src_kers.m_channels; ++R){
+	int src_kers_m_channels = src_kers.m_channels;
+	int src_kers_m_kers_counts = src_kers.m_kers_counts;
+	int src_kers_m_rows = src_kers.m_rows;
+	int src_kers_m_cols = src_kers.m_cols;
+	int dst_kers_mat_m_cols = dst_kers_mat.m_cols;
+	DATA_TYPE *dst_kers_mat_mp_data = dst_kers_mat.mp_data;
+	//matrix src_kers_mp_kers = src_kers.mp_kers;
+	kernel *src_kers_mp_kers = src_kers.mp_kers;
+	for (int R = 0; R < src_kers_m_channels; ++R){
 		t1 = R*t0;
-		for (int C = 0; C < src_kers.m_kers_counts; ++C){
-			for (int r = 0; r < src_kers.m_rows; ++r){
-				t2 = r*src_kers.m_cols;
-				for (int c = 0; c < src_kers.m_cols; ++c){
+		for (int C = 0; C < src_kers_m_kers_counts; ++C){
+			for (int r = 0; r < src_kers_m_rows; ++r){
+				t2 = r*src_kers_m_cols;
+				for (int c = 0; c < src_kers_m_cols; ++c){
 					//i = R*src_kers.m_rows*src_kers.m_cols + r*src_kers.m_cols + c;
 					//j = C;
 					//dst_kers_mat.mp_data[i*dst_kers_mat.m_cols + j] = \
@@ -299,8 +364,8 @@ bool layer::reshape(kernels& src_kers, matrix& dst_kers_mat){
 
 					i = t1 + t2 + c;
 					//j = C;
-					dst_kers_mat.mp_data[i*dst_kers_mat.m_cols + C] = \
-					    src_kers.mp_kers[C].mp_matrixes[R].mp_data[t2 + c];
+					dst_kers_mat_mp_data[i*dst_kers_mat_m_cols + C] = \
+						src_kers_mp_kers[C].mp_matrixes[R].mp_data[t2 + c];
 
 				}
 			}
@@ -336,9 +401,14 @@ bool layer::reshape_(matrix& src_kers_mat_diff, kernels& dst_kers_diff){
 
 	int t0 = m_kers.m_rows*m_kers.m_cols;
 	int t1 = 0;
-	for (int i = 0; i < src_kers_mat_diff.m_rows; ++i){
-		t1 = i*src_kers_mat_diff.m_cols;
-		for (int j = 0; j < src_kers_mat_diff.m_cols; ++j){
+	int src_kers_mat_diff_m_rows = src_kers_mat_diff.m_rows;
+	int src_kers_mat_diff_m_cols = src_kers_mat_diff.m_cols;
+	int m_kers_m_cols = m_kers.m_cols;
+	DATA_TYPE *src_kers_mat_diff_mp_data = src_kers_mat_diff.mp_data;
+	kernel *dst_kers_diff_mp_kers = dst_kers_diff.mp_kers;
+	for (int i = 0; i < src_kers_mat_diff_m_rows; ++i){
+		t1 = i*src_kers_mat_diff_m_cols;
+		for (int j = 0; j < src_kers_mat_diff_m_cols; ++j){
 			;/* todo 此处代码可以优化 */
 			//ROW = i / (m_kers.m_rows*m_kers.m_cols);
 			//COL = j;
@@ -351,10 +421,10 @@ bool layer::reshape_(matrix& src_kers_mat_diff, kernels& dst_kers_diff){
 			ROW = i / t0;
 			//COL = j;
 			index = i - ROW*t0;
-			row = index / m_kers.m_cols;
-			col = index - row*m_kers.m_cols;
-			dst_kers_diff.mp_kers[j].mp_matrixes[ROW].mp_data[row*m_kers.m_cols + col] \
-				= src_kers_mat_diff.mp_data[t1 + j];
+			row = index / m_kers_m_cols;
+			col = index - row*m_kers_m_cols;
+			dst_kers_diff_mp_kers[j].mp_matrixes[ROW].mp_data[index/*row*m_kers_m_cols + col*/] \
+				= src_kers_mat_diff_mp_data[t1 + j];
 
 		}
 	}
@@ -412,42 +482,60 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 	/* 简而言之，就是 A相对于C的位移 = A相对于B的位移 + B相对于C的位移 */
 
 	int t0 = m_kers.m_rows*m_kers.m_cols;
+	int t1 = -1;
+	int t2 = 0;
+	DATA_TYPE *dst_fts_mat_mp_data = dst_fts_mat.mp_data;
+	matrix* src_fts_mp_matrixes = src_fts.mp_matrixes;
+	int dst_fts_mat_m_rows = dst_fts_mat.m_rows;
+	int dst_fts_mat_m_cols = dst_fts_mat.m_cols;
+	int m_kers_m_cols = m_kers.m_cols;
+	int src_fts_m_cols = src_fts.m_cols;
 	switch (m_padding_mode){
 		/* features 2 matrix */
 	case VALID_PADDING: /* (N+2P-K)/S +1 */
 		/* 下面是核心代码 features2matrix */
 		/* todo 此处计算可以优化 */
-		for (int i = 0; i < dst_fts_mat.m_rows; ++i){
-			int t1 = i*dst_fts_mat.m_cols;
-			for (int j = 0; j < dst_fts_mat.m_cols; ++j){
-				/* (i,j) -> (channel,rpk,cpk,rkf,ckf) */
-				//channel = j / (m_kers.m_rows*m_kers.m_cols);
-				//index_in_kernel = j - channel*(m_kers.m_rows*m_kers.m_cols);
-				//rpk = index_in_kernel / m_kers.m_cols;
-				//cpk = index_in_kernel - rpk*m_kers.m_cols;
-				//rkf = i / ((src_fts.m_cols - m_kers.m_cols) / m_stride + 1);
-				//ckf = i - rkf*((src_fts.m_cols - m_kers.m_cols) / m_stride + 1);
+		switch (m_stride)
+		{
+		case 1:
+			
+			for (int i = 0; i < dst_fts_mat_m_rows; ++i){
+				//int t1 = i*dst_fts_mat.m_cols;
+				for (int j = 0; j < dst_fts_mat_m_cols; ++j){
+					/* (i,j) -> (channel,rpk,cpk,rkf,ckf) */
+					//channel = j / (m_kers.m_rows*m_kers.m_cols);
+					//index_in_kernel = j - channel*(m_kers.m_rows*m_kers.m_cols);
+					//rpk = index_in_kernel / m_kers.m_cols;
+					//cpk = index_in_kernel - rpk*m_kers.m_cols;
+					//rkf = i / ((src_fts.m_cols - m_kers.m_cols) / m_stride + 1);
+					//ckf = i - rkf*((src_fts.m_cols - m_kers.m_cols) / m_stride + 1);
 
-				channel = j / t0;
-				index_in_kernel = j - channel*t0;
-				rpk = index_in_kernel / m_kers.m_cols;
-				cpk = index_in_kernel - rpk*m_kers.m_cols;
-				int t2 = ((src_fts.m_cols - m_kers.m_cols) / m_stride + 1);
-				rkf = i / t2;
-				ckf = i - rkf*t2;
+					channel = j / t0;
+					index_in_kernel = j - channel*t0;
+					rpk = index_in_kernel / m_kers_m_cols;
+					cpk = index_in_kernel - rpk*m_kers_m_cols;
+					//int t2 = ((src_fts.m_cols - m_kers_m_cols) / m_stride + 1);
+					t2 = ((src_fts_m_cols - m_kers_m_cols) + 1);
+					rkf = i / t2;
+					ckf = i - rkf*t2;
 
-				/* (channel,rpk,cpk,rkf,ckf) -> (channel,rpf,cpf)*/
-				//channel=channel;
-				/* A相对于C的位移 = A相对于B的位移 + B相对于C的位移 */
-				rpf = rpk + rkf;/* 元素在原始特征中的行数 = 元素在卷积核(二维)中的行数 + 卷积核(二维)在特征中的行数 */
-				cpf = cpk + ckf;/* 元素在原始特征中的列数 = 元素在卷积核(二维)中的列数 + 卷积核(二维)在特征中的列数 */
-				/* 元素在卷积核中的位置是指元素相对于卷积核左上方元素而言 */
-				/* 卷积核在特征图中的位置是指卷积核左上方元素相对于特征图左上方元素的位置 */
-				dst_fts_mat.mp_data[t1 + j] = \
-					src_fts.mp_matrixes[channel].mp_data[rpf*src_fts.m_cols + cpf];
-				//std::cout << "i=" << i << " j=" << j << std::endl;
+					/* (channel,rpk,cpk,rkf,ckf) -> (channel,rpf,cpf)*/
+					//channel=channel;
+					/* A相对于C的位移 = A相对于B的位移 + B相对于C的位移 */
+					rpf = rpk + rkf;/* 元素在原始特征中的行数 = 元素在卷积核(二维)中的行数 + 卷积核(二维)在特征中的行数 */
+					cpf = cpk + ckf;/* 元素在原始特征中的列数 = 元素在卷积核(二维)中的列数 + 卷积核(二维)在特征中的列数 */
+					/* 元素在卷积核中的位置是指元素相对于卷积核左上方元素而言 */
+					/* 卷积核在特征图中的位置是指卷积核左上方元素相对于特征图左上方元素的位置 */
+					dst_fts_mat_mp_data[++t1] = \
+						src_fts_mp_matrixes[channel].mp_data[rpf*src_fts_m_cols + cpf];
+					//std::cout << "i=" << i << " j=" << j << std::endl;
+				}
 			}
+			break;
+		default:
+			break;
 		}
+
 		break;
 	case SAME_PADDING:
 		//todo
@@ -495,7 +583,13 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 	int t0 = m_kers.m_rows*m_kers.m_cols;
 	int t1 = 0;
 	int t2 = 0;
-	DATA_TYPE *pdata = src_fts_mat_diff.mp_data;
+	DATA_TYPE *src_fts_mat_diff_mp_data = src_fts_mat_diff.mp_data;
+	matrix *dst_fts_diff_mp_matrixes = dst_fts_diff.mp_matrixes;
+	int m_kers_cols = m_kers.m_cols;
+	//int m_kers_cols = m_kers.m_cols;
+	int src_fts_mat_diff_m_rows = src_fts_mat_diff.m_rows;
+	int src_fts_mat_diff_m_cols = src_fts_mat_diff.m_cols;
+	int dst_fts_diff_m_cols = dst_fts_diff.m_cols;
 	switch (m_padding_mode)
 	{
 	case VALID_PADDING:
@@ -520,19 +614,19 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 		switch (m_stride)
 		{
 		case 1:
-			for (int i = 0; i < src_fts_mat_diff.m_rows; ++i){
-				t1 = i*src_fts_mat_diff.m_cols;
-				for (int j = 0; j < src_fts_mat_diff.m_cols; ++j){
+			for (int i = 0; i < src_fts_mat_diff_m_rows; ++i){
+				t1 = i*src_fts_mat_diff_m_cols;
+				for (int j = 0; j < src_fts_mat_diff_m_cols; ++j){
 					/* g: (i,j) -> (channel,rpk,cpk,rkf,ckf) */
 					channel = j / t0;/* 此处乘法可以优化 */
 					index_in_kernel = j - channel*t0;
-					rpk = index_in_kernel / m_kers.m_cols;
-					cpk = index_in_kernel - rpk*m_kers.m_cols;
+					rpk = index_in_kernel / m_kers_cols;
+					cpk = index_in_kernel - rpk*m_kers_cols;
 					/* this bug take me a lot of time finally i solve it
 					rkf = i / ( (src_fts_mat_diff.m_cols - m_kers.m_cols)/stride + 1 );
 					ckf = i - rkf*((src_fts_mat_diff.m_cols - m_kers.m_cols)/stride + 1);
 					about two hours 8th Aug 2019 19:35 solved  successful */
-					t2 = ((dst_fts_diff.m_cols - m_kers.m_cols) + 1);
+					t2 = ((dst_fts_diff_m_cols - m_kers_cols) + 1);
 					rkf = i / t2;
 					ckf = i - rkf*t2;
 
@@ -542,8 +636,8 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 					//channel = channel;
 					rpf = rpk + rkf;
 					cpf = cpk + ckf;
-					dst_fts_diff.mp_matrixes[channel].mp_data[rpf*dst_fts_diff.m_cols + cpf]\
-						+= pdata[t1 + j];
+					dst_fts_diff_mp_matrixes[channel].mp_data[rpf*dst_fts_diff_m_cols + cpf]\
+						+= src_fts_mat_diff_mp_data[t1 + j];
 				}
 			}
 			break;
@@ -597,10 +691,16 @@ bool layer::reshape(matrix& src_conv_mat, features& dst_conv_mat2fts){
 	int i = 0;
 	int j = 0;
 	int t0 = 0;
-	for (int channel = 0; channel < dst_conv_mat2fts.m_channels; ++channel){
-		for (int row = 0; row < dst_conv_mat2fts.m_rows; ++row){
-			t0 = row*dst_conv_mat2fts.m_cols;
-			for (int col = 0; col < dst_conv_mat2fts.m_cols; ++col){
+	int dst_conv_mat2fts_m_channels = dst_conv_mat2fts.m_channels;
+	int dst_conv_mat2fts_m_rows = dst_conv_mat2fts.m_rows;
+	int dst_conv_mat2fts_m_cols = dst_conv_mat2fts.m_cols;
+	int src_conv_mat_m_cols = src_conv_mat.m_cols;
+	DATA_TYPE *src_conv_mat_mp_data = src_conv_mat.mp_data;
+	matrix *dst_conv_mat2fts_mp_matrixes = dst_conv_mat2fts.mp_matrixes;
+	for (int channel = 0; channel < dst_conv_mat2fts_m_channels; ++channel){
+		for (int row = 0; row < dst_conv_mat2fts_m_rows; ++row){
+			t0 = row*dst_conv_mat2fts_m_cols;
+			for (int col = 0; col < dst_conv_mat2fts_m_cols; ++col){
 				//j = channel;
 				//i = row*dst_conv_mat2fts.m_cols + col;
 
@@ -612,8 +712,8 @@ bool layer::reshape(matrix& src_conv_mat, features& dst_conv_mat2fts){
 				i = t0 + col;
 
 				//dst_conv_mat2fts.mp_matrixes[channel].mp_data[row*dst_conv_mat2fts.m_cols + col]
-				dst_conv_mat2fts.mp_matrixes[channel].mp_data[i]
-					= src_conv_mat.mp_data[i*src_conv_mat.m_cols + channel];
+				dst_conv_mat2fts_mp_matrixes[channel].mp_data[i]
+					= src_conv_mat_mp_data[i*src_conv_mat_m_cols + channel];
 
 			}
 		}
@@ -641,9 +741,14 @@ bool layer::reshape_(features& src_conv_mat2fts_diff, matrix& dst_conv_mat_diff)
 	/* 以下过程可以优化 */
 	int t0 = 0;
 	matrix* mp_tmp = NULL;
-	for (int i = 0; i < dst_conv_mat_diff.m_rows; ++i){
-		t0 = i*dst_conv_mat_diff.m_cols;
-		for (int j = 0; j < dst_conv_mat_diff.m_cols; ++j){
+	DATA_TYPE *dst_conv_mat_diff_mp_data = dst_conv_mat_diff.mp_data;
+	int dst_conv_mat_diff_m_rows = dst_conv_mat_diff.m_rows;
+	int dst_conv_mat_diff_m_cols = dst_conv_mat_diff.m_cols;
+	int src_conv_mat2fts_diff_m_cols = src_conv_mat2fts_diff.m_cols;
+	matrix *src_conv_mat2fts_diff_mp_matrixes = src_conv_mat2fts_diff.mp_matrixes;
+	for (int i = 0; i < dst_conv_mat_diff_m_rows; ++i){
+		t0 = i*dst_conv_mat_diff_m_cols;
+		for (int j = 0; j < dst_conv_mat_diff_m_cols; ++j){
 			//channel = j;
 			//row = i / src_conv_mat2fts_diff.m_cols;
 			//col = i - row*src_conv_mat2fts_diff.m_cols;
@@ -652,11 +757,11 @@ bool layer::reshape_(features& src_conv_mat2fts_diff, matrix& dst_conv_mat_diff)
 			//	mp_data[row*src_conv_mat2fts_diff.m_cols + col];
 
 			//channel = j;
-			row = i / src_conv_mat2fts_diff.m_cols;
-			col = i - row*src_conv_mat2fts_diff.m_cols;
-			dst_conv_mat_diff.mp_data[t0 + j] = \
-				src_conv_mat2fts_diff.mp_matrixes[j].\
-				mp_data[row*src_conv_mat2fts_diff.m_cols + col];
+			row = i / src_conv_mat2fts_diff_m_cols;
+			col = i - row*src_conv_mat2fts_diff_m_cols;
+			dst_conv_mat_diff_mp_data[t0 + j] = \
+				src_conv_mat2fts_diff_mp_matrixes[j].\
+				mp_data[i/*row*src_conv_mat2fts_diff_m_cols + col*/];
 		}
 	}
 	return true;
@@ -704,31 +809,41 @@ bool layer::reshape(features& pooling_mask, features& dst_fts){
 			int max_row = 0;
 			int max_col = 0;
 			DATA_TYPE max = 0;
+			matrix *dst_fts_mp_matrixes = dst_fts.mp_matrixes;
+			matrix *pooling_mask_mp_matrixes = pooling_mask.mp_matrixes;
+			int m_fts_m_channels = m_fts.m_channels;
+			int dst_fts_m_cols = dst_fts.m_cols;
+			matrix *m_fts_mp_matrixes = m_fts.mp_matrixes;
+			int m_fts_m_cols = m_fts.m_cols;
 			/* todo 此处可以优化 */
-			int t0 = m_pooling_size*m_fts.m_cols;
+			int t0 = m_pooling_size*m_fts_m_cols;
 			int t1 = 0;
 			int t2 = 0;
-			for (int channel = 0; channel < m_fts.m_channels; ++channel){
+			int pooling_mask_m_cols = pooling_mask.m_cols;
+			for (int channel = 0; channel < m_fts_m_channels; ++channel){
 				for (int i = 0; i < rows; ++i){
-					t2 = i*dst_fts.m_cols;
+					t2 = i*dst_fts_m_cols;
+					max_row = i*m_pooling_size;
 					for (int j = 0; j < cols; ++j){
-						max = m_fts.mp_matrixes[channel].mp_data\
+						max = m_fts_mp_matrixes[channel].mp_data\
 							[i*t0 + j*m_pooling_size];
-						max_row = i*m_pooling_size;
+						//max_row = i*m_pooling_size;
 						max_col = j*m_pooling_size;
-						for (int s = m_pooling_size*i; s < m_pooling_size*(i + 1); ++s){
+						int sss = m_pooling_size*(i + 1);
+						for (int s = m_pooling_size*i; s < sss; ++s){
 							t1 = s*m_fts.m_cols;
-							for (int t = m_pooling_size*j; t < m_pooling_size*(j + 1); ++t){
-								if (max < m_fts.mp_matrixes[channel].mp_data[t1 + t]){
-									max = m_fts.mp_matrixes[channel].mp_data[t1 + t];
+							int ttt = m_pooling_size*(j + 1);
+							for (int t = m_pooling_size*j; t < ttt; ++t){
+								if (max < m_fts_mp_matrixes[channel].mp_data[t1 + t]){
+									max = m_fts_mp_matrixes[channel].mp_data[t1 + t];
 									max_row = s;
 									max_col = t;
 								}
 							}/* end t */
 						}/* end s */
-						pooling_mask.mp_matrixes[channel].\
-							mp_data[max_row*pooling_mask.m_cols + max_col] = 1;
-						dst_fts.mp_matrixes[channel].mp_data[t2 + j] = max;
+						pooling_mask_mp_matrixes[channel].\
+							mp_data[max_row*pooling_mask_m_cols + max_col] = 1;
+						dst_fts_mp_matrixes[channel].mp_data[t2 + j] = max;
 					} //end j
 				}//end i
 			}//end channel
@@ -808,23 +923,27 @@ bool layer::transposition(const matrix& src,matrix& dst){
     }
 
     if (src.m_rows == dst.m_cols&&src.m_cols == dst.m_rows){
-		DATA_TYPE* mp_t0 = dst.mp_data;
-		DATA_TYPE* mp_t1 = src.mp_data;
+		DATA_TYPE* dst_mp_data = dst.mp_data;
+		DATA_TYPE* src_mp_data = src.mp_data;
 		int k = -1;
 		int t0 = 0;
-		//for (int j = 0; j < src.m_cols; ++j){
-		//	t0 = j*dst.m_cols;
-		//	for (int i = 0; i < src.m_rows; ++i){
+		int dst_m_cols = dst.m_cols;
+		int src_m_cols = src.m_cols;
+		int src_m_rows = src.m_rows;
+		//for (int j = 0; j < src_m_cols; ++j){
+		//	t0 = j*dst_m_cols;
+		//	for (int i = 0; i < src_m_rows; ++i){
 		//		//dst.mp_data[j*dst.m_cols + i] = src.mp_data[t0 + j];
 		//		mp_t0[t0 + i] = mp_t1[++k];
 		//	}
 		//}
-		for (int i = 0; i < src.m_rows; ++i){
-			for (int j = 0; j < src.m_cols; ++j){
+		for (int i = 0; i < src_m_rows; ++i){
+			for (int j = 0; j < src_m_cols; ++j){
 				//dst.mp_data[j*dst.m_cols + i] = src.mp_data[t0 + j];
-				mp_t0[j*dst.m_cols + i] = mp_t1[++k];
+				dst_mp_data[j*dst.m_cols + i] = src_mp_data[++k];
 			}
 		}
+
         return true;
     }
     else{
