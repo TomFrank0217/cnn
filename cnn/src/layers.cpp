@@ -356,14 +356,29 @@ bool layers::back_propagation(int gt_label[]){
 			}
 			break;
 		case POOLING_LAYER:
+			int t0 = 0;
 			switch (mp_layers[i].m_pooling_mode){
+
 			case MAX_POOLING:
 				mp_layers[i].m_fts_diff.reset(0.0);
+				t0 = 0;
 				for (int channel = 0; channel < mp_layers[i].m_fts_diff.m_channels; ++channel){
 					for (int k = 0; k < mp_layers[i].m_fts_diff.m_rows; ++k){
+						t0 = k*mp_layers[i].m_fts_diff.m_cols;
 						for (int j = 0; j < mp_layers[i].m_fts_diff.m_cols; ++j){
-							if (1 == mp_layers[i].m_pooling_mask.mp_matrixes[channel].mp_data[k*mp_layers[i].m_fts_diff.m_cols + j]){
-								mp_layers[i].m_fts_diff.mp_matrixes[channel].mp_data[k*mp_layers[i].m_fts_diff.m_cols + j] = mp_layers[i + 1].m_fts_diff.mp_matrixes[channel].mp_data[(k / mp_layers[i].m_pooling_size)*mp_layers[i + 1].m_fts_diff.m_cols + (j / mp_layers[i].m_pooling_size)];
+							//if (1 == mp_layers[i].m_pooling_mask.mp_matrixes[channel].\
+							//	mp_data[k*mp_layers[i].m_fts_diff.m_cols + j]){
+							//	mp_layers[i].m_fts_diff.mp_matrixes[channel].mp_data\
+							//		[k*mp_layers[i].m_fts_diff.m_cols + j] = \
+							//		mp_layers[i + 1].m_fts_diff.mp_matrixes[channel].\
+							//		mp_data[(k / mp_layers[i].m_pooling_size)*mp_layers[i + 1].\
+							//		m_fts_diff.m_cols + (j / mp_layers[i].m_pooling_size)];
+							//}
+							if (1 == mp_layers[i].m_pooling_mask.mp_matrixes[channel].mp_data[t0 + j]){
+								mp_layers[i].m_fts_diff.mp_matrixes[channel].mp_data[t0+ j] = \
+									mp_layers[i + 1].m_fts_diff.mp_matrixes[channel].\
+									mp_data[(k / mp_layers[i].m_pooling_size)*mp_layers[i + 1].m_fts_diff.m_cols \
+									+ (j / mp_layers[i].m_pooling_size)];
 							}
 						}
 					}

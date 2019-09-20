@@ -282,14 +282,26 @@ bool layer::reshape(kernels& src_kers, matrix& dst_kers_mat){
 	int i = 0;
 	int j = 0;
 
+	int t0 = src_kers.m_rows*src_kers.m_cols;
+	int t1 = 0;
+	int t2 = 0;
+	int t3 = 0;
 	for (int R = 0; R < src_kers.m_channels; ++R){
+		t1 = R*t0;
 		for (int C = 0; C < src_kers.m_kers_counts; ++C){
 			for (int r = 0; r < src_kers.m_rows; ++r){
+				t2 = r*src_kers.m_cols;
 				for (int c = 0; c < src_kers.m_cols; ++c){
-					i = R*src_kers.m_rows*src_kers.m_cols + r*src_kers.m_cols + c;
-					j = C;
-					dst_kers_mat.mp_data[i*dst_kers_mat.m_cols + j] = \
-						src_kers.mp_kers[C].mp_matrixes[R].mp_data[r*src_kers.m_cols + c];
+					//i = R*src_kers.m_rows*src_kers.m_cols + r*src_kers.m_cols + c;
+					//j = C;
+					//dst_kers_mat.mp_data[i*dst_kers_mat.m_cols + j] = \
+					//	src_kers.mp_kers[C].mp_matrixes[R].mp_data[r*src_kers.m_cols + c];
+
+					i = t1 + t2 + c;
+					//j = C;
+					dst_kers_mat.mp_data[i*dst_kers_mat.m_cols + C] = \
+					    src_kers.mp_kers[C].mp_matrixes[R].mp_data[t2 + c];
+
 				}
 			}
 		}
@@ -322,16 +334,28 @@ bool layer::reshape_(matrix& src_kers_mat_diff, kernels& dst_kers_diff){
 			m_kers.m_rows, m_kers.m_cols, m_kers.m_kers_counts, 0.0);
 	}
 
+	int t0 = m_kers.m_rows*m_kers.m_cols;
+	int t1 = 0;
 	for (int i = 0; i < src_kers_mat_diff.m_rows; ++i){
+		t1 = i*src_kers_mat_diff.m_cols;
 		for (int j = 0; j < src_kers_mat_diff.m_cols; ++j){
 			;/* todo 此处代码可以优化 */
-			ROW = i / (m_kers.m_rows*m_kers.m_cols);
-			COL = j;
-			index = i - ROW*(m_kers.m_rows*m_kers.m_cols);
+			//ROW = i / (m_kers.m_rows*m_kers.m_cols);
+			//COL = j;
+			//index = i - ROW*(m_kers.m_rows*m_kers.m_cols);
+			//row = index / m_kers.m_cols;
+			//col = index - row*m_kers.m_cols;
+			//dst_kers_diff.mp_kers[COL].mp_matrixes[ROW].mp_data[row*m_kers.m_cols + col] \
+			//	= src_kers_mat_diff.mp_data[i*src_kers_mat_diff.m_cols + j];
+
+			ROW = i / t0;
+			//COL = j;
+			index = i - ROW*t0;
 			row = index / m_kers.m_cols;
 			col = index - row*m_kers.m_cols;
-			dst_kers_diff.mp_kers[COL].mp_matrixes[ROW].mp_data[row*m_kers.m_cols + col] \
-				= src_kers_mat_diff.mp_data[i*src_kers_mat_diff.m_cols + j];
+			dst_kers_diff.mp_kers[j].mp_matrixes[ROW].mp_data[row*m_kers.m_cols + col] \
+				= src_kers_mat_diff.mp_data[t1 + j];
+
 		}
 	}
 	/* 以上是核心代码 */
@@ -386,20 +410,31 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 	/* 仿照牛顿力学中的相对位置，即坐标转换，\
 	   能够确定features_matrix元素对应的在原始features中的绝对位置 */
 	/* 简而言之，就是 A相对于C的位移 = A相对于B的位移 + B相对于C的位移 */
+
+	int t0 = m_kers.m_rows*m_kers.m_cols;
 	switch (m_padding_mode){
 		/* features 2 matrix */
 	case VALID_PADDING: /* (N+2P-K)/S +1 */
 		/* 下面是核心代码 features2matrix */
 		/* todo 此处计算可以优化 */
 		for (int i = 0; i < dst_fts_mat.m_rows; ++i){
+			int t1 = i*dst_fts_mat.m_cols;
 			for (int j = 0; j < dst_fts_mat.m_cols; ++j){
 				/* (i,j) -> (channel,rpk,cpk,rkf,ckf) */
-				channel = j / (m_kers.m_rows*m_kers.m_cols);
-				index_in_kernel = j - channel*(m_kers.m_rows*m_kers.m_cols);
+				//channel = j / (m_kers.m_rows*m_kers.m_cols);
+				//index_in_kernel = j - channel*(m_kers.m_rows*m_kers.m_cols);
+				//rpk = index_in_kernel / m_kers.m_cols;
+				//cpk = index_in_kernel - rpk*m_kers.m_cols;
+				//rkf = i / ((src_fts.m_cols - m_kers.m_cols) / m_stride + 1);
+				//ckf = i - rkf*((src_fts.m_cols - m_kers.m_cols) / m_stride + 1);
+
+				channel = j / t0;
+				index_in_kernel = j - channel*t0;
 				rpk = index_in_kernel / m_kers.m_cols;
 				cpk = index_in_kernel - rpk*m_kers.m_cols;
-				rkf = i / ((src_fts.m_cols - m_kers.m_cols) / m_stride + 1);
-				ckf = i - rkf*((src_fts.m_cols - m_kers.m_cols) / m_stride + 1);
+				int t2 = ((src_fts.m_cols - m_kers.m_cols) / m_stride + 1);
+				rkf = i / t2;
+				ckf = i - rkf*t2;
 
 				/* (channel,rpk,cpk,rkf,ckf) -> (channel,rpf,cpf)*/
 				//channel=channel;
@@ -408,7 +443,7 @@ bool layer::reshape(features& src_fts, matrix& dst_fts_mat){
 				cpf = cpk + ckf;/* 元素在原始特征中的列数 = 元素在卷积核(二维)中的列数 + 卷积核(二维)在特征中的列数 */
 				/* 元素在卷积核中的位置是指元素相对于卷积核左上方元素而言 */
 				/* 卷积核在特征图中的位置是指卷积核左上方元素相对于特征图左上方元素的位置 */
-				dst_fts_mat.mp_data[i*dst_fts_mat.m_cols + j] = \
+				dst_fts_mat.mp_data[t1 + j] = \
 					src_fts.mp_matrixes[channel].mp_data[rpf*src_fts.m_cols + cpf];
 				//std::cout << "i=" << i << " j=" << j << std::endl;
 			}
@@ -457,6 +492,10 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 		dst_fts_diff = features(m_fts.m_channels, m_fts.m_rows, m_fts.m_cols, 0.0);
 	}
 	dst_fts_diff.reset(0.0);
+	int t0 = m_kers.m_rows*m_kers.m_cols;
+	int t1 = 0;
+	int t2 = 0;
+	DATA_TYPE *pdata = src_fts_mat_diff.mp_data;
 	switch (m_padding_mode)
 	{
 	case VALID_PADDING:
@@ -474,27 +513,44 @@ bool layer::reshape_(matrix& src_fts_mat_diff, features& dst_fts_diff)
 		/* 以下代码虽然正确，但是features中很多元素被重复被计算了K*K次严重浪费计算资源 */
 		/* 很多元素被重复计算K*K次是必须的，因为反向传播的时候梯度features中元素映射到
 		   features_matrix中多次，因此features中元素的梯度梯度需要累计 */
-		for (int i = 0; i < src_fts_mat_diff.m_rows; ++i){
-			for (int j = 0; j < src_fts_mat_diff.m_cols; ++j){
+		t0 = m_kers.m_rows*m_kers.m_cols;
+		t1 = 0;
+		t2 = 0;
+		//DATA_TYPE *pdata = src_fts_mat_diff.mp_data;
+		switch (m_stride)
+		{
+		case 1:
+			for (int i = 0; i < src_fts_mat_diff.m_rows; ++i){
+				t1 = i*src_fts_mat_diff.m_cols;
+				for (int j = 0; j < src_fts_mat_diff.m_cols; ++j){
 					/* g: (i,j) -> (channel,rpk,cpk,rkf,ckf) */
-					channel = j / (m_kers.m_rows*m_kers.m_cols);/* 此处乘法可以优化 */
-					index_in_kernel = j - channel*(m_kers.m_rows*m_kers.m_cols);
+					channel = j / t0;/* 此处乘法可以优化 */
+					index_in_kernel = j - channel*t0;
 					rpk = index_in_kernel / m_kers.m_cols;
 					cpk = index_in_kernel - rpk*m_kers.m_cols;
 					/* this bug take me a lot of time finally i solve it
 					rkf = i / ( (src_fts_mat_diff.m_cols - m_kers.m_cols)/stride + 1 );
 					ckf = i - rkf*((src_fts_mat_diff.m_cols - m_kers.m_cols)/stride + 1);
-					 about two hours 8th Aug 2019 19:35 solved  successful */
-					rkf = i / ( (dst_fts_diff.m_cols - m_kers.m_cols)/m_stride + 1 );
-					ckf = i - rkf*((dst_fts_diff.m_cols - m_kers.m_cols) / m_stride + 1);
+					about two hours 8th Aug 2019 19:35 solved  successful */
+					t2 = ((dst_fts_diff.m_cols - m_kers.m_cols) + 1);
+					rkf = i / t2;
+					ckf = i - rkf*t2;
+
+					//rkf = i / ((dst_fts_diff.m_cols - m_kers.m_cols) / m_stride + 1);
+					//ckf = i - rkf*((dst_fts_diff.m_cols - m_kers.m_cols) / m_stride + 1);
 					/* h: (channel,rpk,cpk,rkf,ckf) -> (channel,rpf,cpf) */
 					//channel = channel;
 					rpf = rpk + rkf;
 					cpf = cpk + ckf;
 					dst_fts_diff.mp_matrixes[channel].mp_data[rpf*dst_fts_diff.m_cols + cpf]\
-									+= src_fts_mat_diff.mp_data[i*src_fts_mat_diff.m_cols + j];
+						+= pdata[t1 + j];
 				}
+			}
+			break;
+		default:
+			break;
 		}
+
 		break;
 	case SAME_PADDING:
 		/*todo*/
@@ -513,8 +569,18 @@ bool layer::reshape(matrix& src_conv_mat, features& dst_conv_mat2fts){
 	if (NULL == dst_conv_mat2fts.mp_matrixes){
 		int channels = m_kers.m_kers_counts;
 		if (VALID_PADDING == m_padding_mode){
-			int rows = (m_fts.m_rows - m_kers.m_rows) / m_stride + 1;
-			int cols = (m_fts.m_cols - m_kers.m_cols) / m_stride + 1;
+			int rows = 0;
+			int cols = 0;
+			switch (m_stride)
+			{
+			case 1:
+				rows = (m_fts.m_rows - m_kers.m_rows) + 1;
+				cols = (m_fts.m_cols - m_kers.m_cols) + 1;
+				break;
+			default:/* todo 此处这么写是为了减轻计算量 */
+				break;
+			}
+
 			dst_conv_mat2fts = features(channels, rows, cols, 0.0);
 		}
 		else{
@@ -530,15 +596,25 @@ bool layer::reshape(matrix& src_conv_mat, features& dst_conv_mat2fts){
 	/* s.t. f: (channel,row,col) -> (i,j) */
 	int i = 0;
 	int j = 0;
+	int t0 = 0;
 	for (int channel = 0; channel < dst_conv_mat2fts.m_channels; ++channel){
 		for (int row = 0; row < dst_conv_mat2fts.m_rows; ++row){
+			t0 = row*dst_conv_mat2fts.m_cols;
 			for (int col = 0; col < dst_conv_mat2fts.m_cols; ++col){
-				j = channel;
-				i = row*dst_conv_mat2fts.m_cols + col;
+				//j = channel;
+				//i = row*dst_conv_mat2fts.m_cols + col;
+
+				////dst_conv_mat2fts.mp_matrixes[channel].mp_data[row*dst_conv_mat2fts.m_cols + col]
+				//dst_conv_mat2fts.mp_matrixes[channel].mp_data[i]
+				//	= src_conv_mat.mp_data[i*src_conv_mat.m_cols + j];
+
+				//j = channel;
+				i = t0 + col;
 
 				//dst_conv_mat2fts.mp_matrixes[channel].mp_data[row*dst_conv_mat2fts.m_cols + col]
 				dst_conv_mat2fts.mp_matrixes[channel].mp_data[i]
-					= src_conv_mat.mp_data[i*src_conv_mat.m_cols + j];
+					= src_conv_mat.mp_data[i*src_conv_mat.m_cols + channel];
+
 			}
 		}
 	}
@@ -563,13 +639,23 @@ bool layer::reshape_(features& src_conv_mat2fts_diff, matrix& dst_conv_mat_diff)
 	int row = 0;
 	int col = 0;
 	/* 以下过程可以优化 */
+	int t0 = 0;
+	matrix* mp_tmp = NULL;
 	for (int i = 0; i < dst_conv_mat_diff.m_rows; ++i){
+		t0 = i*dst_conv_mat_diff.m_cols;
 		for (int j = 0; j < dst_conv_mat_diff.m_cols; ++j){
-			channel = j;
+			//channel = j;
+			//row = i / src_conv_mat2fts_diff.m_cols;
+			//col = i - row*src_conv_mat2fts_diff.m_cols;
+			//dst_conv_mat_diff.mp_data[i*dst_conv_mat_diff.m_cols + j] = \
+			//	src_conv_mat2fts_diff.mp_matrixes[channel].\
+			//	mp_data[row*src_conv_mat2fts_diff.m_cols + col];
+
+			//channel = j;
 			row = i / src_conv_mat2fts_diff.m_cols;
 			col = i - row*src_conv_mat2fts_diff.m_cols;
-			dst_conv_mat_diff.mp_data[i*dst_conv_mat_diff.m_cols + j] = \
-				src_conv_mat2fts_diff.mp_matrixes[channel].\
+			dst_conv_mat_diff.mp_data[t0 + j] = \
+				src_conv_mat2fts_diff.mp_matrixes[j].\
 				mp_data[row*src_conv_mat2fts_diff.m_cols + col];
 		}
 	}
@@ -583,6 +669,35 @@ bool layer::reshape(features& pooling_mask, features& dst_fts){
 			return false;
 		}
 		else{
+			//pooling_mask.reset(0);
+			//int rows = m_fts.m_rows / m_pooling_size;
+			//int cols = m_fts.m_cols / m_pooling_size;
+			//int max_row = 0;
+			//int max_col = 0;
+			//DATA_TYPE max = 0;
+			///* todo 此处可以优化 */
+			//for (int channel = 0; channel < m_fts.m_channels; ++channel){
+			//	for (int i = 0; i < rows; ++i){
+			//		for (int j = 0; j < cols; ++j){
+			//			max = m_fts.mp_matrixes[channel].mp_data\
+			//				[i*m_pooling_size*m_fts.m_cols + j*m_pooling_size];
+			//			max_row = i*m_pooling_size;
+			//			max_col = j*m_pooling_size;
+			//			for (int s = m_pooling_size*i; s < m_pooling_size*(i + 1); ++s){
+			//				for (int t = m_pooling_size*j; t < m_pooling_size*(j + 1); ++t){
+			//					if (max < m_fts.mp_matrixes[channel].mp_data[s*m_fts.m_cols + t]){
+			//						max = m_fts.mp_matrixes[channel].mp_data[s*m_fts.m_cols + t];
+			//						max_row = s;
+			//						max_col = t;
+			//					}
+			//				}/* end t */
+			//			}/* end s */
+			//			pooling_mask.mp_matrixes[channel].\
+			//				mp_data[max_row*pooling_mask.m_cols + max_col] = 1;
+			//			dst_fts.mp_matrixes[channel].mp_data[i*dst_fts.m_cols + j] = max;
+			//		}
+			//	}
+			//}//end channel
 			pooling_mask.reset(0);
 			int rows = m_fts.m_rows / m_pooling_size;
 			int cols = m_fts.m_cols / m_pooling_size;
@@ -590,17 +705,22 @@ bool layer::reshape(features& pooling_mask, features& dst_fts){
 			int max_col = 0;
 			DATA_TYPE max = 0;
 			/* todo 此处可以优化 */
+			int t0 = m_pooling_size*m_fts.m_cols;
+			int t1 = 0;
+			int t2 = 0;
 			for (int channel = 0; channel < m_fts.m_channels; ++channel){
 				for (int i = 0; i < rows; ++i){
+					t2 = i*dst_fts.m_cols;
 					for (int j = 0; j < cols; ++j){
 						max = m_fts.mp_matrixes[channel].mp_data\
-							[i*m_pooling_size*m_fts.m_cols + j*m_pooling_size];
+							[i*t0 + j*m_pooling_size];
 						max_row = i*m_pooling_size;
 						max_col = j*m_pooling_size;
 						for (int s = m_pooling_size*i; s < m_pooling_size*(i + 1); ++s){
+							t1 = s*m_fts.m_cols;
 							for (int t = m_pooling_size*j; t < m_pooling_size*(j + 1); ++t){
-								if (max < m_fts.mp_matrixes[channel].mp_data[s*m_fts.m_cols + t]){
-									max = m_fts.mp_matrixes[channel].mp_data[s*m_fts.m_cols + t];
+								if (max < m_fts.mp_matrixes[channel].mp_data[t1 + t]){
+									max = m_fts.mp_matrixes[channel].mp_data[t1 + t];
 									max_row = s;
 									max_col = t;
 								}
@@ -608,12 +728,10 @@ bool layer::reshape(features& pooling_mask, features& dst_fts){
 						}/* end s */
 						pooling_mask.mp_matrixes[channel].\
 							mp_data[max_row*pooling_mask.m_cols + max_col] = 1;
-						dst_fts.mp_matrixes[channel].mp_data[i*dst_fts.m_cols + j] = max;
-					}
-				}
+						dst_fts.mp_matrixes[channel].mp_data[t2 + j] = max;
+					} //end j
+				}//end i
 			}//end channel
-			//dst_fts.show();
-			//int xxx = 0;
 		}
 	}
 	else if (AVE_POOLING == m_pooling_mode){
@@ -690,11 +808,23 @@ bool layer::transposition(const matrix& src,matrix& dst){
     }
 
     if (src.m_rows == dst.m_cols&&src.m_cols == dst.m_rows){
-        for (int i = 0; i < src.m_rows; ++i){
-            for (int j = 0; j < src.m_cols; ++j){
-                dst.mp_data[j*dst.m_cols + i] = src.mp_data[i*src.m_cols + j];
-            }
-        }
+		DATA_TYPE* mp_t0 = dst.mp_data;
+		DATA_TYPE* mp_t1 = src.mp_data;
+		int k = -1;
+		int t0 = 0;
+		//for (int j = 0; j < src.m_cols; ++j){
+		//	t0 = j*dst.m_cols;
+		//	for (int i = 0; i < src.m_rows; ++i){
+		//		//dst.mp_data[j*dst.m_cols + i] = src.mp_data[t0 + j];
+		//		mp_t0[t0 + i] = mp_t1[++k];
+		//	}
+		//}
+		for (int i = 0; i < src.m_rows; ++i){
+			for (int j = 0; j < src.m_cols; ++j){
+				//dst.mp_data[j*dst.m_cols + i] = src.mp_data[t0 + j];
+				mp_t0[j*dst.m_cols + i] = mp_t1[++k];
+			}
+		}
         return true;
     }
     else{
@@ -713,11 +843,18 @@ bool layer::hadamard_product(matrix& src, matrix& mask, matrix& dst){
 
 		/* todo check 行列 */
 		int k = 0;
-		for (int i = 0; i < src.m_rows; ++i){
-			for (int j = 0; j < src.m_cols; ++j){
-				dst.mp_data[k] = src.mp_data[k] * mask.mp_data[k];
-				++k;
-			}
+		//for (int i = 0; i < src.m_rows; ++i){
+		//	for (int j = 0; j < src.m_cols; ++j){
+		//		dst.mp_data[k] = src.mp_data[k] * mask.mp_data[k];
+		//		++k;
+		//	}
+		//}
+		int n = src.m_rows*src.m_cols;
+		DATA_TYPE *pdst = dst.mp_data;
+		DATA_TYPE *psrc = src.mp_data;
+		DATA_TYPE *pmask = mask.mp_data;
+		for (int i = 0; i < n; ++i){
+			pdst[i] = psrc[i] * pmask[i];
 		}
 		return true;
 	}

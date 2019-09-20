@@ -48,15 +48,15 @@ bool calculate_accuracy(layers& lys, vector<num_path>& test_path_label, double a
 bool get_nums_counts(double errors[], double test_accuracy[][LABELS_COUNTS + 1], int test_counts, double &scale, int nums_counts[], int& module);
 bool show_results(double test_accuracy[][LABELS_COUNTS + 1]);
 /*todo random初始化不是很好 * /
-/* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑*/
-/* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存，甚至是奔溃 */
+/* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑 */
+/* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存 */
 int main(int argc, char* argv[]){
-	string train_file_name = ".\\data\\train_image\\0\\*.bmp";
-	string valid_file_name = ".\\data\\valid_image\\0\\*.bmp";
-	string test_file_name = ".\\data\\test_image\\0\\*.bmp";
-	//string train_file_name = ".\\data\\small_train_image\\0\\*.bmp";
-	//string valid_file_name = ".\\data\\small_valid_image\\0\\*.bmp";
-	//string test_file_name = ".\\data\\small_test_image\\0\\*.bmp";
+	//string train_file_name = ".\\data\\train_image\\0\\*.bmp";
+	//string valid_file_name = ".\\data\\valid_image\\0\\*.bmp";
+	//string test_file_name = ".\\data\\test_image\\0\\*.bmp";
+	string train_file_name = ".\\data\\small_train_image\\0\\*.bmp";
+	string valid_file_name = ".\\data\\small_valid_image\\0\\*.bmp";
+	string test_file_name = ".\\data\\small_test_image\\0\\*.bmp";
 
 	vector<vector<num_path>> train_label_imgs; train_label_imgs.resize(LABELS_COUNTS);
 	vector<vector<num_path>> valid_label_imgs; valid_label_imgs.resize(LABELS_COUNTS);
@@ -76,7 +76,7 @@ int main(int argc, char* argv[]){
 	int nums_counts[LABELS_COUNTS] = { 0 };
 	double scale = 0.10;
 	for (int i = 0; i < LABELS_COUNTS; ++i){
-		nums_counts[i] = MINI_BATCHES / LABELS_COUNTS;//todo 必须是整数
+		nums_counts[i] = MINI_BATCHES / LABELS_COUNTS;/* todo 必须是整数 */
 		std::cout << nums_counts[i] << "  ";
 	}
 
@@ -94,7 +94,6 @@ int main(int argc, char* argv[]){
 		learning_rate = BASE_LEARNING_RATE*pow(DECAY_RATE, i / RATE_CHANHE_NUMS);
 		reset_params_before_batches_forward_propagations(lys);  /* 每一次batch传播之前所有的梯度清零 */
 		int j = 0;
-		//Sleep(5000);
 		for (int k = 0; k < LABELS_COUNTS; ++k){
 			//std::cout << "nums_counts[" << k << "]=" << nums_counts[k] << "  " << std::endl;
 			for (int l = 0; l < nums_counts[k]; ++l){
