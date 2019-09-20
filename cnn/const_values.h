@@ -61,7 +61,7 @@
 #define MAX_UP                      2000
 
 #define F(x)                       (1.0-(x)*(x))
-#define THRESHOLD_                  0.92
+#define THRESHOLD_                  0.93
 
 #define LABELS_COUNTS               10
 #define MINI_BATCHES                200

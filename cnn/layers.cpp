@@ -253,7 +253,11 @@ bool layers::back_propagation(int gt_label[]){
 		//else{
 		//	scale = 0.012;
 		//}
-		scale = 0.0;
+		scale = 0;
+		if (p > 0.9995){
+			scale = -0.001;
+		}
+		
 	}
 	else{
 		if (p > 0.5){
