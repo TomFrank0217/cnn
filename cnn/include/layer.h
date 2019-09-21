@@ -24,7 +24,7 @@ public:
 	
 	bool show_shapes();
 	//matrix convxxx();
-	bool conv();
+	matrix conv();
 	bool show();
 	/* reshape是前向 reshape_是后向 */
 	/* (channel, row ,col) -> (i,j) 是单射(f)，(i,j) -> (channel, row ,col)是多射

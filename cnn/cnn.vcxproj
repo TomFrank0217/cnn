@@ -152,6 +152,7 @@
     <ClCompile Include="src\layer.cpp" />
     <ClCompile Include="src\layers.cpp" />
     <ClCompile Include="src\layers_parameters.cpp" />
+    <ClCompile Include="src\layer_bak.cpp" />
     <ClCompile Include="src\matrix.cpp" />
   </ItemGroup>
   <ItemGroup>

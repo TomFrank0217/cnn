@@ -51,12 +51,12 @@ bool show_results(double test_accuracy[][LABELS_COUNTS + 1]);
 /* 一般的卷积网络第一层都是卷积层,所以第一层默认卷积层，todo 第一层不是卷积层需要重新考虑 */
 /* 同样的，layers中实例化的所有参数都必须始终不能重新申请，否则系统会不停的申请释放内存 */
 int main(int argc, char* argv[]){
-	//string train_file_name = ".\\data\\train_image\\0\\*.bmp";
-	//string valid_file_name = ".\\data\\valid_image\\0\\*.bmp";
-	//string test_file_name = ".\\data\\test_image\\0\\*.bmp";
-	string train_file_name = ".\\data\\small_train_image\\0\\*.bmp";
-	string valid_file_name = ".\\data\\small_valid_image\\0\\*.bmp";
-	string test_file_name = ".\\data\\small_test_image\\0\\*.bmp";
+	string train_file_name = ".\\data\\train_image\\0\\*.bmp";
+	string valid_file_name = ".\\data\\valid_image\\0\\*.bmp";
+	string test_file_name = ".\\data\\test_image\\0\\*.bmp";
+	//string train_file_name = ".\\data\\small_train_image\\0\\*.bmp";
+	//string valid_file_name = ".\\data\\small_valid_image\\0\\*.bmp";
+	//string test_file_name = ".\\data\\small_test_image\\0\\*.bmp";
 
 	vector<vector<num_path>> train_label_imgs; train_label_imgs.resize(LABELS_COUNTS);
 	vector<vector<num_path>> valid_label_imgs; valid_label_imgs.resize(LABELS_COUNTS);

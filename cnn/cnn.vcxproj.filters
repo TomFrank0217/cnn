@@ -36,6 +36,9 @@
     <ClCompile Include="src\matrix.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\layer_bak.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\const_values.h">
