@@ -237,9 +237,9 @@ bool reset_params_before_batches_forward_propagations(layers& lys){
 }
 
 bool show_train_probability(int* gt_10, layers& lys, int iters_count, int bacthes_count){
-	if (iters_count % 11 == 0){
-		if (bacthes_count % 23 == 0){
-			std::cout << "\n\niterations  " << iters_count*MINI_BATCHES + bacthes_count << "   " << std::endl;
+	if (iters_count % 10 == 0){
+		if (bacthes_count % 50 == 0){
+			std::cout << "\n\n第" <<setw(7)<< iters_count*MINI_BATCHES + bacthes_count << "个训练样本的概率分布" << std::endl;
 			for (int i = 0; i < LABELS_COUNTS; ++i){
 				if (0 == gt_10[i]){
 					for (int j = 0; j < SHOW_PROBABILITY_WIDTH - 2; ++j){
@@ -269,14 +269,14 @@ bool show_train_probability(int* gt_10, layers& lys, int iters_count, int bacthe
 					std::cout << "********";
 				}
 			}//end i
-			std::cout << std::endl;
-			for (int i = 0; i < LABELS_COUNTS; ++i){
-				std::cout << setw(SHOW_PROBABILITY_WIDTH) << lys.y.mp_matrixes[i].mp_data[0];
-			}
-			std::cout << std::endl;
-			for (int i = 0; i < LABELS_COUNTS; ++i){
-				std::cout << setw(SHOW_PROBABILITY_WIDTH) << lys.t.mp_matrixes[i].mp_data[0];
-			}
+			//std::cout << std::endl;
+			//for (int i = 0; i < LABELS_COUNTS; ++i){
+			//	std::cout << setw(SHOW_PROBABILITY_WIDTH) << lys.y.mp_matrixes[i].mp_data[0];
+			//}
+			//std::cout << std::endl;
+			//for (int i = 0; i < LABELS_COUNTS; ++i){
+			//	std::cout << setw(SHOW_PROBABILITY_WIDTH) << lys.t.mp_matrixes[i].mp_data[0];
+			//}
 			std::cout << std::endl;
 			for (int i = 0; i < LABELS_COUNTS; ++i){
 				std::cout << setw(SHOW_PROBABILITY_WIDTH) << 100.0*lys.q.mp_matrixes[i].mp_data[0];
