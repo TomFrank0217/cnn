@@ -1,11 +1,11 @@
-Õâ¸öÐ¡¹¤³ÌÓÃC++´Ó×îµ×²ãµÄ¾ØÕóÔËËã£¬µ½ÈýÎ¬ËÄÎ¬µÄÕÅÁ¿ÔËËã£¬¸´ÏÖÁËlenetµÄÕýÏòºÍ·´Ïò´«²¥µÄÏ¸½Ú¡£
-¾­¹ýµ÷²Î£¬ÔÚ lenetµÄ²âÊÔ¼¯ÉÏ´ïµ½ÁË99.03%µÄ×¼È·¶È¡£
+è¿™ä¸ªå°å·¥ç¨‹ç”¨C++ä»Žæœ€åº•å±‚çš„çŸ©é˜µè¿ç®—ï¼Œåˆ°ä¸‰ç»´å››ç»´çš„å¼ é‡è¿ç®—ï¼Œå¤çŽ°äº†lenetçš„æ­£å‘å’Œåå‘ä¼ æ’­çš„ç»†èŠ‚ã€‚
+ç»è¿‡è°ƒå‚ï¼Œåœ¨ lenetçš„æµ‹è¯•é›†ä¸Šè¾¾åˆ°äº†99.03%çš„å‡†ç¡®åº¦ã€‚
 
-But, there is some problems todo.
-0. ½«Í¼Æ¬¶ÁÈë»»³ÉC++½âÎöbmp,ÓÃopencv¶ÁÈë»áÓ°Ïì±ðÈËµÄÊ¹ÓÃ
-1. ²¹³äCMakeLists·½±ãÔÚlinuxÏÂµ÷ÊÔ
-2. ´úÂëÁ¿4000ÐÐÌ«¶àÁË£¬²»Ò×ÓÚÎ¬»¤£¬ÖØ¹¹·â×°º¯Êý£¬Ôö¼Ó×¢ÊÍ£¬¼õÉÙ´úÂëÁ¿£¬Ìá¸ß´úÂëµÄ¿É¶ÁÐÔ
-3. layers_parameters.cpp ÖÐÊÇÃèÊöÍøÂç½á¹¹µÄ²ÎÊý£¬ÏÖÔÚ²»Ö§³Ö¿ç²ãµÄÍøÂç½á¹¹
-4. ÐÞ¸ÄÍøÂçÕýÏò´«²¥ºÍ·´Ïò´«²¥µÄÏ¸½Ú£¬¼õÉÙÖØ¸´µÄÔËËãÁ¿
-5. ÐÞ¸ÄËðÊ§º¯Êý£¬Ê¹µÃ×¼È·¶ÈÌáÉý
-6. ÏëÖ§³ÖshufflenetÓëresnetµÄÍøÂç½á¹¹¡£
+But, there are some problems todo.
+0. å°†å›¾ç‰‡è¯»å…¥æ¢æˆC++è§£æžbmp,ç”¨opencvè¯»å…¥ä¼šå½±å“åˆ«äººçš„ä½¿ç”¨
+1. è¡¥å……CMakeListsæ–¹ä¾¿åœ¨linuxä¸‹è°ƒè¯•
+2. ä»£ç é‡4000è¡Œå¤ªå¤šäº†ï¼Œä¸æ˜“äºŽç»´æŠ¤ï¼Œé‡æž„å°è£…å‡½æ•°ï¼Œå¢žåŠ æ³¨é‡Šï¼Œå‡å°‘ä»£ç é‡ï¼Œæé«˜ä»£ç çš„å¯è¯»æ€§
+3. layers_parameters.cpp ä¸­æ˜¯æè¿°ç½‘ç»œç»“æž„çš„å‚æ•°ï¼ŒçŽ°åœ¨ä¸æ”¯æŒè·¨å±‚çš„ç½‘ç»œç»“æž„
+4. ä¿®æ”¹ç½‘ç»œæ­£å‘ä¼ æ’­å’Œåå‘ä¼ æ’­çš„ç»†èŠ‚ï¼Œå‡å°‘é‡å¤çš„è¿ç®—é‡
+5. ä¿®æ”¹æŸå¤±å‡½æ•°ï¼Œä½¿å¾—å‡†ç¡®åº¦æå‡
+6. æƒ³æ”¯æŒshufflenetä¸Žresnetçš„ç½‘ç»œç»“æž„ã€‚
