@@ -1,6 +1,5 @@
 这个小工程用C++从最底层的矩阵运算，到三维四维的张量运算，复现了lenet的正向和反向传播的细节。
 经过调参，在 lenet的测试集上达到了99.03%的准确度。
-其中  ./cnn/cnn.exe是可执行文件，可以直接运行。
 
 But, there are some problems todo.
 0. 将图片读入换成C++解析bmp,用opencv读入会影响别人的使用
